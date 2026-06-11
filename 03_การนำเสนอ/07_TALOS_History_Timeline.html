@@ -204,13 +204,14 @@
 
   /* ===== Mute Button ===== */
   #mute-btn{
-    background:none; border:1px solid var(--line); color:var(--dim);
+    background:none; border:1px solid var(--gold); color:var(--gold-soft);
     font-family:'Chakra Petch',sans-serif; font-size:13px;
     padding:6px 12px; border-radius:6px; cursor:pointer; transition:.2s;
     white-space:nowrap; letter-spacing:.3px;
   }
-  #mute-btn:hover{border-color:var(--gold); color:var(--gold);}
-  #mute-btn.unmuted{border-color:var(--gold); color:var(--gold-soft);}
+  #mute-btn:hover{background:rgba(212,168,32,.12);}
+  #mute-btn.muted{border-color:var(--line); color:var(--dim);}
+  #mute-btn.muted:hover{border-color:var(--gold); color:var(--gold);}
 </style>
 </head>
 <body>
@@ -221,7 +222,7 @@
     <h1>เส้นเวลาประวัติศาสตร์เกาะ TALOS — การรุกล้ำของ WL และความชอบธรรมของ AZ</h1>
     <div class="sub">IO Product: หักล้าง Narrative N1 «#TalosOurHeritage» — ความชอบธรรมในการทวงคืนพื้นที่ทั้งหมด | Operation RESTORE TALOS</div>
   </div>
-  <button id="mute-btn" title="เปิด/ปิดเสียง">🔇 เปิดเสียง</button>
+  <button id="mute-btn" title="ปิด/เปิดเสียง">🔊 ปิดเสียง</button>
   <div class="era-counter" id="eraCounter">๑ / ๑๐</div>
   <a class="backlink" href="index.html">← กลับหน้าหลัก</a>
 </div>
@@ -715,27 +716,45 @@ document.addEventListener('keydown', ev=>{
 go(0);
 </script>
 
-<!-- ===== Hidden YouTube Music Player ===== -->
-<div id="yt-box" style="position:fixed;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true"></div>
+<!-- ===== YouTube Music Player (hidden, triggered by Play button) ===== -->
+<div style="position:fixed;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+  <div id="yt-node"></div>
+</div>
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
 (function(){
   const VID = 'I1T4W8SJ-Ds';
   const btn = document.getElementById('mute-btn');
-  const box = document.getElementById('yt-box');
-  let on = false;
+  var yt = null;
+
+  /* called inside Play button click → user gesture → autoplay+sound allowed */
+  function _startMusic(){
+    if(yt){ yt.unMute(); yt.playVideo(); return; }
+    if(!window.YT || !YT.Player) return;
+    yt = new YT.Player('yt-node',{
+      videoId: VID,
+      playerVars:{autoplay:1, mute:0, loop:1, playlist:VID,
+                  controls:0, disablekb:1, fs:0, rel:0},
+      events:{onReady:function(e){ e.target.unMute(); e.target.playVideo(); }}
+    });
+  }
+
+  /* hook onto the Play button — fires AFTER the original listener sets playing=true */
+  document.getElementById('btnPlay').addEventListener('click', function(){
+    if(playing) _startMusic();
+  });
+
+  /* mute/unmute toggle */
   btn.addEventListener('click', function(){
-    on = !on;
-    if(on){
-      box.innerHTML = '<iframe src="https://www.youtube.com/embed/'+VID
-        +'?autoplay=1&loop=1&playlist='+VID+'&controls=0&disablekb=1&fs=0&rel=0"'
-        +' width="1" height="1" frameborder="0"'
-        +' allow="autoplay; encrypted-media"></iframe>';
+    if(!yt || typeof yt.isMuted !== 'function') return;
+    if(yt.isMuted()){
+      yt.unMute();
       btn.textContent = '🔊 ปิดเสียง';
-      btn.classList.add('unmuted');
+      btn.classList.remove('muted');
     } else {
-      box.innerHTML = '';
+      yt.mute();
       btn.textContent = '🔇 เปิดเสียง';
-      btn.classList.remove('unmuted');
+      btn.classList.add('muted');
     }
   });
 })();
