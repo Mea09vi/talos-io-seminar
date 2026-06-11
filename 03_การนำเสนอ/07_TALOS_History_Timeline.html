@@ -202,25 +202,15 @@
     padding:5px 0 7px; border-top:1px solid #0d1d33; font-family:'Chakra Petch',sans-serif;
   }
 
-  /* ===== Music Dock ===== */
-  #yt-dock{
-    position:fixed; bottom:50px; right:18px; z-index:200;
-    display:flex; flex-direction:column; align-items:flex-end; gap:6px;
+  /* ===== Mute Button ===== */
+  #mute-btn{
+    background:none; border:1px solid var(--line); color:var(--dim);
+    font-family:'Chakra Petch',sans-serif; font-size:13px;
+    padding:6px 12px; border-radius:6px; cursor:pointer; transition:.2s;
+    white-space:nowrap; letter-spacing:.3px;
   }
-  #yt-toggle{
-    background:rgba(5,13,26,.92); border:1px solid var(--gold);
-    color:var(--gold); font-size:13px; font-family:'Chakra Petch',sans-serif;
-    padding:7px 14px; border-radius:7px; cursor:pointer; transition:.2s;
-    white-space:nowrap; backdrop-filter:blur(4px); letter-spacing:.4px;
-  }
-  #yt-toggle:hover{background:rgba(212,168,32,.15);}
-  #yt-toggle.playing{border-color:var(--az-soft); color:var(--az-soft);}
-  #yt-player-wrap{
-    display:none; border:1px solid var(--line); border-radius:8px;
-    overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,.65);
-  }
-  #yt-player-wrap.open{display:block;}
-  #yt-player-wrap iframe{display:block; width:240px; height:135px; border:0;}
+  #mute-btn:hover{border-color:var(--gold); color:var(--gold);}
+  #mute-btn.unmuted{border-color:var(--gold); color:var(--gold-soft);}
 </style>
 </head>
 <body>
@@ -231,6 +221,7 @@
     <h1>เส้นเวลาประวัติศาสตร์เกาะ TALOS — การรุกล้ำของ WL และความชอบธรรมของ AZ</h1>
     <div class="sub">IO Product: หักล้าง Narrative N1 «#TalosOurHeritage» — ความชอบธรรมในการทวงคืนพื้นที่ทั้งหมด | Operation RESTORE TALOS</div>
   </div>
+  <button id="mute-btn" title="เปิด/ปิดเสียง">🔇 เปิดเสียง</button>
   <div class="era-counter" id="eraCounter">๑ / ๑๐</div>
   <a class="backlink" href="index.html">← กลับหน้าหลัก</a>
 </div>
@@ -724,34 +715,34 @@ document.addEventListener('keydown', ev=>{
 go(0);
 </script>
 
-<!-- ===== Music Dock ===== -->
-<div id="yt-dock">
-  <div id="yt-player-wrap"></div>
-  <button id="yt-toggle">♪ เปิดเพลง</button>
+<!-- ===== Hidden YouTube Music Player ===== -->
+<div style="position:fixed;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+  <div id="yt-player"></div>
 </div>
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-(function(){
-  const btn  = document.getElementById('yt-toggle');
-  const wrap = document.getElementById('yt-player-wrap');
-  let open = false;
-  const VID = 'I1T4W8SJ-Ds';
-  btn.addEventListener('click', function(){
-    open = !open;
-    if(open){
-      wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/'+VID
-        +'?autoplay=1&loop=1&playlist='+VID+'&rel=0" '
-        +'allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-      wrap.classList.add('open');
-      btn.textContent = '♪ ปิดเพลง';
-      btn.classList.add('playing');
-    } else {
-      wrap.innerHTML = '';
-      wrap.classList.remove('open');
-      btn.textContent = '♪ เปิดเพลง';
-      btn.classList.remove('playing');
+var _ytPlayer;
+window.onYouTubeIframeAPIReady = function(){
+  _ytPlayer = new YT.Player('yt-player',{
+    videoId:'I1T4W8SJ-Ds',
+    playerVars:{autoplay:1,mute:1,loop:1,playlist:'I1T4W8SJ-Ds',controls:0,disablekb:1,fs:0,rel:0},
+    events:{
+      onReady:function(e){ e.target.playVideo(); _syncBtn(); }
     }
   });
-})();
+};
+function _syncBtn(){
+  const btn = document.getElementById('mute-btn');
+  if(!btn||!_ytPlayer||typeof _ytPlayer.isMuted!=='function') return;
+  const m = _ytPlayer.isMuted();
+  btn.textContent = m ? '🔇 เปิดเสียง' : '🔊 ปิดเสียง';
+  btn.classList.toggle('unmuted',!m);
+}
+document.getElementById('mute-btn').addEventListener('click',function(){
+  if(!_ytPlayer||typeof _ytPlayer.isMuted!=='function') return;
+  _ytPlayer.isMuted() ? _ytPlayer.unMute() : _ytPlayer.mute();
+  _syncBtn();
+});
 </script>
 </body>
 </html>
