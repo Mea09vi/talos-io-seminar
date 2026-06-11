@@ -201,6 +201,26 @@
     flex:0 0 auto; text-align:center; font-size:11px; color:#46607f;
     padding:5px 0 7px; border-top:1px solid #0d1d33; font-family:'Chakra Petch',sans-serif;
   }
+
+  /* ===== Music Dock ===== */
+  #yt-dock{
+    position:fixed; bottom:50px; right:18px; z-index:200;
+    display:flex; flex-direction:column; align-items:flex-end; gap:6px;
+  }
+  #yt-toggle{
+    background:rgba(5,13,26,.92); border:1px solid var(--gold);
+    color:var(--gold); font-size:13px; font-family:'Chakra Petch',sans-serif;
+    padding:7px 14px; border-radius:7px; cursor:pointer; transition:.2s;
+    white-space:nowrap; backdrop-filter:blur(4px); letter-spacing:.4px;
+  }
+  #yt-toggle:hover{background:rgba(212,168,32,.15);}
+  #yt-toggle.playing{border-color:var(--az-soft); color:var(--az-soft);}
+  #yt-player-wrap{
+    display:none; border:1px solid var(--line); border-radius:8px;
+    overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,.65);
+  }
+  #yt-player-wrap.open{display:block;}
+  #yt-player-wrap iframe{display:block; width:240px; height:135px; border:0;}
 </style>
 </head>
 <body>
@@ -702,6 +722,36 @@ document.addEventListener('keydown', ev=>{
 });
 
 go(0);
+</script>
+
+<!-- ===== Music Dock ===== -->
+<div id="yt-dock">
+  <div id="yt-player-wrap"></div>
+  <button id="yt-toggle">♪ เปิดเพลง</button>
+</div>
+<script>
+(function(){
+  const btn  = document.getElementById('yt-toggle');
+  const wrap = document.getElementById('yt-player-wrap');
+  let open = false;
+  const VID = 'I1T4W8SJ-Ds';
+  btn.addEventListener('click', function(){
+    open = !open;
+    if(open){
+      wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/'+VID
+        +'?autoplay=1&loop=1&playlist='+VID+'&rel=0" '
+        +'allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+      wrap.classList.add('open');
+      btn.textContent = '♪ ปิดเพลง';
+      btn.classList.add('playing');
+    } else {
+      wrap.innerHTML = '';
+      wrap.classList.remove('open');
+      btn.textContent = '♪ เปิดเพลง';
+      btn.classList.remove('playing');
+    }
+  });
+})();
 </script>
 </body>
 </html>
