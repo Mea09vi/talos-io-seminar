@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IO Campaign Hub — Operation RESTORE TALOS | N7 สธ.๘๖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,system-ui,sans-serif;
+  background:#050d1a;
+  color:#e8f0ff;
+  min-height:100vh;
+}
+
+/* Top bar */
+.top-bar {
+  background:linear-gradient(90deg,#0d2045,#1a3a6a);
+  border-bottom:2px solid #d4a820;
+  padding:16px 40px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.top-bar .left { display:flex; align-items:center; gap:10px; }
+.top-bar .left h1 { font-family:'Chakra Petch','Sarabun',sans-serif; font-size:18px; font-weight:700; color:#e8f0ff; }
+.back-link { font-size:13px; color:#d4a820; text-decoration:none; font-weight:600; border:1px solid #8a6010; padding:6px 14px; border-radius:4px; transition:all 0.2s; white-space:nowrap; }
+.back-link:hover { background:rgba(212,168,32,0.15); border-color:#d4a820; }
+
+/* Disclaimer */
+.disclaimer {
+  background:rgba(138,45,45,0.18);
+  border-bottom:1px solid #8a2d2d;
+  color:#ff9a9a;
+  font-size:12px;
+  text-align:center;
+  padding:8px 40px;
+  letter-spacing:0.3px;
+}
+
+/* Hero */
+.hero {
+  background:linear-gradient(135deg,#050d1a 0%,#0a1628 55%,#0d2045 100%);
+  padding:44px 40px;
+  border-bottom:1px solid #1a3a6a;
+  display:flex;
+  align-items:center;
+  gap:36px;
+}
+.hero-emblem { width:84px; height:84px; opacity:0.6; flex-shrink:0; }
+.hero-emblem img { width:100%; height:100%; object-fit:contain; }
+.hero-text h2 { font-family:'Chakra Petch','Sarabun',sans-serif; font-size:28px; font-weight:700; color:#e8f0ff; line-height:1.3; }
+.hero-text .op-sub { font-family:'Chakra Petch','Sarabun',sans-serif; font-size:14px; color:#d4a820; margin-top:6px; letter-spacing:1px; }
+.hero-text p { font-size:14px; color:#7090b0; margin-top:12px; line-height:1.7; max-width:880px; }
+.hero-tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:18px; }
+.tag { padding:3px 10px; border-radius:3px; font-size:11px; font-weight:600; border:1px solid; }
+.tag-blue { background:rgba(30,95,168,0.2); color:#60a0f0; border-color:#1e5fa8; }
+.tag-gold { background:rgba(212,168,32,0.2); color:#d4a820; border-color:#8a6010; }
+.tag-purple { background:rgba(192,132,252,0.2); color:#c084fc; border-color:#7c3aed; }
+.tag-red { background:rgba(138,45,45,0.3); color:#ff8080; border-color:#8a2d2d; }
+.tag-green { background:rgba(45,138,90,0.2); color:#60d090; border-color:#2d8a5a; }
+
+/* Sections */
+.section { padding:40px; }
+.section.tight { padding-top:0; }
+.section-title {
+  font-family:'Chakra Petch','Sarabun',sans-serif;
+  font-size:12px;
+  font-weight:700;
+  color:#d4a820;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:20px;
+  padding-bottom:8px;
+  border-bottom:1px solid #1a3a6a;
+}
+.section-lead { font-size:13px; color:#6080a0; line-height:1.7; margin-bottom:22px; max-width:900px; }
+
+/* TA segmentation grid */
+.ta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; }
+.ta-box {
+  background:rgba(13,32,69,0.6);
+  border:1px solid #1a3a6a;
+  border-radius:8px;
+  padding:18px 20px;
+}
+.ta-box.primary { border-left:3px solid #2d8a5a; }
+.ta-box.neutral { border-left:3px solid #d4a820; }
+.ta-box.settler { border-left:3px solid #8a2d2d; }
+.ta-box.intl    { border-left:3px solid #7c3aed; }
+.ta-box .ta-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; gap:8px; }
+.ta-box h4 { font-size:14px; font-weight:700; color:#e8f0ff; }
+.ta-pop { font-size:11px; color:#6080a0; margin-bottom:12px; }
+.ta-row { font-size:12px; color:#7090b0; line-height:1.55; margin-bottom:8px; }
+.ta-row b { color:#d4a820; font-weight:600; }
+.ta-row.msg { color:#cfe0ff; padding:8px 10px; background:rgba(10,22,40,0.7); border-radius:4px; border-left:2px solid #1e5fa8; font-style:italic; }
+.ta-row.chan { color:#60a0f0; }
+.mini-tag { font-size:10px; font-weight:700; padding:2px 8px; border-radius:3px; letter-spacing:0.5px; white-space:nowrap; }
+.mt-green { background:rgba(45,138,90,0.2); color:#60d090; border:1px solid #2d8a5a; }
+.mt-gold  { background:rgba(212,168,32,0.2); color:#d4a820; border:1px solid #8a6010; }
+.mt-red   { background:rgba(138,45,45,0.3); color:#ff8080; border:1px solid #8a2d2d; }
+.mt-purple{ background:rgba(192,132,252,0.2); color:#c084fc; border:1px solid #7c3aed; }
+
+/* Pillars */
+.pillars { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+.pillar {
+  background:rgba(10,22,40,0.8);
+  border:1px solid #1a3a6a;
+  border-radius:6px;
+  padding:16px 18px;
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+.pillar .num {
+  font-family:'Chakra Petch',sans-serif;
+  font-size:26px;
+  font-weight:700;
+  color:#d4a820;
+  line-height:1;
+  flex-shrink:0;
+}
+.pillar h5 { font-size:13px; font-weight:700; color:#e8f0ff; margin-bottom:4px; }
+.pillar p { font-size:12px; color:#6080a0; line-height:1.6; }
+
+/* Campaign catalog cards */
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
+.card {
+  background:rgba(13,32,69,0.6);
+  border:1px solid #1a3a6a;
+  border-radius:8px;
+  overflow:hidden;
+  text-decoration:none;
+  transition:all 0.2s;
+  display:flex;
+  flex-direction:column;
+}
+.card:hover { border-color:#2a7fd4; transform:translateY(-2px); box-shadow:0 8px 24px rgba(30,95,168,0.3); }
+.card-header {
+  padding:14px 20px;
+  border-bottom:1px solid #1a3a6a;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.card-num { font-size:11px; color:#4a6a8a; font-weight:600; letter-spacing:1px; }
+.card-body { padding:20px; flex:1; }
+.card-title { font-size:16px; font-weight:700; color:#e8f0ff; margin-bottom:8px; line-height:1.4; }
+.card-desc { font-size:12px; color:#6080a0; line-height:1.65; }
+.card-footer {
+  padding:12px 20px;
+  border-top:1px solid #1a3a6a;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.open-btn { font-size:11px; color:#2a7fd4; display:flex; align-items:center; gap:4px; font-weight:600; }
+
+/* MOE / MOP table */
+.moe-wrap { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.moe-card {
+  background:rgba(13,32,69,0.6);
+  border:1px solid #1a3a6a;
+  border-radius:8px;
+  overflow:hidden;
+}
+.moe-card.moe { border-top:3px solid #2d8a5a; }
+.moe-card.mop { border-top:3px solid #1e5fa8; }
+.moe-card h4 {
+  font-size:13px; font-weight:700; padding:14px 18px;
+  border-bottom:1px solid #1a3a6a;
+}
+.moe-card.moe h4 { color:#60d090; }
+.moe-card.mop h4 { color:#60a0f0; }
+.moe-card h4 span { font-size:11px; color:#6080a0; font-weight:400; display:block; margin-top:2px; }
+table { width:100%; border-collapse:collapse; }
+td { font-size:12px; color:#7090b0; padding:9px 18px; border-bottom:1px solid rgba(26,58,106,0.5); line-height:1.5; vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+td.metric { color:#cfe0ff; }
+td.target { color:#d4a820; font-weight:600; text-align:right; white-space:nowrap; }
+
+/* Footer */
+.footer { padding:24px 40px; border-top:1px solid #1a3a6a; text-align:center; font-size:11px; color:#2a4a6a; line-height:1.8; }
+
+@media (max-width:760px) {
+  .hero { flex-direction:column; text-align:center; gap:20px; }
+  .hero-text p { margin-left:auto; margin-right:auto; }
+  .hero-tags { justify-content:center; }
+  .moe-wrap { grid-template-columns:1fr; }
+  .section { padding:28px 20px; }
+  .top-bar, .disclaimer, .hero, .footer { padding-left:20px; padding-right:20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="left">
+    <img src="../../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:28px;width:auto;">
+    <h1>กลุ่มที่ ๒ — N7 IO Campaign Portfolio</h1>
+  </div>
+  <a class="back-link" href="../index.html">← กลับหน้าหลัก</a>
+</div>
+
+<div class="disclaimer">
+  ⚠ สถานการณ์ฝึกสมมุติ (fictional training scenario) — ประเทศ ALIZARIA (AZ), WOADLAND (WL) และเกาะ TALOS ไม่มีอยู่จริง
+</div>
+
+<div class="hero">
+  <div class="hero-emblem"><img src="../../Emblem_of_the_Royal_Thai_Navy.svg" alt="Royal Thai Navy"></div>
+  <div class="hero-text">
+    <h2>IO Campaign Portfolio</h2>
+    <div class="op-sub">OPERATION RESTORE TALOS</div>
+    <p>คลังผลิตภัณฑ์และแคมเปญการปฏิบัติการสารสนเทศ (IO) ของ N7 ที่ออกแบบสำหรับ<b style="color:#cfe0ff"> กลุ่มเป้าหมายหลักคือประชาชนพลเรือนบนเกาะ TALOS</b>
+    เพื่อสร้างความชอบธรรม (legitimacy) ในการที่ ALIZARIA (AZ) ทวงคืนอธิปไตยเหนือเกาะ หักล้างปฏิบัติการบิดเบือนข้อมูลของ WOADLAND (WL)
+    และยึดโยงเข้ากับมติคณะมนตรีความมั่นคงแห่งสหประชาชาติ UNSC 2847 (Chapter VII)</p>
+    <div class="hero-tags">
+      <span class="tag tag-gold">StratComm</span>
+      <span class="tag tag-purple">PSYOP</span>
+      <span class="tag tag-blue">Counter-Disinformation</span>
+      <span class="tag tag-green">Legitimacy</span>
+      <span class="tag tag-red">Counter #TalosOurHeritage</span>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Target Audience Segmentation -->
+<div class="section">
+  <div class="section-title">การแบ่งกลุ่มเป้าหมาย — TARGET AUDIENCE (TA) SEGMENTATION</div>
+  <div class="section-lead">เกาะ TALOS มีประชากรพลเรือนประมาณ ๑๘,๗๐๐ คน การออกแบบสารแยกตามกลุ่มเป้าหมาย ๔ กลุ่ม โดยกำหนดวัตถุประสงค์ สารหลัก (key message) และช่องทาง (channel) ที่เหมาะสมสำหรับแต่ละกลุ่ม</div>
+  <div class="ta-grid">
+
+    <div class="ta-box primary">
+      <div class="ta-head">
+        <h4>กลุ่มหลัก — ชาว Azizalian บนเกาะ</h4>
+        <span class="mini-tag mt-green">REINFORCE</span>
+      </div>
+      <div class="ta-pop">~๘๐% ของประชากร (~๑๘,๗๐๐ คน) — เห็นใจ AZ อยู่แล้ว</div>
+      <div class="ta-row"><b>วัตถุประสงค์:</b> เสริมแรง (reinforce) อัตลักษณ์และความเชื่อมั่น กระตุ้นให้แสดงออกอย่างเปิดเผยและสนับสนุนการกลับคืนสู่ AZ</div>
+      <div class="ta-row msg">«TALOS คือบ้านของเรา — การกลับคืนสู่ AZ คือการกลับบ้านอย่างสันติและถูกต้องตามกฎหมาย»</div>
+      <div class="ta-row chan"><b style="color:#60a0f0">ช่องทาง:</b> วิทยุชุมชน, กลุ่ม LINE/messaging ท้องถิ่น, ผู้นำชุมชน (KLE), โปสเตอร์ในตลาด</div>
+    </div>
+
+    <div class="ta-box neutral">
+      <div class="ta-head">
+        <h4>กลุ่มลังเล / เป็นกลาง</h4>
+        <span class="mini-tag mt-gold">PERSUADE</span>
+      </div>
+      <div class="ta-pop">ยังไม่ตัดสินใจ — อ่อนไหวต่อข้อมูลบิดเบือนของ WL</div>
+      <div class="ta-row"><b>วัตถุประสงค์:</b> โน้มน้าวด้วยข้อเท็จจริง (persuade with facts) ลดความสับสน สร้างภูมิคุ้มกัน (inoculation) ต่อข่าวลวง</div>
+      <div class="ta-row msg">«ดูข้อเท็จจริงด้วยตัวคุณเอง — ประชากร ตัวเลข และกฎหมายระหว่างประเทศ ชี้ไปทางเดียวกัน»</div>
+      <div class="ta-row chan"><b style="color:#60a0f0">ช่องทาง:</b> ศูนย์ตรวจสอบข้อเท็จจริง TALOS TRUTH, เกมตอบคำถามประวัติศาสตร์, social feed</div>
+    </div>
+
+    <div class="ta-box settler">
+      <div class="ta-head">
+        <h4>กลุ่มผู้ตั้งถิ่นฐาน WL (settlers)</h4>
+        <span class="mini-tag mt-red">DE-ESCALATE</span>
+      </div>
+      <div class="ta-pop">ผู้ตั้งรกรากภายใต้นโยบายของ WL หลังการรุกล้ำ</div>
+      <div class="ta-row"><b>วัตถุประสงค์:</b> ลดความตึงเครียด (de-escalate) ให้หลักประกันความปลอดภัย ป้องกันการต่อต้านด้วยอาวุธ แยกประชาชนออกจากกองกำลัง</div>
+      <div class="ta-row msg">«ท่านและครอบครัวจะปลอดภัย — AZ รับประกันสิทธิพลเรือนและการปฏิบัติตามกฎหมายมนุษยธรรม»</div>
+      <div class="ta-row chan"><b style="color:#60a0f0">ช่องทาง:</b> ใบปลิว/leaflet, ประกาศ loudspeaker, ช่องทางมนุษยธรรม, สายด่วนปลอดภัย</div>
+    </div>
+
+    <div class="ta-box intl">
+      <div class="ta-head">
+        <h4>ประชาคมระหว่างประเทศ / สื่อ</h4>
+        <span class="mini-tag mt-purple">LEGITIMIZE</span>
+      </div>
+      <div class="ta-pop">ผู้สังเกตการณ์, องค์การระหว่างประเทศ, สื่อมวลชนต่างชาติ</div>
+      <div class="ta-row"><b>วัตถุประสงค์:</b> สร้างความชอบธรรม (legitimize) ผ่านกรอบกฎหมาย ยึดโยง UNSC 2847 (Chapter VII) ตอบโต้ narrative ของ WL</div>
+      <div class="ta-row msg">«การกระทำของ AZ สอดคล้องกับมติ UNSC 2847 และกฎหมายระหว่างประเทศทุกประการ»</div>
+      <div class="ta-row chan"><b style="color:#60a0f0">ช่องทาง:</b> แถลงข่าวทางการ (StratComm), press kit, X/Twitter ภาษาอังกฤษ, briefing สื่อ</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 3. Campaign Objectives & Themes -->
+<div class="section tight">
+  <div class="section-title">วัตถุประสงค์และแก่นสาร — CAMPAIGN OBJECTIVES &amp; THEMES</div>
+  <div class="section-lead">ทุกผลิตภัณฑ์ IO ในคลังนี้ยึดโยงกับ ๕ เสาหลักความชอบธรรมของ AZ (5 Pillars of Legitimacy) ซึ่งเป็น message architecture หลักของแคมเปญ</div>
+  <div class="pillars">
+    <div class="pillar">
+      <div class="num">①</div>
+      <div><h5>ประชากร &gt;95% Azizalian</h5><p>องค์ประกอบประชากรของเกาะเป็นชาว Azizalian อย่างท่วมท้น สะท้อนเจตจำนงและอัตลักษณ์ของผู้อยู่อาศัยจริง</p></div>
+    </div>
+    <div class="pillar">
+      <div class="num">②</div>
+      <div><h5>เส้นแบ่งของ ARGENTIA ไม่ชอบธรรม</h5><p>เส้นแบ่งเขตที่ขีดโดยมหาอำนาจอาณานิคม ARGENTIA ขัดต่อหลักการกำหนดใจตนเอง ไม่มีความชอบธรรมทางประวัติศาสตร์</p></div>
+    </div>
+    <div class="pillar">
+      <div class="num">③</div>
+      <div><h5>WL ละเมิดข้อตกลงทวิภาคี</h5><p>WL ละเมิดข้อตกลงเส้นสันปันน้ำ (watershed line) ที่ตนลงนามเองด้วยการข้ามเส้นและยึดครองพื้นที่ด้วยกำลัง</p></div>
+    </div>
+    <div class="pillar">
+      <div class="num">④</div>
+      <div><h5>สิทธิเขตไหล่ทวีป (ตั้งแต่ ค.ศ.1982)</h5><p>AZ มีสิทธิเหนือเขตไหล่ทวีปและทรัพยากรโดยรอบเกาะตามกฎหมายทะเลตั้งแต่ ค.ศ.๑๙๘๒ ก่อนการรุกล้ำของ WL</p></div>
+    </div>
+    <div class="pillar">
+      <div class="num">⑤</div>
+      <div><h5>UNSC 2847 (Chapter VII)</h5><p>มติคณะมนตรีความมั่นคงฯ 2847 ภายใต้หมวด ๗ ให้อำนาจและรับรองความชอบธรรมในการดำเนินการของ AZ</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Campaign Catalog -->
+<div class="section tight">
+  <div class="section-title">คลังแคมเปญ — CAMPAIGN CATALOG</div>
+  <div class="section-lead">ผลิตภัณฑ์ IO ๔ ชิ้นที่พร้อมเผยแพร่ คลิกการ์ดเพื่อเปิดแต่ละแคมเปญ</div>
+  <div class="cards">
+
+    <a class="card" href="truth-campaign.html">
+      <div class="card-header">
+        <span class="card-num">CAMPAIGN 01</span>
+        <span class="mini-tag mt-gold">Counter-Disinfo</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">TALOS TRUTH — ศูนย์ตรวจสอบข้อเท็จจริง</div>
+        <div class="card-desc">ศูนย์ Counter-Disinformation รูปแบบ Myth vs Fact หักล้างข่าวลวงและ narrative #TalosOurHeritage ของ WL ด้วยข้อเท็จจริงที่อ้างอิงได้</div>
+      </div>
+      <div class="card-footer">
+        <span class="mini-tag mt-gold">Myth vs Fact</span>
+        <span class="open-btn">เปิด →</span>
+      </div>
+    </a>
+
+    <a class="card" href="social-feed.html">
+      <div class="card-header">
+        <span class="card-num">CAMPAIGN 02</span>
+        <span class="mini-tag mt-purple">StratComm</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Social Media Campaign — #TalosTruth #ReturnHome</div>
+        <div class="card-desc">จำลอง social feed พร้อม content calendar และ metrics สำหรับการรณรงค์บนสื่อสังคมออนไลน์ เน้น hashtag #TalosTruth และ #ReturnHome</div>
+      </div>
+      <div class="card-footer">
+        <span class="mini-tag mt-purple">Feed + Calendar + Metrics</span>
+        <span class="open-btn">เปิด →</span>
+      </div>
+    </a>
+
+    <a class="card" href="quiz.html">
+      <div class="card-header">
+        <span class="card-num">CAMPAIGN 03</span>
+        <span class="mini-tag mt-green">PSYOP</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">TALOS History Quiz — เกมทดสอบความรู้</div>
+        <div class="card-desc">เกมตอบคำถามเชิงโต้ตอบ (interactive quiz) สร้างภูมิคุ้มกัน (inoculation) ต่อข้อมูลบิดเบือน ผ่านการเรียนรู้ประวัติศาสตร์เกาะ TALOS</div>
+      </div>
+      <div class="card-footer">
+        <span class="mini-tag mt-green">Inoculation</span>
+        <span class="open-btn">เปิด →</span>
+      </div>
+    </a>
+
+    <a class="card" href="posters.html">
+      <div class="card-header">
+        <span class="card-num">CAMPAIGN 04</span>
+        <span class="mini-tag mt-red">PSYOP</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">PSYOP Poster Gallery — โปสเตอร์รณรงค์</div>
+        <div class="card-desc">คลังโปสเตอร์รณรงค์ที่พิมพ์ได้ (printable) สำหรับติดในพื้นที่สาธารณะ ตลาด และชุมชน เพื่อเสริมแรงสารหลักของแคมเปญ</div>
+      </div>
+      <div class="card-footer">
+        <span class="mini-tag mt-red">Printable</span>
+        <span class="open-btn">เปิด →</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- 5. MOE / MOP -->
+<div class="section tight">
+  <div class="section-title">การประเมินผล — MOE / MOP</div>
+  <div class="section-lead">มาตรวัดประสิทธิผล (Measures of Effectiveness — ผลลัพธ์ที่เกิดต่อกลุ่มเป้าหมาย) เทียบกับมาตรวัดการปฏิบัติ (Measures of Performance — ปริมาณงานที่ดำเนินการ)</div>
+  <div class="moe-wrap">
+
+    <div class="moe-card moe">
+      <h4>MOE — มาตรวัดประสิทธิผล<span>"เรากำลังทำสิ่งที่ถูกต้องหรือไม่" — วัดที่พฤติกรรม/ทัศนคติของ TA</span></h4>
+      <table>
+        <tr><td class="metric">% ชาวเกาะที่เชื่อว่า AZ มีความชอบธรรมในการทวงคืน</td><td class="target">≥ 70%</td></tr>
+        <tr><td class="metric">จำนวน engagement เชิงบวก (like/share/comment สนับสนุน)</td><td class="target">↑ ต่อสัปดาห์</td></tr>
+        <tr><td class="metric">การลดลงของ reach แฮชแท็ก #TalosOurHeritage ของ WL</td><td class="target">↓ −40%</td></tr>
+        <tr><td class="metric">% กลุ่มลังเลที่เปลี่ยนมาเป็นกลาง/สนับสนุน</td><td class="target">↑ shift</td></tr>
+        <tr><td class="metric">จำนวน settler ที่ติดต่อสายด่วนปลอดภัย (de-escalation)</td><td class="target">↑ uptake</td></tr>
+      </table>
+    </div>
+
+    <div class="moe-card mop">
+      <h4>MOP — มาตรวัดการปฏิบัติ<span>"เราทำงานครบตามแผนหรือไม่" — วัดที่ผลผลิต/กิจกรรม</span></h4>
+      <table>
+        <tr><td class="metric">จำนวนโพสต์ที่เผยแพร่ตาม content calendar</td><td class="target">/ สัปดาห์</td></tr>
+        <tr><td class="metric">จำนวนโปสเตอร์ที่พิมพ์และแจกจ่าย</td><td class="target">/ พื้นที่</td></tr>
+        <tr><td class="metric">จำนวน quiz completions (ผู้เล่นจบเกม)</td><td class="target">ยอดสะสม</td></tr>
+        <tr><td class="metric">จำนวนรายการ Myth vs Fact ที่เผยแพร่ใน TALOS TRUTH</td><td class="target">ยอดสะสม</td></tr>
+        <tr><td class="metric">จำนวนแถลงข่าว / press kit ที่ส่งถึงสื่อ</td><td class="target">/ เดือน</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  กลุ่มที่ ๒ | N7 การปฏิบัติการสารสนเทศ | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖ | ๒๕๖๙
+</div>
+
+</body>
+</html>

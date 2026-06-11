@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TALOS History Quiz — คุณรู้จักบ้านของคุณดีแค่ไหน?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050d1a;
+    --panel:rgba(13,32,69,0.6);
+    --line:#1a3a6a;
+    --txt:#e8f0ff;
+    --dim:#6080a0;
+    --gold:#d4a820;
+    --az:#1e5fa8; --az-soft:#60a0f0;
+    --wl:#8a2d2d; --wl-soft:#ff8080;
+    --tr:#2d8a5a; --tr-soft:#60d090;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--txt);
+    font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,sans-serif;
+    line-height:1.6; min-height:100vh;
+  }
+  h1,h2,h3,.head{font-family:'Chakra Petch','Sarabun',sans-serif;}
+  a{color:inherit}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    display:flex; align-items:center; gap:14px;
+    padding:10px 22px;
+    background:linear-gradient(90deg,#0d2045,#1a3a6a);
+    border-bottom:2px solid var(--gold);
+    position:sticky; top:0; z-index:50;
+  }
+  .topbar img{height:28px}
+  .topbar .brand{flex:1; min-width:0}
+  .topbar .brand b{font-family:'Chakra Petch',sans-serif; letter-spacing:.5px; color:#fff; font-size:15px}
+  .topbar .brand span{display:block; font-size:11.5px; color:var(--az-soft)}
+  .backlink{
+    color:var(--gold); text-decoration:none; font-size:13px;
+    border:1px solid var(--gold); border-radius:6px; padding:6px 13px;
+    white-space:nowrap; transition:.2s;
+  }
+  .backlink:hover{background:var(--gold); color:#0d2045}
+
+  /* ===== Disclaimer ===== */
+  .disclaimer{
+    background:rgba(138,45,45,0.18); border-bottom:1px solid var(--wl);
+    color:var(--wl-soft); text-align:center; font-size:12.5px;
+    padding:6px 16px; letter-spacing:.2px;
+  }
+
+  /* ===== Layout ===== */
+  .wrap{max-width:780px; margin:0 auto; padding:0 20px 50px}
+
+  /* ===== Screens ===== */
+  .screen{display:none; animation:fade .35s ease}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+
+  /* ===== Start ===== */
+  .start{
+    text-align:center; padding:60px 24px 44px;
+    background:radial-gradient(ellipse at 50% 0%, rgba(30,95,168,0.18) 0%, transparent 62%);
+  }
+  .start .badge-top{
+    display:inline-block; font-family:'Chakra Petch',sans-serif; font-size:12px;
+    letter-spacing:2px; text-transform:uppercase; color:var(--gold);
+    border:1px solid var(--gold); border-radius:20px; padding:5px 16px; margin-bottom:22px;
+  }
+  .start h1{
+    font-size:clamp(26px,5.5vw,42px); line-height:1.2; color:#fff; letter-spacing:.5px;
+  }
+  .start h1 .hl{color:var(--az-soft)}
+  .start .intro{
+    margin:18px auto 0; max-width:560px; color:var(--dim); font-size:15px;
+  }
+  .start .intro b{color:var(--txt)}
+
+  /* ===== Buttons ===== */
+  .btn{
+    font-family:'Chakra Petch','Sarabun',sans-serif; font-weight:600;
+    font-size:16px; letter-spacing:.4px; cursor:pointer; border:none;
+    border-radius:10px; padding:14px 30px; transition:.2s; margin-top:30px;
+    color:#fff; background:linear-gradient(180deg,var(--az),#163f73);
+    box-shadow:0 6px 20px rgba(30,95,168,0.4);
+  }
+  .btn:hover{filter:brightness(1.15); transform:translateY(-2px)}
+  .btn:focus-visible{outline:3px solid var(--gold); outline-offset:3px}
+  .btn:active{transform:translateY(0)}
+  .btn.next{
+    background:linear-gradient(180deg,var(--tr),#1d6040);
+    box-shadow:0 6px 20px rgba(45,138,90,0.4); margin-top:22px;
+  }
+  .btn.ghost{
+    background:transparent; border:1px solid var(--line); box-shadow:none;
+    color:var(--txt); font-size:14px; padding:11px 22px;
+  }
+  .btn.ghost:hover{border-color:var(--gold); color:var(--gold); filter:none}
+
+  /* ===== Quiz progress ===== */
+  .qhead{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin:34px 0 10px; font-family:'Chakra Petch',sans-serif;
+  }
+  .qhead .count{color:var(--gold); font-size:14px; letter-spacing:1px}
+  .qhead .scoretag{color:var(--dim); font-size:13px}
+  .pbar{
+    height:8px; background:rgba(26,58,106,0.5); border:1px solid var(--line);
+    border-radius:6px; overflow:hidden; margin-bottom:30px;
+  }
+  .pbar .fill{
+    height:100%; width:0; border-radius:6px; transition:width .4s ease;
+    background:linear-gradient(90deg,var(--az),var(--az-soft));
+  }
+
+  /* ===== Question card ===== */
+  .qcard{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:26px 24px; box-shadow:0 6px 22px rgba(0,0,0,0.35);
+  }
+  .qtext{
+    font-size:19px; font-weight:600; color:#fff; line-height:1.45;
+    font-family:'Chakra Petch','Sarabun',sans-serif; margin-bottom:20px;
+  }
+  .opts{display:flex; flex-direction:column; gap:12px}
+  .opt{
+    text-align:left; width:100%; cursor:pointer; font-size:15.5px; color:var(--txt);
+    background:rgba(13,32,69,0.5); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; transition:.18s; display:flex; align-items:center; gap:13px;
+    font-family:inherit;
+  }
+  .opt:hover:not(:disabled){border-color:var(--az-soft); background:rgba(30,95,168,0.18)}
+  .opt:focus-visible{outline:3px solid var(--gold); outline-offset:2px}
+  .opt:disabled{cursor:default}
+  .opt .key{
+    flex:0 0 auto; width:26px; height:26px; border-radius:7px;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13px;
+    background:rgba(26,58,106,0.6); color:var(--az-soft); border:1px solid var(--line);
+  }
+  .opt.correct{border-color:var(--tr); background:rgba(45,138,90,0.22)}
+  .opt.correct .key{background:var(--tr); color:#fff; border-color:var(--tr)}
+  .opt.wrong{border-color:var(--wl); background:rgba(138,45,45,0.22)}
+  .opt.wrong .key{background:var(--wl); color:#fff; border-color:var(--wl)}
+  .opt .mark{margin-left:auto; font-weight:700; font-size:16px}
+  .opt.correct .mark{color:var(--tr-soft)}
+  .opt.wrong .mark{color:var(--wl-soft)}
+
+  /* ===== Explain box ===== */
+  .explain{
+    margin-top:20px; border-radius:10px; padding:15px 17px;
+    border-left:4px solid var(--gold); background:rgba(212,168,32,0.10);
+    font-size:14.5px; color:var(--txt); display:none; animation:fade .3s ease;
+  }
+  .explain.show{display:block}
+  .explain .lbl{
+    font-family:'Chakra Petch',sans-serif; font-weight:700; color:var(--gold);
+    font-size:13px; letter-spacing:.5px; margin-right:6px;
+  }
+  .explain .verdict{
+    display:inline-block; font-family:'Chakra Petch',sans-serif; font-weight:700;
+    font-size:12.5px; padding:2px 10px; border-radius:14px; margin-bottom:8px;
+  }
+  .explain .verdict.ok{background:rgba(45,138,90,0.25); color:var(--tr-soft)}
+  .explain .verdict.no{background:rgba(138,45,45,0.25); color:var(--wl-soft)}
+  .qfoot{text-align:right}
+
+  /* ===== Results ===== */
+  .result{text-align:center; padding:36px 10px 0}
+  .scoreRing{
+    width:150px; height:150px; margin:0 auto 8px; border-radius:50%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    border:4px solid var(--gold); box-shadow:0 0 0 8px rgba(212,168,32,0.12);
+    background:radial-gradient(circle at 50% 40%, rgba(30,95,168,0.25), transparent 70%);
+  }
+  .scoreRing .big{font-family:'Chakra Petch',sans-serif; font-size:46px; font-weight:700; color:#fff; line-height:1}
+  .scoreRing .of{color:var(--dim); font-size:14px; margin-top:2px}
+  .tier{font-family:'Chakra Petch',sans-serif; font-size:24px; font-weight:700; color:var(--gold); margin-top:18px}
+  .tierMsg{color:var(--dim); font-size:14.5px; margin-top:6px; max-width:520px; margin-left:auto; margin-right:auto}
+
+  .recap{margin-top:38px; text-align:left}
+  .recap h3{
+    font-size:17px; color:var(--gold); margin-bottom:14px;
+    display:flex; align-items:center; gap:9px;
+  }
+  .recap h3::before{content:''; width:5px; height:20px; background:var(--gold); border-radius:2px}
+  .ritem{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px 13px 15px; margin-bottom:11px; border-left:4px solid var(--tr);
+  }
+  .ritem.miss{border-left-color:var(--wl)}
+  .ritem .rq{font-weight:600; color:#fff; font-size:14.5px; display:flex; gap:9px; align-items:flex-start}
+  .ritem .rq .ic{flex:0 0 auto; font-weight:700}
+  .ritem.hit .rq .ic{color:var(--tr-soft)}
+  .ritem.miss .rq .ic{color:var(--wl-soft)}
+  .ritem .ra{margin-top:6px; font-size:13.5px; color:var(--dim); padding-left:24px}
+  .ritem .ra b{color:var(--tr-soft); font-weight:600}
+
+  .resActions{
+    display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:30px;
+  }
+  .resActions .btn{margin-top:0}
+  .linkrow{margin-top:24px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center}
+  .linkrow a{
+    color:var(--az-soft); text-decoration:none; font-size:14px; border:1px solid var(--line);
+    border-radius:8px; padding:9px 16px; transition:.2s;
+  }
+  .linkrow a:hover{border-color:var(--az-soft); background:rgba(30,95,168,0.15)}
+
+  footer{
+    margin-top:46px; text-align:center; color:var(--dim); font-size:12.5px;
+    border-top:1px solid var(--line); padding:22px 16px;
+  }
+
+  @media(max-width:520px){
+    .qtext{font-size:17px}
+    .scoreRing{width:128px; height:128px}
+    .scoreRing .big{font-size:38px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <img src="../../Emblem_of_the_Royal_Thai_Navy.svg" style="height:28px" alt="emblem">
+  <div class="brand">
+    <b>TALOS HISTORY QUIZ</b>
+    <span>แบบทดสอบประวัติศาสตร์เพื่อประชาชนเกาะ TALOS</span>
+  </div>
+  <a class="backlink" href="index.html">← Campaign Hub</a>
+</div>
+
+<div class="disclaimer">
+  สถานการณ์ฝึกสมมุติ (fictional training scenario) — AZ, WL, เกาะ TALOS ไม่มีอยู่จริง
+</div>
+
+<div class="wrap">
+
+  <!-- ===== START SCREEN ===== -->
+  <section id="startScreen" class="screen active">
+    <div class="start">
+      <span class="badge-top">Inoculation Quiz · ๘ ข้อ</span>
+      <h1>TALOS History Quiz<br><span class="hl">คุณรู้จักบ้านของคุณดีแค่ไหน?</span></h1>
+      <p class="intro">
+        ทดสอบความรู้เกี่ยวกับ <b>ประวัติศาสตร์และข้อเท็จจริง</b> ที่ยืนยันความชอบธรรมของ
+        <b>AZ</b> เหนือเกาะ TALOS — ตอบให้ถูกแล้วเรียนรู้ข้อเท็จจริงที่มีหลักฐานในแต่ละข้อ
+        เพื่อรู้ทันปฏิบัติการบิดเบือนข้อมูลของ <b>WL</b>
+      </p>
+      <button class="btn" id="startBtn">เริ่มทำแบบทดสอบ ▶</button>
+    </div>
+  </section>
+
+  <!-- ===== QUIZ SCREEN ===== -->
+  <section id="quizScreen" class="screen">
+    <div class="qhead">
+      <span class="count" id="qcount">ข้อ ๑ / ๘</span>
+      <span class="scoretag" id="scoretag">คะแนน 0</span>
+    </div>
+    <div class="pbar"><div class="fill" id="pfill"></div></div>
+
+    <div class="qcard">
+      <div class="qtext" id="qtext"></div>
+      <div class="opts" id="opts"></div>
+      <div class="explain" id="explain"></div>
+    </div>
+
+    <div class="qfoot">
+      <button class="btn next" id="nextBtn" style="display:none">ถัดไป →</button>
+    </div>
+  </section>
+
+  <!-- ===== RESULTS SCREEN ===== -->
+  <section id="resultScreen" class="screen">
+    <div class="result">
+      <div class="scoreRing">
+        <span class="big" id="finalScore">0</span>
+        <span class="of">/ ๘</span>
+      </div>
+      <div class="tier" id="tierTitle"></div>
+      <div class="tierMsg" id="tierMsg"></div>
+    </div>
+
+    <div class="recap">
+      <h3>สรุปข้อเท็จจริงทั้ง ๘ ข้อ</h3>
+      <div id="recapList"></div>
+    </div>
+
+    <div class="resActions">
+      <button class="btn" id="retryBtn">ทำใหม่อีกครั้ง ↺</button>
+    </div>
+    <div class="linkrow">
+      <a href="truth-campaign.html">อ่านข้อเท็จจริงเต็ม →</a>
+      <a href="index.html">กลับ Campaign Hub</a>
+    </div>
+  </section>
+
+  <footer>
+    กลุ่มที่ ๒ | N7 การปฏิบัติการสารสนเทศ | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖ | ๒๕๖๙
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+/* ===== Data ===== */
+const QUESTIONS = [
+  {
+    q: "ชาว Azizalian (AZ) มีสัดส่วนประชากรบนเกาะ TALOS ประมาณเท่าใด?",
+    opts: [
+      "มากกว่า ๙๕% ของประชากรทั้งเกาะ",
+      "ประมาณ ๕๐% เท่า ๆ กับชาว WL",
+      "เป็นชนกลุ่มน้อยราว ๒๐%",
+      "ไม่มีชาว AZ อาศัยอยู่เลย"
+    ],
+    answer: 0,
+    explain: "สำมะโนประชากรยืนยันว่าชาว Azizalian เป็นประชากรส่วนใหญ่ มากกว่า ๙๕% ของเกาะ TALOS — เกาะนี้คือบ้านของชาว AZ ทั้งทางเชื้อชาติ ภาษา และวัฒนธรรม"
+  },
+  {
+    q: "ในยุคอาณานิคม ใครเป็นผู้ขีดเส้นแบ่งเขตเกาะ TALOS?",
+    opts: [
+      "มหาอำนาจ ARGENTIA",
+      "รัฐบาล WL ฝ่ายเดียว",
+      "องค์การสหประชาชาติ (UN)",
+      "ชาว AZ ลงประชามติเอง"
+    ],
+    answer: 0,
+    explain: "เส้นแบ่งเขตเกาะถูกขีดโดยมหาอำนาจอาณานิคม ARGENTIA — มิใช่โดย WL ดังนั้นข้ออ้างของ WL ที่ว่า 'เป็นเขตของตนมาแต่เดิม' จึงไม่มีมูลทางประวัติศาสตร์"
+  },
+  {
+    q: "WL ได้ครอบครองเกาะ TALOS เป็นครั้งแรกด้วยวิธีใด?",
+    opts: [
+      "ใช้กำลังทหารเข้ายึด ประกอบกับนโยบายตั้งถิ่นฐานทับ",
+      "ซื้อเกาะอย่างถูกต้องตามกฎหมายจาก AZ",
+      "ได้รับมอบจาก UN ในฐานะดินแดนในอารักขา",
+      "ชาว TALOS เชิญ WL เข้ามาปกครอง"
+    ],
+    answer: 0,
+    explain: "WL เข้าครอบครอง TALOS ครั้งแรกด้วยกำลังทหาร และใช้นโยบายตั้งถิ่นฐานทับ (settler colonization) — เป็นการยึดครองโดยใช้กำลัง ไม่ใช่กรรมสิทธิ์ที่ชอบธรรม"
+  },
+  {
+    q: "ในสงคราม WL–EDR เส้นเขตแดนระหว่างประเทศใช้แนวใด?",
+    opts: [
+      "แนวสันปันน้ำของเทือกเขาตอนกลาง โดย WL ลงนามยกฝั่งใต้ให้ AZ",
+      "แนวชายฝั่งทะเลด้านตะวันออกทั้งหมด",
+      "เส้นรุ้งที่ ๔๕ องศาเหนือ",
+      "ไม่มีการตกลงเส้นเขตแดนใด ๆ"
+    ],
+    answer: 0,
+    explain: "ในสงคราม WL–EDR ทั้งสองฝ่ายตกลงใช้แนวสันปันน้ำของเทือกเขาตอนกลางเป็นเขตแดน และ WL ได้ 'ลงนาม' ยกพื้นที่ฝั่งใต้ (รวมถึง TALOS) ให้ AZ — เป็นพันธกรณีที่ WL ผูกพันด้วยลายลักษณ์อักษร"
+  },
+  {
+    q: "AZ ประกาศเขตไหล่ทวีปครอบคลุมเกาะ TALOS เมื่อปีใด?",
+    opts: [
+      "ค.ศ. 1982 — ก่อนการค้นพบแหล่ง VERDATA",
+      "ค.ศ. 2015 — หลังพบแหล่ง VERDATA",
+      "ค.ศ. 1999 — พร้อมกับ WL",
+      "ยังไม่เคยมีการประกาศ"
+    ],
+    answer: 0,
+    explain: "AZ ประกาศเขตไหล่ทวีปครอบคลุม TALOS ตั้งแต่ ค.ศ. 1982 — ก่อนค้นพบแหล่ง VERDATA หลายปี จึงพิสูจน์ว่า AZ อ้างสิทธิ์ในเชิงอธิปไตย ไม่ใช่เพราะหวังผลประโยชน์จากแร่"
+  },
+  {
+    q: "แหล่ง VERDATA มีปริมาณแร่หายาก (REE) และมูลค่าประมาณเท่าใด?",
+    opts: [
+      "ราว ๒๓ ล้านตัน มูลค่าประมาณ ๔.๗ ล้านล้านดอลลาร์",
+      "ราว ๕ แสนตัน มูลค่าประมาณ ๑ พันล้านดอลลาร์",
+      "ไม่มีแร่หายากในแหล่งนี้",
+      "ราว ๑๐๐ ล้านตัน มูลค่าประมาณ ๕๐๐ ดอลลาร์"
+    ],
+    answer: 0,
+    explain: "แหล่ง VERDATA มีแร่หายาก (REE) ประมาณ ๒๓ ล้านตัน มูลค่าราว ๔.๗ ล้านล้านดอลลาร์ — มูลค่ามหาศาลนี้คือแรงจูงใจที่แท้จริงเบื้องหลังปฏิบัติการบิดเบือนของ WL"
+  },
+  {
+    q: "แฮชแท็ก #TalosOurHeritage ของ WL คืออะไร และสร้าง impressions ได้เท่าใด?",
+    opts: [
+      "ปฏิบัติการข้อมูลบิดเบือน สร้าง impressions ได้ ๘.๗ ล้านครั้ง",
+      "แคมเปญท่องเที่ยวของชาว TALOS",
+      "งานวิจัยทางวิชาการที่ผ่านการตรวจสอบ",
+      "มติของ UN ที่รับรอง WL"
+    ],
+    answer: 0,
+    explain: "#TalosOurHeritage เป็นปฏิบัติการข้อมูลบิดเบือน (disinformation) ของ WL ที่สร้าง impressions ได้ถึง ๘.๗ ล้านครั้ง — ปริมาณการเข้าถึงมิได้ทำให้ข้อมูลเท็จกลายเป็นจริง"
+  },
+  {
+    q: "ข้อมติใดของคณะมนตรีความมั่นคง UN (หมวด ๗) เรียกร้องให้ WL ถอนตัว?",
+    opts: [
+      "ข้อมติที่ 2847",
+      "ข้อมติที่ 1441",
+      "ข้อมติที่ 678",
+      "ไม่มีข้อมติใดกล่าวถึง WL"
+    ],
+    answer: 0,
+    explain: "คณะมนตรีความมั่นคงแห่ง UN ออกข้อมติที่ 2847 ภายใต้หมวด ๗ ของกฎบัตร เรียกร้องให้ WL ถอนกำลังออกจาก TALOS — เป็นพันธกรณีที่มีผลผูกพันตามกฎหมายระหว่างประเทศ"
+  }
+];
+
+/* ===== State ===== */
+let current = 0;
+let score = 0;
+let answered = [];   // selected index per question (null = unanswered)
+
+/* ===== Elements ===== */
+const screens = {
+  start: document.getElementById('startScreen'),
+  quiz: document.getElementById('quizScreen'),
+  result: document.getElementById('resultScreen')
+};
+const elCount   = document.getElementById('qcount');
+const elScore   = document.getElementById('scoretag');
+const elFill    = document.getElementById('pfill');
+const elQText   = document.getElementById('qtext');
+const elOpts    = document.getElementById('opts');
+const elExplain = document.getElementById('explain');
+const elNext    = document.getElementById('nextBtn');
+
+const TH_NUM = ['๐','๑','๒','๓','๔','๕','๖','๗','๘','๙'];
+function toThai(n){ return String(n).split('').map(d => /\d/.test(d) ? TH_NUM[+d] : d).join(''); }
+const OPT_KEYS = ['ก','ข','ค','ง'];
+
+function show(name){
+  Object.values(screens).forEach(s => s.classList.remove('active'));
+  screens[name].classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ===== Render a question ===== */
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  elCount.textContent = 'ข้อ ' + toThai(current+1) + ' / ' + toThai(QUESTIONS.length);
+  elScore.textContent = 'คะแนน ' + toThai(score);
+  elFill.style.width = ((current) / QUESTIONS.length * 100) + '%';
+
+  elQText.textContent = q.q;
+  elExplain.className = 'explain';
+  elExplain.innerHTML = '';
+  elNext.style.display = 'none';
+  elNext.textContent = (current === QUESTIONS.length - 1) ? 'ดูผลคะแนน →' : 'ถัดไป →';
+
+  elOpts.innerHTML = '';
+  q.opts.forEach((text, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.type = 'button';
+    btn.innerHTML = '<span class="key">' + OPT_KEYS[i] + '</span><span class="lbl">' +
+                    text + '</span><span class="mark"></span>';
+    btn.addEventListener('click', () => handleAnswer(i));
+    elOpts.appendChild(btn);
+  });
+}
+
+/* ===== Handle an answer ===== */
+function handleAnswer(picked){
+  const q = QUESTIONS[current];
+  if (answered[current] != null) return;   // guard double-answer
+  answered[current] = picked;
+
+  const isCorrect = picked === q.answer;
+  if (isCorrect) score++;
+  elScore.textContent = 'คะแนน ' + toThai(score);
+
+  const buttons = elOpts.querySelectorAll('.opt');
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    const mark = btn.querySelector('.mark');
+    if (i === q.answer){
+      btn.classList.add('correct');
+      mark.textContent = '✓';
+    } else if (i === picked){
+      btn.classList.add('wrong');
+      mark.textContent = '✗';
+    }
+  });
+
+  elExplain.innerHTML =
+    '<div class="verdict ' + (isCorrect ? 'ok' : 'no') + '">' +
+      (isCorrect ? '✓ ถูกต้อง' : '✗ ยังไม่ถูก') + '</div>' +
+    '<div><span class="lbl">อธิบาย:</span>' + q.explain + '</div>';
+  elExplain.classList.add('show');
+
+  elNext.style.display = 'inline-block';
+  elNext.focus();
+}
+
+/* ===== Next ===== */
+function nextQuestion(){
+  if (current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    elFill.style.width = '100%';
+    showResults();
+  }
+}
+
+/* ===== Results ===== */
+function tierFor(s){
+  if (s >= 7) return {
+    title: 'ผู้พิทักษ์ความจริงแห่ง TALOS',
+    msg: 'ยอดเยี่ยม! คุณรู้ทันข้อมูลบิดเบือนและเข้าใจข้อเท็จจริงที่ยืนยันความชอบธรรมของ AZ เหนือเกาะ TALOS อย่างถ่องแท้'
+  };
+  if (s >= 4) return {
+    title: 'รู้จักบ้านของคุณดี',
+    msg: 'ดีมาก! คุณเข้าใจประวัติศาสตร์ของ TALOS เป็นอย่างดี ลองทบทวนข้อที่พลาดเพื่อรู้ทันปฏิบัติการบิดเบือนของ WL ให้ครบถ้วน'
+  };
+  return {
+    title: 'เรียนรู้เพิ่มได้!',
+    msg: 'ไม่เป็นไร — ข้อเท็จจริงทุกข้ออยู่ด้านล่างนี้แล้ว อ่านทบทวนแล้วลองทำใหม่อีกครั้ง เพื่อปกป้องความจริงของบ้านเรา'
+  };
+}
+
+function showResults(){
+  document.getElementById('finalScore').textContent = toThai(score);
+  const t = tierFor(score);
+  document.getElementById('tierTitle').textContent = t.title;
+  document.getElementById('tierMsg').textContent = t.msg;
+
+  const list = document.getElementById('recapList');
+  list.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const hit = answered[i] === q.answer;
+    const item = document.createElement('div');
+    item.className = 'ritem ' + (hit ? 'hit' : 'miss');
+    item.innerHTML =
+      '<div class="rq"><span class="ic">' + (hit ? '✓' : '✗') + '</span><span>' +
+        'ข้อ ' + toThai(i+1) + '. ' + q.q + '</span></div>' +
+      '<div class="ra"><b>' + q.opts[q.answer] + '</b> — ' + q.explain + '</div>';
+    list.appendChild(item);
+  });
+
+  show('result');
+}
+
+/* ===== Reset ===== */
+function resetQuiz(){
+  current = 0;
+  score = 0;
+  answered = new Array(QUESTIONS.length).fill(null);
+  renderQuestion();
+  show('quiz');
+}
+
+/* ===== Wire up ===== */
+document.getElementById('startBtn').addEventListener('click', resetQuiz);
+document.getElementById('retryBtn').addEventListener('click', resetQuiz);
+elNext.addEventListener('click', nextQuestion);
+</script>
+</body>
+</html>
