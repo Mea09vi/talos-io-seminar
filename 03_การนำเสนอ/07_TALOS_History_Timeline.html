@@ -716,33 +716,29 @@ go(0);
 </script>
 
 <!-- ===== Hidden YouTube Music Player ===== -->
-<div style="position:fixed;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
-  <div id="yt-player"></div>
-</div>
-<script src="https://www.youtube.com/iframe_api"></script>
+<div id="yt-box" style="position:fixed;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true"></div>
 <script>
-var _ytPlayer;
-window.onYouTubeIframeAPIReady = function(){
-  _ytPlayer = new YT.Player('yt-player',{
-    videoId:'I1T4W8SJ-Ds',
-    playerVars:{autoplay:1,mute:1,loop:1,playlist:'I1T4W8SJ-Ds',controls:0,disablekb:1,fs:0,rel:0},
-    events:{
-      onReady:function(e){ e.target.playVideo(); _syncBtn(); }
+(function(){
+  const VID = 'I1T4W8SJ-Ds';
+  const btn = document.getElementById('mute-btn');
+  const box = document.getElementById('yt-box');
+  let on = false;
+  btn.addEventListener('click', function(){
+    on = !on;
+    if(on){
+      box.innerHTML = '<iframe src="https://www.youtube.com/embed/'+VID
+        +'?autoplay=1&loop=1&playlist='+VID+'&controls=0&disablekb=1&fs=0&rel=0"'
+        +' width="1" height="1" frameborder="0"'
+        +' allow="autoplay; encrypted-media"></iframe>';
+      btn.textContent = '🔊 ปิดเสียง';
+      btn.classList.add('unmuted');
+    } else {
+      box.innerHTML = '';
+      btn.textContent = '🔇 เปิดเสียง';
+      btn.classList.remove('unmuted');
     }
   });
-};
-function _syncBtn(){
-  const btn = document.getElementById('mute-btn');
-  if(!btn||!_ytPlayer||typeof _ytPlayer.isMuted!=='function') return;
-  const m = _ytPlayer.isMuted();
-  btn.textContent = m ? '🔇 เปิดเสียง' : '🔊 ปิดเสียง';
-  btn.classList.toggle('unmuted',!m);
-}
-document.getElementById('mute-btn').addEventListener('click',function(){
-  if(!_ytPlayer||typeof _ytPlayer.isMuted!=='function') return;
-  _ytPlayer.isMuted() ? _ytPlayer.unMute() : _ytPlayer.mute();
-  _syncBtn();
-});
+})();
 </script>
 </body>
 </html>
