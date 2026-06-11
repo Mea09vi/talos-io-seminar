@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เส้นเวลาประวัติศาสตร์เกาะ TALOS — ความชอบธรรมของ AZ | กลุ่มที่ ๒ N7 IO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050d1a; --panel:#0a1628; --panel2:#0d1d33; --line:#1d3a5f;
+    --gold:#d4a820; --gold-soft:#e8c55a;
+    --az:#3b82f6; --az-soft:#7eb3ff;
+    --wl:#ef4444; --wl-soft:#ff8a8a;
+    --txt:#dce8f5; --dim:#8fa8c4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:var(--bg); color:var(--txt);
+    font-family:'Sarabun',sans-serif;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+
+  /* ===== Header ===== */
+  .topbar{
+    display:flex; align-items:center; gap:14px;
+    padding:10px 22px; border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,#081325,#050d1a);
+    flex:0 0 auto;
+  }
+  .topbar img{height:40px}
+  .topbar .titles{flex:1; min-width:0}
+  .topbar h1{
+    font-family:'Chakra Petch',sans-serif; font-size:19px; color:var(--gold-soft);
+    letter-spacing:.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .topbar .sub{font-size:12.5px; color:var(--dim)}
+  .backlink{
+    font-size:13px; color:var(--dim); text-decoration:none; border:1px solid var(--line);
+    padding:6px 14px; border-radius:6px; white-space:nowrap; transition:.2s;
+  }
+  .backlink:hover{color:var(--gold-soft); border-color:var(--gold)}
+  .era-counter{
+    font-family:'Chakra Petch',sans-serif; font-size:13px; color:var(--gold);
+    border:1px solid var(--gold); border-radius:6px; padding:6px 12px; white-space:nowrap;
+  }
+
+  /* ===== Main split ===== */
+  .main{flex:1 1 auto; display:flex; min-height:0}
+
+  /* --- Map side --- */
+  .map-side{
+    flex:1.55; min-width:0; display:flex; align-items:center; justify-content:center;
+    position:relative; padding:10px;
+    background:
+      radial-gradient(ellipse at 50% 40%, #0a1d36 0%, #050d1a 70%);
+  }
+  .map-wrap{
+    position:relative; height:100%; max-height:100%; aspect-ratio:901/882; max-width:100%;
+  }
+  .map-wrap img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:contain;
+    filter:brightness(.92) saturate(.95);
+    border-radius:8px;
+  }
+  .map-wrap svg{position:absolute; inset:0; width:100%; height:100%}
+  .layer{opacity:0; transition:opacity .9s ease; pointer-events:none}
+  .layer.on{opacity:1}
+
+  .map-caption{
+    position:absolute; left:18px; top:14px; z-index:5;
+    font-family:'Chakra Petch',sans-serif; font-size:15px; color:#fff;
+    background:rgba(5,13,26,.78); border-left:3px solid var(--gold);
+    padding:8px 14px; border-radius:0 6px 6px 0; max-width:62%;
+    backdrop-filter:blur(3px);
+  }
+  .map-caption .yr{color:var(--gold-soft); font-size:13px; display:block}
+
+  /* SVG text + anim */
+  .svg-lab{font-family:'Chakra Petch',sans-serif; font-weight:600}
+  @keyframes dashmarch{to{stroke-dashoffset:-60}}
+  .march{animation:dashmarch 2.2s linear infinite}
+  @keyframes pulse{0%{r:6;opacity:.95}70%{r:22;opacity:0}100%{r:22;opacity:0}}
+  .pulse{animation:pulse 1.8s ease-out infinite; transform-box:fill-box}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+  .blink{animation:blink 1.4s ease-in-out infinite}
+  @keyframes sail{from{transform:translateY(0)}to{transform:translateY(46px)}}
+  .sail{animation:sail 3.2s ease-in-out infinite alternate}
+  @keyframes waveout{0%{opacity:.8; transform:scale(.4)}100%{opacity:0; transform:scale(1.5)}}
+  .wave{transform-origin:center; transform-box:fill-box; animation:waveout 2.4s ease-out infinite}
+  .wave.w2{animation-delay:.8s} .wave.w3{animation-delay:1.6s}
+
+  /* --- Info side --- */
+  .info-side{
+    flex:1; min-width:340px; max-width:520px; border-left:1px solid var(--line);
+    background:var(--panel); display:flex; flex-direction:column; min-height:0;
+  }
+  .era-card{flex:1 1 auto; overflow-y:auto; padding:20px 24px}
+  .era-card::-webkit-scrollbar{width:8px}
+  .era-card::-webkit-scrollbar-thumb{background:var(--line); border-radius:4px}
+
+  .era-period{
+    display:inline-block; font-family:'Chakra Petch',sans-serif; font-size:13px;
+    color:#0a1628; background:var(--gold); padding:3px 12px; border-radius:4px; font-weight:700;
+    margin-bottom:10px;
+  }
+  .era-title{font-family:'Chakra Petch',sans-serif; font-size:21px; color:#fff; line-height:1.3; margin-bottom:4px}
+  .era-sub{font-size:14px; color:var(--dim); margin-bottom:14px}
+  .era-desc{list-style:none}
+  .era-desc li{
+    font-size:14.5px; line-height:1.65; padding:7px 0 7px 18px; position:relative;
+    border-bottom:1px dashed #14283f;
+  }
+  .era-desc li::before{content:'▸'; position:absolute; left:0; color:var(--gold)}
+  .era-src{
+    margin-top:12px; font-size:12px; color:#6e87a3; font-style:italic;
+  }
+  .era-legit{
+    margin-top:14px; background:linear-gradient(135deg,#1a1503,#241c05);
+    border:1px solid #5e4c10; border-left:4px solid var(--gold);
+    border-radius:6px; padding:12px 14px;
+  }
+  .era-legit .hd{
+    font-family:'Chakra Petch',sans-serif; font-size:12.5px; color:var(--gold-soft);
+    letter-spacing:.5px; margin-bottom:5px; font-weight:600;
+  }
+  .era-legit .tx{font-size:14px; line-height:1.6; color:#f0e2b0}
+  .fadeable{transition:opacity .45s ease}
+  .fading{opacity:0}
+
+  /* legitimacy chips */
+  .chips-zone{
+    flex:0 0 auto; border-top:1px solid var(--line); padding:12px 24px 14px;
+    background:var(--panel2);
+  }
+  .chips-zone .zhd{
+    font-family:'Chakra Petch',sans-serif; font-size:12px; color:var(--dim);
+    letter-spacing:1px; margin-bottom:8px;
+  }
+  .chips{display:flex; flex-wrap:wrap; gap:6px}
+  .chip{
+    font-size:11.5px; padding:4px 10px; border-radius:20px;
+    border:1px solid #233d5e; color:#3e5878; background:#0a1628;
+    transition:all .6s ease;
+  }
+  .chip.got{
+    border-color:var(--gold); color:var(--gold-soft); background:#1d1604;
+    box-shadow:0 0 8px rgba(212,168,32,.25);
+  }
+
+  /* ===== Timeline bar ===== */
+  .tl-bar{
+    flex:0 0 auto; border-top:1px solid var(--line); background:#071120;
+    padding:12px 22px 10px; user-select:none;
+  }
+  .tl-controls{display:flex; align-items:center; gap:14px}
+  .ctl-btn{
+    background:var(--panel2); border:1px solid var(--line); color:var(--txt);
+    font-family:'Chakra Petch',sans-serif; font-size:15px; border-radius:6px;
+    width:42px; height:36px; cursor:pointer; transition:.15s;
+  }
+  .ctl-btn:hover{border-color:var(--gold); color:var(--gold-soft)}
+  .ctl-btn.play{width:56px; background:var(--gold); color:#081325; font-weight:700; border-color:var(--gold)}
+  .ctl-btn.play:hover{background:var(--gold-soft); color:#081325}
+
+  .rail-wrap{flex:1; position:relative; height:54px}
+  .rail{
+    position:absolute; left:0; right:0; top:12px; height:4px;
+    background:#16304e; border-radius:2px;
+  }
+  .rail-fill{
+    position:absolute; left:0; top:12px; height:4px; width:0;
+    background:linear-gradient(90deg,#8a6c10,var(--gold)); border-radius:2px;
+    transition:width .5s ease;
+  }
+  .node{
+    position:absolute; top:0; transform:translateX(-50%); cursor:pointer; text-align:center;
+    width:86px;
+  }
+  .node .dot{
+    width:14px; height:14px; border-radius:50%; margin:7px auto 4px;
+    background:#0a1628; border:2px solid #2c4d75; transition:.25s;
+  }
+  .node .nlab{
+    font-family:'Chakra Petch',sans-serif; font-size:10px; color:#5a7493;
+    line-height:1.25; transition:.25s;
+  }
+  .node:hover .dot{border-color:var(--gold-soft)}
+  .node.done .dot{background:#5e4c10; border-color:#8a6c10}
+  .node.active .dot{
+    background:var(--gold); border-color:var(--gold-soft);
+    box-shadow:0 0 12px rgba(212,168,32,.7); transform:scale(1.25);
+  }
+  .node.active .nlab{color:var(--gold-soft); font-weight:600}
+
+  .hint{font-size:11px; color:#46607f; margin-left:4px; white-space:nowrap}
+
+  /* ===== Footer ===== */
+  .foot{
+    flex:0 0 auto; text-align:center; font-size:11px; color:#46607f;
+    padding:5px 0 7px; border-top:1px solid #0d1d33; font-family:'Chakra Petch',sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN">
+  <div class="titles">
+    <h1>เส้นเวลาประวัติศาสตร์เกาะ TALOS — การรุกล้ำของ WL และความชอบธรรมของ AZ</h1>
+    <div class="sub">IO Product: หักล้าง Narrative N1 «#TalosOurHeritage» — ความชอบธรรมในการทวงคืนพื้นที่ทั้งหมด | Operation RESTORE TALOS</div>
+  </div>
+  <div class="era-counter" id="eraCounter">๑ / ๑๐</div>
+  <a class="backlink" href="index.html">← กลับหน้าหลัก</a>
+</div>
+
+<div class="main">
+
+  <!-- ================= MAP ================= -->
+  <div class="map-side">
+    <div class="map-caption" id="mapCaption">
+      <span class="yr" id="capYr"></span><span id="capTx"></span>
+    </div>
+    <div class="map-wrap">
+      <img src="../06_แผนที่/talos_island.png" alt="TALOS Island">
+      <svg viewBox="0 0 901 882" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="soften" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="7"/>
+          </filter>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <marker id="arrR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#ff5a5a"/>
+          </marker>
+          <marker id="arrB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#6fb0ff"/>
+          </marker>
+        </defs>
+
+        <!-- ====== shared shapes (referenced by several layers) ====== -->
+        <!-- island outline (approx) — เกาะหลัก + เกาะ SOSNOVKA -->
+        <!-- BORDER = เส้นเขตแดน (ทาบแนวเส้นแดงบนแผนที่จริง) -->
+
+        <!-- E0–E1 : ทั้งเกาะเป็นของ AZ -->
+        <g id="l-az-all" class="layer">
+          <path filter="url(#soften)" fill="#3b82f6" fill-opacity=".20"
+            d="M60,330 L70,250 L110,150 L150,95 L210,55 L300,45 L400,38 L500,55 L560,62 L640,28 L720,35 L800,80 L835,150 L845,260 L840,330 L820,420 L780,480 L700,560 L600,630 L500,655 L400,650 L300,640 L200,610 L120,560 L80,470 L60,400 Z
+               M330,750 L360,700 L420,672 L500,665 L580,690 L640,730 L645,790 L600,840 L520,860 L430,855 L360,820 Z"/>
+          <text class="svg-lab" x="430" y="500" fill="#9cc4ff" font-size="26" text-anchor="middle" opacity=".9">ALIZARIA</text>
+          <text class="svg-lab" x="430" y="528" fill="#9cc4ff" font-size="14" text-anchor="middle" opacity=".75">ประชากร &gt;๙๕% ชาว Alizarian</text>
+        </g>
+
+        <!-- E0 : เส้นทางการค้า -->
+        <g id="l-trade" class="layer">
+          <path d="M60,840 C140,640 110,420 152,250" fill="none" stroke="#6fb0ff" stroke-width="3"
+                stroke-dasharray="10 8" class="march" marker-end="url(#arrB)" opacity=".85"/>
+          <path d="M175,225 C330,110 520,55 660,-15" fill="none" stroke="#6fb0ff" stroke-width="3"
+                stroke-dasharray="10 8" class="march" marker-end="url(#arrB)" opacity=".6"/>
+          <g filter="url(#glow)">
+            <circle cx="160" cy="240" r="7" fill="#6fb0ff"/>
+            <circle cx="160" cy="240" class="pulse" fill="none" stroke="#6fb0ff" stroke-width="2"/>
+          </g>
+          <text class="svg-lab" x="178" y="222" fill="#bcd8ff" font-size="14">ท่าพักสินค้า (เส้นทางการค้าทางทะเล)</text>
+          <text class="svg-lab" x="95" y="800" fill="#6fb0ff" font-size="13">จาก ALIZARIA</text>
+          <text class="svg-lab" x="610" y="40" fill="#6fb0ff" font-size="13" opacity=".8">สู่ WOADLAND</text>
+          <polygon class="sail" points="105,690 119,690 112,676" fill="#bcd8ff"/>
+        </g>
+
+        <!-- E1 : เส้นที่มหาอำนาจ Argentia ขีด -->
+        <g id="l-colony" class="layer">
+          <line x1="55" y1="305" x2="850" y2="290" stroke="#b9c4d0" stroke-width="2.5"
+                stroke-dasharray="14 10" class="march" opacity=".9"/>
+          <text class="svg-lab" x="450" y="272" fill="#d7dee6" font-size="15" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="4">เส้นแบ่งดินแดนที่มหาอำนาจ ARGENTIA ขีด (คริสต์ศตวรรษที่ ๑๙)</text>
+          <text class="svg-lab" x="450" y="296" fill="#8fa8c4" font-size="12.5" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="4">— ไม่คำนึงถึงประวัติศาสตร์และประชากรบนเกาะ —</text>
+        </g>
+
+        <!-- E2 : WL ใช้กำลังเข้ายึดทั้งเกาะ -->
+        <g id="l-wl-all" class="layer">
+          <path filter="url(#soften)" fill="#ef4444" fill-opacity=".24"
+            d="M60,330 L70,250 L110,150 L150,95 L210,55 L300,45 L400,38 L500,55 L560,62 L640,28 L720,35 L800,80 L835,150 L845,260 L840,330 L820,420 L780,480 L700,560 L600,630 L500,655 L400,650 L300,640 L200,610 L120,560 L80,470 L60,400 Z
+               M330,750 L360,700 L420,672 L500,665 L580,690 L640,730 L645,790 L600,840 L520,860 L430,855 L360,820 Z"/>
+          <text class="svg-lab" x="430" y="500" fill="#ffb0b0" font-size="24" text-anchor="middle">WL ยึดครองด้วยกำลัง</text>
+          <text class="svg-lab" x="430" y="528" fill="#ffb0b0" font-size="14" text-anchor="middle" opacity=".8">+ นโยบายส่งชาว Woadlandian มาตั้งรกราก</text>
+        </g>
+        <g id="l-seize-arrows" class="layer">
+          <path d="M250,-15 L255,120" stroke="#ff5a5a" stroke-width="5" marker-end="url(#arrR)" class="blink"/>
+          <path d="M480,-15 L478,95" stroke="#ff5a5a" stroke-width="5" marker-end="url(#arrR)" class="blink"/>
+          <path d="M700,-15 L705,90" stroke="#ff5a5a" stroke-width="5" marker-end="url(#arrR)" class="blink"/>
+          <text class="svg-lab" x="560" y="22" fill="#ff8a8a" font-size="14"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="4">กำลัง WL จากแผ่นดินใหญ่ (เหนือ ~๒๒๐ ไมล์)</text>
+        </g>
+
+        <!-- E3+ : เขตเหนือ WL / ใต้ AZ + เส้นเขตแดน -->
+        <g id="l-wl-north" class="layer">
+          <path filter="url(#soften)" fill="#ef4444" fill-opacity=".20"
+            d="M90,336 L60,330 L70,250 L110,150 L150,95 L210,55 L300,45 L400,38 L500,55 L560,62 L640,28 L720,35 L800,80 L835,150 L845,260 L840,315 L780,321 L750,336 L715,373 L680,394 L640,417 L608,420 L575,391 L545,376 L505,381 L470,391 L420,408 L385,402 L345,372 L305,331 L275,327 L250,338 L220,374 L160,353 L130,339 Z"/>
+          <text class="svg-lab" x="430" y="150" fill="#ffb0b0" font-size="20" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="5">WOADLAND (ฝั่งเหนือ)</text>
+        </g>
+        <g id="l-az-south" class="layer">
+          <path filter="url(#soften)" fill="#3b82f6" fill-opacity=".20"
+            d="M90,336 L130,339 L160,353 L220,374 L250,338 L275,327 L305,331 L345,372 L385,402 L420,408 L470,391 L505,381 L545,376 L575,391 L608,420 L640,417 L680,394 L715,373 L750,336 L780,321 L840,315 L820,420 L780,480 L700,560 L600,630 L500,655 L400,650 L300,640 L200,610 L120,560 L80,470 L60,400 L60,330 L90,336 Z
+               M330,750 L360,700 L420,672 L500,665 L580,690 L640,730 L645,790 L600,840 L520,860 L430,855 L360,820 Z"/>
+          <text class="svg-lab" x="380" y="560" fill="#9cc4ff" font-size="20" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="5">ALIZARIA (ฝั่งใต้)</text>
+        </g>
+        <g id="l-border" class="layer">
+          <path id="borderPath" fill="none" stroke="#ffd75e" stroke-width="4" stroke-linejoin="round"
+            stroke-dasharray="16 10" class="march" filter="url(#glow)"
+            d="M90,336 L130,339 L160,353 L220,374 L250,338 L275,327 L305,331 L345,372 L385,402 L420,408 L470,391 L505,381 L545,376 L575,391 L608,420 L640,417 L680,394 L715,373 L750,336 L780,321"/>
+          <text class="svg-lab" x="450" y="448" fill="#ffe9a8" font-size="14" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="5">เส้นเขตแดนระหว่างประเทศ — แนวสันปันน้ำเทือกเขาตอนกลาง</text>
+        </g>
+
+        <!-- E4 : ไหล่ทวีป ๑๙๘๒ -->
+        <g id="l-shelf" class="layer">
+          <ellipse cx="451" cy="430" rx="442" ry="426" fill="none" stroke="#6fb0ff"
+                   stroke-width="3" stroke-dasharray="18 12" class="march" opacity=".9"/>
+          <path d="M-10,876 L260,610" stroke="#6fb0ff" stroke-width="3" stroke-dasharray="6 6"
+                marker-end="url(#arrB)" opacity=".85"/>
+          <text class="svg-lab" x="40" y="845" fill="#9cc4ff" font-size="13"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="4">แบริ่ง ๑๙๐ จากหลักเขตที่ ๗ (VERTIMIGLIA)</text>
+          <text class="svg-lab" x="451" y="868" fill="#9cc4ff" font-size="15" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="5">เขตไหล่ทวีปที่ AZ ประกาศ ค.ศ. ๑๙๘๒ — ครอบคลุมเกาะ TALOS</text>
+        </g>
+
+        <!-- E5 : ปะทะ ๒๐๐๙ -->
+        <g id="l-2009" class="layer">
+          <g class="svg-lab" font-size="30" fill="#ff8a4a" text-anchor="middle" filter="url(#glow)">
+            <text x="230" y="372" class="blink">✕</text>
+            <text x="470" y="400" class="blink" style="animation-delay:.4s">✕</text>
+            <text x="690" y="400" class="blink" style="animation-delay:.8s">✕</text>
+          </g>
+          <circle cx="230" cy="362" class="pulse" fill="none" stroke="#ff8a4a" stroke-width="2"/>
+          <circle cx="470" cy="390" class="pulse" fill="none" stroke="#ff8a4a" stroke-width="2" style="animation-delay:.5s"/>
+          <circle cx="690" cy="390" class="pulse" fill="none" stroke="#ff8a4a" stroke-width="2" style="animation-delay:1s"/>
+          <text class="svg-lab" x="450" y="330" fill="#ffc09a" font-size="15" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="5">การปะทะตามแนวเขตแดน ค.ศ. ๒๐๐๙ — UN ปล่อยให้แก้แบบทวิภาคี</text>
+        </g>
+
+        <!-- E6 : VERDATA / ทรัพยากร -->
+        <g id="l-verdata" class="layer">
+          <g filter="url(#glow)">
+            <path d="M620,415 l12,16 -12,16 -12,-16 z" fill="#ffd75e" class="blink"/>
+            <path d="M195,560 l11,15 -11,15 -11,-15 z" fill="#ffd75e" class="blink" style="animation-delay:.5s"/>
+            <path d="M770,200 l11,15 -11,15 -11,-15 z" fill="#ffd75e" class="blink" style="animation-delay:1s"/>
+          </g>
+          <text class="svg-lab" x="640" y="412" fill="#ffe9a8" font-size="15"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="5">แหล่ง VERDATA — Rare Earth ๒๓ ล้านตัน (~$4.7T)</text>
+          <g class="svg-lab" font-size="13" fill="#ffe9a8" style="paint-order:stroke" stroke="#050d1a" stroke-width="4">
+            <text x="60" y="120">⛽ น้ำมัน/ก๊าซ นอกชายฝั่ง</text>
+            <text x="700" y="660">⛽ น้ำมัน/ก๊าซ นอกชายฝั่ง</text>
+            <text x="540" y="120" fill="#9cc4ff">⚓ SLOC ๑๒,๐๐๐ ลำ/ปี</text>
+          </g>
+        </g>
+
+        <!-- E7 : สงครามข่าวสาร WL -->
+        <g id="l-io" class="layer">
+          <g stroke="#ff5a5a" fill="none" stroke-width="2.5">
+            <path class="wave"    d="M420,-40 A120,120 0 0 1 540,-40" transform="translate(0,80) rotate(180 480 -40)"/>
+          </g>
+          <g>
+            <circle cx="480" cy="-30" r="60" class="wave" fill="none" stroke="#ff5a5a" stroke-width="2.5"/>
+            <circle cx="480" cy="-30" r="60" class="wave w2" fill="none" stroke="#ff5a5a" stroke-width="2.5"/>
+            <circle cx="480" cy="-30" r="60" class="wave w3" fill="none" stroke="#ff5a5a" stroke-width="2.5"/>
+          </g>
+          <text class="svg-lab" x="450" y="70" fill="#ff8a8a" font-size="22" text-anchor="middle" filter="url(#glow)" class="blink">#TalosOurHeritage</text>
+          <text class="svg-lab" x="450" y="96" fill="#ffb0b0" font-size="14" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="4">๘.๗ ล้าน impressions ใน ๙๐ วัน — IO Brigade ปฏิบัติการเต็มรูปแบบ</text>
+          <g class="svg-lab" font-size="13" fill="#ff8a8a" style="paint-order:stroke" stroke="#050d1a" stroke-width="4">
+            <text x="150" y="180" class="blink">ข่าวปลอม</text>
+            <text x="640" y="170" class="blink" style="animation-delay:.5s">บัญชีอวตาร</text>
+            <text x="390" y="220" class="blink" style="animation-delay:1s">ลาดตระเวนไซเบอร์</text>
+          </g>
+        </g>
+
+        <!-- E8 : การรุกราน H-60→H-45 -->
+        <g id="l-wl-all2" class="layer">
+          <path filter="url(#soften)" fill="#ef4444" fill-opacity=".28"
+            d="M60,330 L70,250 L110,150 L150,95 L210,55 L300,45 L400,38 L500,55 L560,62 L640,28 L720,35 L800,80 L835,150 L845,260 L840,330 L820,420 L780,480 L700,560 L600,630 L500,655 L400,650 L300,640 L200,610 L120,560 L80,470 L60,400 Z
+               M330,750 L360,700 L420,672 L500,665 L580,690 L640,730 L645,790 L600,840 L520,860 L430,855 L360,820 Z"/>
+        </g>
+        <g id="l-tf77" class="layer">
+          <g class="sail" fill="#ff8a8a">
+            <path d="M250,8 h36 l-7,12 h-22 z"/>
+            <path d="M430,2 h36 l-7,12 h-22 z"/>
+            <path d="M610,10 h36 l-7,12 h-22 z"/>
+          </g>
+          <text class="svg-lab" x="700" y="20" fill="#ff8a8a" font-size="15"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="4">กองเรือ TF-77 (H-60)</text>
+          <path d="M270,30 C240,120 200,180 172,228" stroke="#ff5a5a" stroke-width="6"
+                marker-end="url(#arrR)" fill="none" class="blink"/>
+          <path d="M610,40 C640,180 645,320 632,415" stroke="#ff5a5a" stroke-width="6"
+                marker-end="url(#arrR)" fill="none" class="blink" style="animation-delay:.5s"/>
+        </g>
+        <g id="l-invasion" class="layer">
+          <g filter="url(#glow)">
+            <circle cx="160" cy="240" r="8" fill="#ff5a5a"/>
+            <circle cx="160" cy="240" class="pulse" fill="none" stroke="#ff5a5a" stroke-width="2.5"/>
+            <circle cx="632" cy="430" r="8" fill="#ff5a5a"/>
+            <circle cx="632" cy="430" class="pulse" fill="none" stroke="#ff5a5a" stroke-width="2.5" style="animation-delay:.6s"/>
+          </g>
+          <text class="svg-lab" x="180" y="232" fill="#ffd1d1" font-size="15"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="5">⚑ ท่าเรือ TALOS — ถูกยึด</text>
+          <text class="svg-lab" x="650" y="445" fill="#ffd1d1" font-size="15"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="5">⚑ สนามบิน VERDATA — ถูกยึด</text>
+          <text class="svg-lab" x="450" y="490" fill="#ff5a5a" font-size="19" text-anchor="middle" filter="url(#glow)" class="blink">⚠ ละเมิดเส้นเขตแดนที่ WL เคยรับรองเอง</text>
+          <text class="svg-lab" x="450" y="516" fill="#ffb0b0" font-size="13.5" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="4">ยกพลขึ้นบกยึดพื้นที่สำคัญใน ๗๒ ชม. + เข้าควบคุมสื่อทั้งเกาะ (H-45)</text>
+        </g>
+
+        <!-- E9 : RESTORE TALOS -->
+        <g id="l-restore" class="layer">
+          <path filter="url(#soften)" fill="#3b82f6" fill-opacity=".24"
+            d="M60,330 L70,250 L110,150 L150,95 L210,55 L300,45 L400,38 L500,55 L560,62 L640,28 L720,35 L800,80 L835,150 L845,260 L840,330 L820,420 L780,480 L700,560 L600,630 L500,655 L400,650 L300,640 L200,610 L120,560 L80,470 L60,400 Z
+               M330,750 L360,700 L420,672 L500,665 L580,690 L640,730 L645,790 L600,840 L520,860 L430,855 L360,820 Z"/>
+          <path d="M150,876 C200,790 250,720 290,665" stroke="#6fb0ff" stroke-width="6" marker-end="url(#arrB)" fill="none" class="blink"/>
+          <path d="M420,876 C420,810 418,740 418,672" stroke="#6fb0ff" stroke-width="6" marker-end="url(#arrB)" fill="none" class="blink" style="animation-delay:.4s"/>
+          <path d="M700,876 C660,800 600,720 560,660" stroke="#6fb0ff" stroke-width="6" marker-end="url(#arrB)" fill="none" class="blink" style="animation-delay:.8s"/>
+          <g class="svg-lab" font-size="13" style="paint-order:stroke" stroke="#050d1a" stroke-width="4">
+            <text x="245" y="640" fill="#ff8a8a">BEACH RED</text>
+            <text x="380" y="660" fill="#9cc4ff">BEACH BLUE</text>
+            <text x="545" y="640" fill="#8ef0b0">BEACH GREEN</text>
+          </g>
+          <text class="svg-lab" x="430" y="755" fill="#bcd8ff" font-size="15" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="5">TF-51 + พันธมิตร ๓ ชาติ — Operation RESTORE TALOS</text>
+          <text class="svg-lab" x="430" y="350" fill="#9cc4ff" font-size="22" text-anchor="middle" filter="url(#glow)">ทวงคืนพื้นที่ทั้งหมด — โดยชอบธรรม</text>
+        </g>
+        <g id="l-unsc" class="layer">
+          <g filter="url(#glow)">
+            <circle cx="800" cy="90" r="52" fill="#0a1628" stroke="#6fb0ff" stroke-width="3"/>
+            <text class="svg-lab" x="800" y="84" fill="#9cc4ff" font-size="14" text-anchor="middle">UNSC</text>
+            <text class="svg-lab" x="800" y="104" fill="#fff" font-size="17" text-anchor="middle" font-weight="700">2847</text>
+          </g>
+          <text class="svg-lab" x="800" y="165" fill="#9cc4ff" font-size="12.5" text-anchor="middle"
+            style="paint-order:stroke" stroke="#050d1a" stroke-width="4">Chapter VII — ให้อำนาจ AZ และพันธมิตร</text>
+        </g>
+
+      </svg>
+    </div>
+  </div>
+
+  <!-- ================= INFO ================= -->
+  <div class="info-side">
+    <div class="era-card fadeable" id="eraCard"></div>
+    <div class="chips-zone">
+      <div class="zhd">หลักฐานความชอบธรรมของ AZ — สะสมตามเส้นเวลา</div>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= TIMELINE BAR ================= -->
+<div class="tl-bar">
+  <div class="tl-controls">
+    <button class="ctl-btn" id="btnPrev" title="ก่อนหน้า (←)">◀</button>
+    <button class="ctl-btn play" id="btnPlay" title="เล่นอัตโนมัติ (Space)">▶</button>
+    <button class="ctl-btn" id="btnNext" title="ถัดไป (→)">▶▶</button>
+    <div class="rail-wrap" id="railWrap">
+      <div class="rail"></div>
+      <div class="rail-fill" id="railFill"></div>
+    </div>
+    <span class="hint">← → เลื่อนยุค | Space เล่น/หยุด</span>
+  </div>
+</div>
+
+<div class="foot">กลุ่มที่ ๒ — N7 IO | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖</div>
+
+<script>
+/* =========================================================================
+   ข้อมูลยุคสมัย — แก้ไขได้ที่นี่ (ข้อความ, layers ที่แสดง, chip ความชอบธรรม)
+   พิกัด marker ทั้งหมดอยู่ใน SVG ด้านบน (viewBox 901×882 = พิกเซลของภาพแผนที่)
+   ========================================================================= */
+const ERAS = [
+  {
+    period: 'ยุคการค้าทางทะเล (ก่อนคริสต์ศตวรรษที่ ๑๙)',
+    title: 'TALOS — จุดพักการค้าของชาว Alizarian',
+    sub: 'รากประวัติศาสตร์และประชากรของ AZ บนเกาะ',
+    desc: [
+      'ชาว ALIZARIA เดินเรือค้าขายกับดินแดน WOADLAND โดยใช้เกาะ TALOS เป็นจุดแวะพักและพักสินค้ากลางทะเล',
+      'ชุมชนบนเกาะเติบโตจากการค้า — ประชากรกว่า <b>ร้อยละ ๙๕ เป็นชาว Alizarian</b>',
+    ],
+    src: 'ที่มา: เอกสารประเทศ WOADLAND (1Country Woadland 86) ข้อ ๖ — ความเป็นมาในการอ้างสิทธิเกาะ TALOS',
+    legit: 'รากเหง้าทางประวัติศาสตร์และประชากรของเกาะเป็นของชาว Alizarian มาก่อน WL — ข้อเท็จจริงพื้นฐานที่หักล้าง "มรดก WL" ตั้งแต่ต้น',
+    chip: 'ประชากร >๙๕% เป็นชาว Alizarian',
+    layers: ['l-az-all','l-trade'],
+  },
+  {
+    period: '~๑๐๐ ปีก่อน — คริสต์ศตวรรษที่ ๑๙',
+    title: 'ยุคอาณานิคม — มหาอำนาจ ARGENTIA ขีดเส้น',
+    sub: 'เกาะ TALOS เป็นอาณานิคม/ดินแดนของ ALIZARIA',
+    desc: [
+      'เมื่อ ๑๐๐ ปีที่แล้ว เกาะ TALOS มีฐานะเป็น<b>อาณานิคมของประเทศ ALIZARIA</b>',
+      'มหาอำนาจ ARGENTIA เข้าครอบงำภูมิภาคและ<b>ขีดเส้นแบ่งดินแดน</b>ในคริสต์ศตวรรษที่ ๑๙ โดยไม่คำนึงถึงประวัติศาสตร์และประชากรในพื้นที่',
+    ],
+    src: 'ที่มา: 1Country Woadland 86 ข้อ ๓ — "เมื่อ ๑๐๐ ปีที่แล้วเป็นอาณานิคมของประเทศ ALIZARIA ... ถูกขีดเส้นโดยมหาอำนาจ Argentia"',
+    legit: 'เส้นแบ่งบนเกาะคือ "มรดกอาณานิคม" ที่คนนอกขีดให้ — ไม่ใช่เจตจำนงของประชาชนบนเกาะ ซึ่งส่วนใหญ่เป็นชาว Alizarian',
+    chip: 'เส้นแบ่ง = มรดกอาณานิคม',
+    layers: ['l-az-all','l-colony'],
+  },
+  {
+    period: 'หลัง ARGENTIA ถอนตัว',
+    title: 'จุดรุกล้ำที่ ๑ — WL ใช้กำลังเข้ายึดเกาะ',
+    sub: 'การยึดครองด้วยกำลัง + นโยบายกลืนประชากร',
+    desc: [
+      'ช่วงเดียวกับที่ WL ยึดเมือง MODANE→OLIVETTA บนแผ่นดินใหญ่ WL <b>สถาปนาการครอบครองเกาะ TALOS ด้วยกำลัง</b> หวังผูกขาดเส้นทางการค้าทางทะเล',
+      'ใช้<b>นโยบายรัฐ</b>ส่งชาว Woadlandian มาตั้งรกรากบนเกาะ ทั้งที่ประชากรเดิมกว่าร้อยละ ๙๕ เป็นชาว Alizarian — สร้างความไม่พอใจอย่างยิ่งแก่ ALIZARIA',
+    ],
+    src: 'ที่มา: 1Country Woadland 86 ข้อ ๖',
+    legit: 'WL ได้เกาะมาด้วย "การรุกรานและการกลืนประชากร" ไม่ใช่สิทธิทางประวัติศาสตร์ — หักล้าง #TalosOurHeritage โดยตรง',
+    chip: 'WL ยึดเกาะด้วยกำลัง + ตั้งรกรากทับ',
+    layers: ['l-wl-all','l-seize-arrows'],
+  },
+  {
+    period: 'ช่วงสงคราม WL–EDR',
+    title: 'ข้อตกลงแลกเปลี่ยน — เส้นสันปันน้ำ',
+    sub: 'AZ ได้ครอบครองฝั่งใต้คืน โดยข้อตกลงที่ WL รับรอง',
+    desc: [
+      'WL เผชิญภัยคุกคามจาก EDR — AZ เสนอตัวเป็นหลักประกันว่าจะไม่ถูกโจมตี แลกกับพื้นที่เกาะ TALOS',
+      'WL ภายใต้แรงบีบของสถานการณ์ ยอมให้ AZ ครอบครองเฉพาะ<b>ฝั่งด้านใต้</b> โดยใช้<b>แนวสันปันน้ำของเทือกเขาตอนกลางเป็นเส้นเขตแดนระหว่างประเทศ</b> (เส้นสีแดงบนแผนที่)',
+      'หมายเหตุ: AZ ยอมรับเส้นนี้ทั้งที่ตน<b>เสียพื้นที่ส่วนใหญ่ของเกาะที่เคยเป็นของตนทั้งหมด</b>',
+    ],
+    src: 'ที่มา: 1Country Woadland 86 ข้อ ๖ — "ใช้แนวสันปันน้ำ ... เป็น International Border"',
+    legit: 'อธิปไตยของ AZ เหนือฝั่งใต้มีข้อตกลงทวิภาคีรองรับ และเส้นเขตแดนนี้ WL เป็นผู้รับรองเอง — เส้นเดียวกับที่ WL จะละเมิดในเวลาต่อมา',
+    chip: 'ฝั่งใต้เป็นของ AZ โดยข้อตกลงทวิภาคี',
+    layers: ['l-wl-north','l-az-south','l-border'],
+  },
+  {
+    period: 'ค.ศ. ๑๙๘๒',
+    title: 'AZ ประกาศเขตไหล่ทวีป — ครอบคลุม TALOS',
+    sub: 'สิทธิตามกฎหมายทะเล ๔ ทศวรรษก่อนวิกฤต',
+    desc: [
+      'วิกฤตพลังงานโลก — AZ ประกาศ<b>เขตไหล่ทวีป</b>จากก้นอ่าว VENEZIA ถึงเกาะ IONIA สร้าง<b>หลักเขตที่ ๗</b> ณ VERTIMIGLIA และใช้เส้นแบริ่ง ๑๙๐ เป็นแนวอ้างอิง — ครอบคลุมเกาะ TALOS',
+      'WL ปฏิเสธ ยอมปักปันเขตแดนร่วมเฉพาะแผ่นดินเหนือเมือง MODANE — ใต้ลงมาไม่มีข้อยุติ',
+    ],
+    src: 'ที่มา: 1Country Woadland 86 ข้อ ๕–๖',
+    legit: 'AZ ยืนยันสิทธิทางทะเลตามกฎหมายมาตั้งแต่ ค.ศ. ๑๙๘๒ — ไม่ใช่ข้ออ้างที่เพิ่งประดิษฐ์ขึ้นหลังพบแร่หายาก (ต่างจาก WL)',
+    chip: 'อ้างสิทธิไหล่ทวีปตั้งแต่ ๑๙๘๒',
+    layers: ['l-wl-north','l-az-south','l-border','l-shelf'],
+  },
+  {
+    period: 'ค.ศ. ๒๐๐๙',
+    title: 'ความขัดแย้งปะทุ — UN ปล่อยทวิภาคี',
+    sub: 'WL ปฏิเสธกลไกระงับข้อพิพาทโดยสันติ',
+    desc: [
+      'ข้อพิพาทเขตแดนและเขตทางทะเลรอบ TALOS ปะทุเป็น<b>ความขัดแย้ง ค.ศ. ๒๐๐๙</b>',
+      'สหประชาชาติในขณะนั้นปล่อยให้สองฝ่ายแก้ไขกันแบบทวิภาคี — ไม่มีข้อยุติ ความตึงเครียดคุกรุ่นต่อเนื่อง',
+    ],
+    src: 'ที่มา: 2 General Data2 AZ 86 + 1Country Woadland 86',
+    legit: 'AZ พยายามใช้กลไกสันติมาตลอด ขณะที่ WL ไม่เคยยอมเจรจาให้ได้ข้อยุติ — ประวัติที่ทำให้การใช้กำลังของ WL ในเวลาต่อมา "คาดหมายได้"',
+    chip: 'WL ปฏิเสธกลไกสันติมาตลอด',
+    layers: ['l-wl-north','l-az-south','l-border','l-2009'],
+  },
+  {
+    period: 'ปีที่ผ่านมา',
+    title: 'การค้นพบ VERDATA — แรงจูงใจที่แท้จริง',
+    sub: 'Rare Earth ๒๓ ล้านตัน + น้ำมัน/ก๊าซ + SLOC',
+    desc: [
+      'การสำรวจพบ<b>น้ำมันดิบ ก๊าซธรรมชาติ และแร่หายาก (Rare Earth Elements)</b> ในน่านน้ำรอบเกาะ',
+      'แหล่ง VERDATA ประเมิน <b>๒๓ ล้านตัน มูลค่า ~๔.๗ ล้านล้านดอลลาร์</b> และเส้นทางคมนาคมทางทะเล (SLOC) ผ่านพื้นที่ ~๑๒,๐๐๐ ลำ/ปี',
+    ],
+    src: 'ที่มา: 1Country Woadland 86 ข้อ ๖ + สถานการณ์ทั่วไป Op RESTORE TALOS',
+    legit: 'เปิดโปงว่าแรงจูงใจที่แท้จริงของ WL คือ "ทรัพยากร" — ข้ออ้าง "มรดกทางประวัติศาสตร์" เพิ่งถูกหยิบมาใช้หลังพบแร่',
+    chip: 'แรงจูงใจจริงของ WL = ทรัพยากร',
+    layers: ['l-wl-north','l-az-south','l-border','l-verdata'],
+  },
+  {
+    period: 'H-120 → H-90',
+    title: 'สงครามข่าวสารของ WL — #TalosOurHeritage',
+    sub: 'Narrative N1: สร้างข้ออ้าง (pretext) ก่อนรุกราน',
+    desc: [
+      'H-120: WL ประกาศอ้างกรรมสิทธิ์ทั้งเกาะโดยอ้าง "หลักฐานทางประวัติศาสตร์" พร้อมปั่นกระแส <b>#TalosOurHeritage — ๘.๗ ล้าน impressions ใน ๙๐ วัน</b>',
+      'H-90: <b>IO Brigade ของ WL ปฏิบัติการเต็มรูปแบบ</b> — โซเชียลมีเดีย ข่าวปลอม บัญชีอวตาร และการลาดตระเวนไซเบอร์',
+    ],
+    src: 'ที่มา: สถานการณ์ทั่วไป Op RESTORE TALOS (H-120, H-90)',
+    legit: 'รูปแบบคลาสสิกของการ "สร้างความชอบธรรมปลอมก่อนรุกราน" — ยิ่งตอกย้ำว่า N1 ของ WL คือเครื่องมือสงคราม ไม่ใช่ข้อเท็จจริงทางประวัติศาสตร์',
+    chip: 'N1 = pretext ก่อนการรุกราน',
+    layers: ['l-wl-north','l-az-south','l-border','l-io'],
+  },
+  {
+    period: 'H-60 → H-45',
+    title: 'จุดรุกล้ำที่ ๒ — รุกรานข้ามเส้นเขตแดน',
+    sub: 'ละเมิดเส้นที่ WL เคยรับรองเอง',
+    desc: [
+      'H-60: กองเรือ <b>TF-77</b> ของ WL ล้ำเข้าเขตเศรษฐกิจจำเพาะ (EEZ) โดยอ้าง "สิทธิประมง"',
+      'H-45: WL <b>ยกพลขึ้นบก ยึดท่าเรือ TALOS และสนามบิน VERDATA ภายใน ๗๒ ชั่วโมง</b> — ข้ามเส้นเขตแดนระหว่างประเทศ (แนวสันปันน้ำ) ที่ WL เป็นผู้รับรองเอง',
+      'IO Brigade เข้า<b>ควบคุมสื่อทั้งเกาะ</b> ตัดการรับรู้ของประชาชน ~๑๘,๗๐๐ คน ซึ่ง ~๘๐% สนับสนุน AZ',
+    ],
+    src: 'ที่มา: สถานการณ์ทั่วไป Op RESTORE TALOS (H-60, H-45)',
+    legit: 'การละเมิดอธิปไตยโดยเปิดเผยและตรวจสอบได้ — ทำลายความชอบธรรมของ WL ทั้งหมด และเปิดประตูสู่การใช้สิทธิป้องกันตนเอง/ทวงคืนของ AZ',
+    chip: 'WL ละเมิดเส้นเขตแดนที่ตนรับรอง',
+    layers: ['l-border','l-wl-all2','l-tf77','l-invasion'],
+  },
+  {
+    period: 'D-30 → ปัจจุบัน',
+    title: 'UNSC 2847 — Operation RESTORE TALOS',
+    sub: 'ความชอบธรรมสมบูรณ์: ประวัติศาสตร์ + กฎหมาย + ประชาคมโลก',
+    desc: [
+      'คณะมนตรีความมั่นคงฯ มี<b>ข้อมติที่ ๒๘๔๗</b>: เรียกร้องให้ WL ถอนกำลังโดยไม่มีเงื่อนไข และให้อำนาจ AZ กับพันธมิตรปฏิบัติการตาม<b>หมวด ๗ ของกฎบัตรสหประชาชาติ</b>',
+      'TF-51 พร้อมพันธมิตร ๓ ชาติ เคลื่อนกำลังเข้าทวงคืน — ประชาชนบนเกาะ ~๘๐% สนับสนุน AZ',
+      '<b>สรุป ๕ เสาความชอบธรรมของ AZ ในการทวงคืนพื้นที่ทั้งหมด:</b> ① ประวัติศาสตร์–ประชากร (>๙๕% Alizarian, อดีตอาณานิคม AZ) ② เส้นแบ่งคือมรดกอาณานิคม ③ WL ละเมิดข้อตกลงที่ตนรับรอง ④ สิทธิตามกฎหมายทะเลตั้งแต่ ๑๙๘๒ ⑤ อาณัติ UNSC 2847',
+    ],
+    src: 'ที่มา: สถานการณ์ทั่วไป Op RESTORE TALOS (D-30 → D-Day)',
+    legit: 'การทวงคืนพื้นที่ทั้งหมดของเกาะ TALOS ชอบธรรมทั้งทางประวัติศาสตร์ กฎหมาย และมนุษยธรรม — ตรงข้ามกับ WL ที่ครองพื้นที่ด้วยการรุกราน ๔๕ วัน',
+    chip: 'UNSC 2847 — Chapter VII',
+    layers: ['l-border','l-restore','l-unsc'],
+  },
+];
+
+const TH = ['๐','๑','๒','๓','๔','๕','๖','๗','๘','๙'];
+const thNum = n => String(n).split('').map(d=>TH[+d]||d).join('');
+
+let idx = 0, playing = false, timer = null;
+const AUTO_MS = 11000;
+
+const railWrap = document.getElementById('railWrap');
+const railFill = document.getElementById('railFill');
+const eraCard  = document.getElementById('eraCard');
+const chipsEl  = document.getElementById('chips');
+
+/* build nodes */
+ERAS.forEach((e,i)=>{
+  const n = document.createElement('div');
+  n.className = 'node'; n.dataset.i = i;
+  n.style.left = (3 + i*(94/(ERAS.length-1))) + '%';
+  n.innerHTML = `<div class="dot"></div><div class="nlab">${e.period.split('—')[0].trim()}</div>`;
+  n.addEventListener('click', ()=>{ stopPlay(); go(i); });
+  railWrap.appendChild(n);
+});
+
+/* build chips */
+ERAS.forEach((e,i)=>{
+  const c = document.createElement('span');
+  c.className = 'chip'; c.id = 'chip'+i; c.textContent = e.chip;
+  chipsEl.appendChild(c);
+});
+
+function renderCard(e){
+  eraCard.classList.add('fading');
+  setTimeout(()=>{
+    eraCard.innerHTML = `
+      <span class="era-period">${e.period}</span>
+      <div class="era-title">${e.title}</div>
+      <div class="era-sub">${e.sub}</div>
+      <ul class="era-desc">${e.desc.map(d=>`<li>${d}</li>`).join('')}</ul>
+      <div class="era-src">${e.src}</div>
+      <div class="era-legit"><div class="hd">⚖ นัยต่อความชอบธรรมของ AZ</div><div class="tx">${e.legit}</div></div>`;
+    eraCard.classList.remove('fading');
+    eraCard.scrollTop = 0;
+  }, 220);
+}
+
+function go(i){
+  idx = Math.max(0, Math.min(ERAS.length-1, i));
+  const e = ERAS[idx];
+  /* layers */
+  document.querySelectorAll('.layer').forEach(g=>g.classList.remove('on'));
+  e.layers.forEach(id=>{ const g=document.getElementById(id); if(g) g.classList.add('on'); });
+  /* caption */
+  document.getElementById('capYr').textContent = e.period;
+  document.getElementById('capTx').textContent = e.title;
+  /* card + chips + nodes */
+  renderCard(e);
+  ERAS.forEach((_,j)=>{
+    document.getElementById('chip'+j).classList.toggle('got', j<=idx);
+    const nd = railWrap.querySelector(`.node[data-i="${j}"]`);
+    nd.classList.toggle('active', j===idx);
+    nd.classList.toggle('done', j<idx);
+  });
+  railFill.style.width = (3 + idx*(94/(ERAS.length-1))) + '%';
+  document.getElementById('eraCounter').textContent = `${thNum(idx+1)} / ${thNum(ERAS.length)}`;
+}
+
+function startPlay(){
+  if(idx >= ERAS.length-1) go(0);
+  playing = true;
+  document.getElementById('btnPlay').textContent = '⏸';
+  timer = setInterval(()=>{
+    if(idx < ERAS.length-1) go(idx+1);
+    else stopPlay();
+  }, AUTO_MS);
+}
+function stopPlay(){
+  playing = false;
+  document.getElementById('btnPlay').textContent = '▶';
+  clearInterval(timer); timer = null;
+}
+
+document.getElementById('btnPlay').addEventListener('click', ()=> playing ? stopPlay() : startPlay());
+document.getElementById('btnPrev').addEventListener('click', ()=>{ stopPlay(); go(idx-1); });
+document.getElementById('btnNext').addEventListener('click', ()=>{ stopPlay(); go(idx+1); });
+document.addEventListener('keydown', ev=>{
+  if(ev.key==='ArrowRight'){ stopPlay(); go(idx+1); }
+  else if(ev.key==='ArrowLeft'){ stopPlay(); go(idx-1); }
+  else if(ev.key===' '){ ev.preventDefault(); playing ? stopPlay() : startPlay(); }
+});
+
+go(0);
+</script>
+</body>
+</html>

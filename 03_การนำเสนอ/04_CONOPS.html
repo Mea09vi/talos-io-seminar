@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>IO CONOPS Annex — N7 | สธ.๘๖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,system-ui,sans-serif;background:#050d1a;color:#e8f0ff;height:100vh;overflow:hidden;}
+#pres{width:100vw;height:100vh;position:relative;}
+.slide{display:none;width:100%;height:100%;padding:32px 56px 20px;flex-direction:column;position:absolute;top:0;left:0;
+  background:linear-gradient(135deg,#050d1a 0%,#0a1628 60%,#0d2045 100%);}
+.slide.active{display:flex;}
+.sh{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #d4a820;padding-bottom:10px;margin-bottom:18px;flex-shrink:0;}
+.sh-left{display:flex;align-items:center;gap:12px;}
+.sh-anchor{display:inline-flex;align-items:center;opacity:0.8;vertical-align:middle;}
+.sh-unit{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:10px;color:#d4a820;letter-spacing:1.5px;font-weight:700;}
+.sh-right{text-align:right;}
+.sh-label{font-size:9px;color:#4a6a8a;letter-spacing:1px;}
+.sh-tag{font-size:11px;color:#7090b0;font-weight:600;}
+.content{flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden;}
+.box{background:rgba(26,58,106,0.25);border:1px solid #1a3a6a;border-left:4px solid #d4a820;border-radius:4px;padding:14px 16px;margin-bottom:10px;}
+.box.blue{border-left-color:#2a7fd4;} .box.cyan{border-left-color:#2d8a8a;}
+.box.purple{border-left-color:#c084fc;} .box.red{border-left-color:#e05050;}
+.box.green{border-left-color:#2d8a5a;} .box.orange{border-left-color:#e07820;}
+.bh{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.8px;margin-bottom:6px;color:#d4a820;}
+.box.blue .bh{color:#60a0f0;} .box.cyan .bh{color:#40c0c0;} .box.purple .bh{color:#c084fc;}
+.box.red .bh{color:#ff8080;} .box.green .bh{color:#60d090;} .box.orange .bh{color:#f09840;}
+.bp{font-size:12px;color:#7090b0;line-height:1.65;}
+.bp strong{color:#a0c0e0;font-weight:600;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+table{width:100%;border-collapse:collapse;font-size:11px;}
+th{background:#0a1e40;color:#d4a820;padding:7px 10px;text-align:left;font-weight:700;border:1px solid #1a3a6a;}
+td{padding:6px 10px;border:1px solid #1a3a6a;color:#b0c8e0;vertical-align:middle;font-size:11px;}
+tr:nth-child(even) td{background:rgba(26,58,106,0.15);}
+td.hl{color:#e8f0ff;font-weight:600;}
+.badge{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:700;}
+.bh-r{background:rgba(138,45,45,0.3);color:#ff8080;border:1px solid #8a2d2d;}
+.bh-y{background:rgba(180,120,0,0.3);color:#f0c840;border:1px solid #b47800;}
+.bh-g{background:rgba(45,138,90,0.3);color:#60d090;border:1px solid #2d8a5a;}
+.bh-b{background:rgba(30,95,168,0.3);color:#60a0f0;border:1px solid #1e5fa8;}
+.bh-c{background:rgba(45,138,138,0.3);color:#40c0c0;border:1px solid #2d8a8a;}
+.bh-p{background:rgba(124,58,237,0.3);color:#c084fc;border:1px solid #7c3aed;}
+.sf{border-top:1px solid #1a3a6a;padding-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#2a4a6a;flex-shrink:0;margin-top:8px;}
+.sf-center{color:#4a6a8a;}
+#nav{position:fixed;bottom:18px;right:28px;display:flex;align-items:center;gap:10px;background:rgba(10,22,40,0.92);border:1px solid #1a3a6a;padding:6px 14px;border-radius:30px;z-index:200;}
+#nav button{background:none;border:1px solid #1a3a6a;color:#6080a0;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:11px;}
+#nav button:hover{background:#1a3a6a;color:#e8f0ff;}
+#ctr{color:#5070a0;font-size:11px;min-width:44px;text-align:center;}
+#home-btn{color:#4a6a8a;font-size:11px;text-decoration:none;padding:0 6px;border-left:1px solid #1a3a6a;}
+/* Phase bar */
+.phase-bar{display:flex;gap:4px;margin-bottom:12px;flex-shrink:0;}
+.phase-pill{flex:1;text-align:center;font-size:10px;font-weight:700;padding:4px 4px;border-radius:3px;border:1px solid;}
+.pp-shape{background:rgba(45,138,90,0.15);border-color:#2d8a5a;color:#60d090;}
+.pp-deter{background:rgba(30,95,168,0.15);border-color:#1e5fa8;color:#60a0f0;}
+.pp-seize{background:rgba(212,168,32,0.15);border-color:#8a6010;color:#d4a820;}
+.pp-exploit{background:rgba(45,138,138,0.15);border-color:#2d8a8a;color:#40c0c0;}
+.pp-sustain{background:rgba(124,58,237,0.15);border-color:#7c3aed;color:#c084fc;}
+/* Sync matrix */
+.sm-cell{text-align:center;font-size:10px;padding:5px 3px;border:1px solid #1a3a6a;}
+.sm-full{background:rgba(45,138,90,0.3);color:#60d090;}
+.sm-high{background:rgba(212,168,32,0.25);color:#f0c840;}
+.sm-med{background:rgba(30,95,168,0.2);color:#60a0f0;}
+.sm-low{background:rgba(26,58,106,0.15);color:#4a6a8a;}
+.sm-none{background:rgba(10,20,40,0.5);color:#2a3a5a;}
+/* IO task rows */
+.io-row{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid #1a3a6a;border-radius:3px;background:rgba(10,22,40,0.4);margin-bottom:6px;}
+.io-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.io-body{flex:1;}
+.io-title{font-size:12px;font-weight:700;color:#e8f0ff;}
+.io-desc{font-size:11px;color:#5070a0;margin-top:2px;line-height:1.5;}
+.io-who{font-size:10px;color:#3a5a7a;margin-top:3px;}
+/* Timeline */
+.tl-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;}
+.tl-mark{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.tl-line{width:2px;height:20px;background:#1a3a6a;margin-left:5px;}
+.tl-body{flex:1;}
+.tl-time{font-size:10px;color:#d4a820;font-weight:700;letter-spacing:0.5px;}
+.tl-act{font-size:12px;color:#b0c8e0;}
+</style>
+</head>
+<body>
+<div id="pres">
+
+<!-- SLIDE 1: COVER -->
+<div class="slide active" id="s1">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — INFORMATION OPERATIONS</div><div class="sh-tag">กลุ่มที่ ๒ | สธ.๘๖</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 04 OF 04</div><div class="sh-tag">CONOPS Brief — 25–29 มิ.ย. ๒๕๖๙</div></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;">
+    <div style="position:absolute;user-select:none;opacity:0.04;"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:200px;width:auto;"></div>
+    <div style="font-size:11px;color:#d4a820;letter-spacing:3px;font-weight:700;margin-bottom:16px;">BRIEFING 04 — IO CONOPS ANNEX | N7</div>
+    <div style="font-size:36px;font-weight:900;color:#e8f0ff;line-height:1.25;margin-bottom:8px;">IO CONOPS</div>
+    <div style="font-size:22px;color:#d4a820;margin-bottom:4px;">ภาคผนวก IO ต่อแผนปฏิบัติการ</div>
+    <div style="font-size:16px;color:#4a6a8a;margin-bottom:20px;">Concept of Operations — Information Operations Annex</div>
+    <div style="width:180px;height:2px;background:linear-gradient(90deg,transparent,#d4a820,transparent);margin:0 auto 20px;"></div>
+    <div style="font-size:12px;color:#4a6a8a;line-height:1.8;">CONOPS Brief | ๒๕–๒๙ มิถุนายน ๒๕๖๙<br>สถานการณ์ AZ–WL | เกาะ TALOS | N7 IO กลุ่มที่ ๒</div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap;">
+      <span style="padding:4px 12px;border:1px solid #2d8a5a;color:#60d090;background:rgba(45,138,90,0.1);border-radius:3px;font-size:11px;">Commander's Intent</span>
+      <span style="padding:4px 12px;border:1px solid #2a7fd4;color:#60a0f0;background:rgba(42,127,212,0.1);border-radius:3px;font-size:11px;">IO Tasks</span>
+      <span style="padding:4px 12px;border:1px solid #d4a820;color:#d4a820;background:rgba(212,168,32,0.1);border-radius:3px;font-size:11px;">Sync Matrix</span>
+      <span style="padding:4px 12px;border:1px solid #c084fc;color:#c084fc;background:rgba(192,132,252,0.1);border-radius:3px;font-size:11px;">IO Timeline</span>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO CONOPS Annex</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 2: COMMANDER'S INTENT IO -->
+<div class="slide" id="s2">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — Commander's Intent</div><div class="sh-tag">เจตนารมณ์ผู้บังคับบัญชาด้าน IO</div></div></div>
+    <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">Commander's IO Intent</div>
+    <div class="box" style="margin-bottom:14px;border-left-width:4px;padding:16px 18px;">
+      <div class="bh" style="font-size:13px;margin-bottom:8px;">เจตนารมณ์ผู้บังคับบัญชาด้านสารสนเทศ</div>
+      <div class="bp" style="font-size:13px;line-height:1.8;color:#b0c8e0;">
+        "กองกำลัง AZ ดำเนิน <strong>Full-Spectrum Information Operations</strong> เพื่อรักษา Information Advantage ตลอดทุกระยะของปฏิบัติการ — โดยการ <strong>ปกป้อง</strong> ระบบ C2 และ Decision Cycle ของเรา, <strong>บั่นทอน</strong> Will to Fight และความสามารถในการตัดสินใจของ WL, <strong>ครอง</strong> Narrative ในมิติ Cognitive ทั้งในระดับยุทธวิธีและยุทธศาสตร์ — เพื่อสร้างเงื่อนไขที่เอื้อต่อการบรรลุวัตถุประสงค์ของ กองกำลัง AZ บนเกาะ TALOS"
+      </div>
+    </div>
+    <div class="g3">
+      <div class="box green">
+        <div class="bh">IO Purpose</div>
+        <div class="bp">ทำให้ WL ตัดสินใจผิดพลาดและช้า ขณะที่ AZ ตัดสินใจถูกต้องและเร็ว</div>
+      </div>
+      <div class="box blue">
+        <div class="bh">IO Method</div>
+        <div class="bp">EMCON, MILDEC, PSYOP, Cyber Defense, EW, StratComm, CMO ประสานงานเป็นเอกภาพ</div>
+      </div>
+      <div class="box purple">
+        <div class="bh">IO End State</div>
+        <div class="bp">WL ไม่สามารถรักษา Will to Fight ได้ AZ ครอง Information Space บน TALOS</div>
+      </div>
+    </div>
+    <div class="box orange">
+      <div class="bh">IO Tasks Priority: PROTECT &gt; ATTACK &gt; INFLUENCE</div>
+      <div class="bp">ลำดับความสำคัญ: ปกป้อง C2 AZ ก่อน → โจมตี/บั่นทอน IO WL → สร้างอิทธิพลต่อ Cognitive Domain</div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">Commander's IO Intent</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 3: IO TASKS ASSIGNMENT -->
+<div class="slide" id="s3">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO Tasks</div><div class="sh-tag">การมอบหมายภารกิจ IO</div></div></div>
+    <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:12px;">IO Task Assignment — การมอบหมายภารกิจ</div>
+    <div class="io-row">
+      <div class="io-icon" style="background:rgba(212,168,32,0.15);border:1px solid #8a6010;color:#d4a820;">📻</div>
+      <div class="io-body">
+        <div class="io-title">PSYOP — Psychological Operations</div>
+        <div class="io-desc">ดำเนิน Hidden Truth Campaign ผ่านวิทยุ, แผ่นพับ, สื่อสังคม เพื่อบั่นทอน Morale WL Garrison และ Win Hearts & Minds ของประชาชน TALOS</div>
+        <div class="io-who">ผู้รับผิดชอบ: N7 IO Cell | เริ่ม: D-7 | กลุ่มเป้าหมาย: WL Garrison, ประชาชน TALOS, นานาชาติ</div>
+      </div>
+    </div>
+    <div class="io-row">
+      <div class="io-icon" style="background:rgba(30,95,168,0.15);border:1px solid #1e5fa8;color:#60a0f0;">🛡</div>
+      <div class="io-body">
+        <div class="io-title">DEFNET — Cyber Defense</div>
+        <div class="io-desc">ปกป้องระบบ C2, เครือข่ายสื่อสาร AZ จาก Cyber Attack ของ WL ตลอดปฏิบัติการ ติดตั้ง Backup C2 Offline ก่อน D-2</div>
+        <div class="io-who">ผู้รับผิดชอบ: N7 / N6 | เริ่ม: ทันที | Priority: DEFNET สูงสุดก่อน D-Day</div>
+      </div>
+    </div>
+    <div class="io-row">
+      <div class="io-icon" style="background:rgba(45,138,90,0.15);border:1px solid #2d8a5a;color:#60d090;">📡</div>
+      <div class="io-body">
+        <div class="io-title">EMCON — Emission Control</div>
+        <div class="io-desc">บังคับใช้ EMCON Level III เพื่อปกป้องตำแหน่ง Task Force จาก DF ของ WL เปลี่ยนผ่าน Landline + Messenger สำรองก่อน D-3</div>
+        <div class="io-who">ผู้รับผิดชอบ: N7 / N6 | เริ่ม: D-3 | Level: III (Strict)</div>
+      </div>
+    </div>
+    <div class="io-row">
+      <div class="io-icon" style="background:rgba(192,132,252,0.15);border:1px solid #7c3aed;color:#c084fc;">🎭</div>
+      <div class="io-body">
+        <div class="io-title">MILDEC — Military Deception</div>
+        <div class="io-desc">วาง EM Decoy Pattern ที่ TALOS South เป็นเวลา 7 วัน ก่อน D-Day เพื่อชักนำ WL วางกำลังผิดทิศ สอดคล้องกับ Historical Pattern</div>
+        <div class="io-who">ผู้รับผิดชอบ: N7 / N2 | เริ่ม: D-7 | ต้องได้รับอนุมัติจาก ผบ. ก่อน</div>
+      </div>
+    </div>
+    <div class="io-row">
+      <div class="io-icon" style="background:rgba(224,120,32,0.15);border:1px solid #804010;color:#f09840;">🌐</div>
+      <div class="io-body">
+        <div class="io-title">StratComm — Strategic Communications</div>
+        <div class="io-desc">ดำเนิน International Legitimacy Campaign ผ่านสื่อ นานาชาติ และ Allied Briefing เพื่อรักษา Coalition Support และโดดเดี่ยว WL</div>
+        <div class="io-who">ผู้รับผิดชอบ: N7 / PAO | ต่อเนื่องตลอดปฏิบัติการ</div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO Task Assignment</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 4: PSYOP HIDDEN TRUTH CAMPAIGN -->
+<div class="slide" id="s4">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — PSYOP</div><div class="sh-tag">Hidden Truth Campaign</div></div></div>
+    <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#d4a820;margin-bottom:14px;">PSYOP — Hidden Truth Campaign</div>
+    <div class="box" style="margin-bottom:12px;">
+      <div class="bh">Campaign Concept</div>
+      <div class="bp">"Hidden Truth" — เผยข้อเท็จจริงที่ WL ปิดบัง: ความสูญเสียจริง, ความจริงเรื่อง VERDATA Minerals ที่ WL ปล้นทรัพยากรประชาชน TALOS, และสัญญาที่ WL ให้แล้วผิด — ข้อมูลทั้งหมดต้องเป็นความจริงพิสูจน์ได้ (Verifiable Truth)</div>
+    </div>
+    <table>
+      <tr>
+        <th style="width:22%;">กลุ่มเป้าหมาย</th>
+        <th style="width:22%;">ช่องทาง</th>
+        <th style="width:28%;">สาร (Message)</th>
+        <th style="width:14%;text-align:center;">ความถี่</th>
+        <th style="width:14%;text-align:center;">ตัวชี้วัด</th>
+      </tr>
+      <tr>
+        <td class="hl">WL Garrison TALOS</td>
+        <td>วิทยุ FM + แผ่นพับทางอากาศ</td>
+        <td>"ครอบครัวของคุณรอคุณ — การยึดครอง TALOS ผิดกฎหมาย ยอมแพ้ปลอดภัย"</td>
+        <td style="text-align:center;">6 ครั้ง/วัน</td>
+        <td style="text-align:center;"><span class="badge bh-y">Surrender Rate</span></td>
+      </tr>
+      <tr>
+        <td class="hl">ผู้นำชุมชน TALOS</td>
+        <td>KLE (Key Leader Engagement)</td>
+        <td>"AZ คืนอำนาจการปกครอง TALOS — VERDATA เป็นของประชาชน TALOS"</td>
+        <td style="text-align:center;">รายสัปดาห์</td>
+        <td style="text-align:center;"><span class="badge bh-g">KLE Success</span></td>
+      </tr>
+      <tr>
+        <td class="hl">ประชาชน TALOS</td>
+        <td>Social Media + Radio</td>
+        <td>"WL ปล้น VERDATA ทรัพยากรของคุณ — AZ คืนความยุติธรรม"</td>
+        <td style="text-align:center;">ต่อเนื่อง</td>
+        <td style="text-align:center;"><span class="badge bh-b">Sentiment Score</span></td>
+      </tr>
+      <tr>
+        <td class="hl">สังคมนานาชาติ</td>
+        <td>สื่อนานาชาติ + StratComm</td>
+        <td>"WL ละเมิดกฎหมายระหว่างประเทศ — International Community ต้องกดดัน"</td>
+        <td style="text-align:center;">ตามโอกาส</td>
+        <td style="text-align:center;"><span class="badge bh-c">Media Coverage</span></td>
+      </tr>
+      <tr>
+        <td class="hl">WL พันธมิตร (Soft)</td>
+        <td>Diplomatic Channel + Media</td>
+        <td>"ความสัมพันธ์กับ WL นำมาซึ่งต้นทุนทางการทูต — ถอนสนับสนุน WL"</td>
+        <td style="text-align:center;">ตามโอกาส</td>
+        <td style="text-align:center;"><span class="badge bh-p">Ally Defection</span></td>
+      </tr>
+      <tr>
+        <td class="hl">UNSC &amp; นานาชาติ<br><span style="font-size:9px;color:#ff8080;">(Counter-N5 ด่วน)</span></td>
+        <td>StratComm + Diplomatic Channel + Social Media</td>
+        <td>"AZ <strong>ไม่เคย</strong>สนับสนุน PPTT/Bersat — WL บิดเบือนเพื่อสร้าง Pretext ยึดครอง TALOS อย่างผิดกฎหมาย" — แนบหลักฐาน ISR + UNSC Res. 2847</td>
+        <td style="text-align:center;">ทันที + ต่อเนื่อง</td>
+        <td style="text-align:center;"><span class="badge bh-r">Counter-N5 Score</span></td>
+      </tr>
+    </table>
+    <div class="box red" style="margin-top:10px;">
+      <div class="bh">ข้อห้าม PSYOP</div>
+      <div class="bp">ห้ามใช้ข้อมูลเท็จ, ห้ามโจมตีพลเรือน WL โดยตรง, ห้ามดำเนิน Psychological Attack ที่อาจก่อให้เกิด Escalation ก่อนที่ผบ. จะอนุมัติ</div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">PSYOP — Hidden Truth Campaign</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 5: EMCON + MILDEC -->
+<div class="slide" id="s5">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — EMCON & MILDEC</div><div class="sh-tag">การควบคุมการแพร่คลื่นแม่เหล็กไฟฟ้าและการหลอกลวง</div></div></div>
+    <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">EMCON & MILDEC — แผนปฏิบัติการ</div>
+    <div class="g2">
+      <div>
+        <div class="box cyan">
+          <div class="bh">EMCON — Emission Control Plan</div>
+          <div class="bp">
+            <strong>D-7 ถึง D-4:</strong> EMCON Level I — ปกติ (เพื่อ Baseline Pattern)<br>
+            <strong>D-3:</strong> EMCON Level II — จำกัด EM Emission ที่ไม่จำเป็น<br>
+            <strong>D-2 ถึง D-Day:</strong> EMCON Level III — ห้าม RF Emission ทุกชนิด เว้น Emergency<br>
+            <strong>H-Hour:</strong> ยกเลิก EMCON — เปิด C2 เต็มรูปแบบสำหรับ Coordination<br><br>
+            <strong>การสื่อสารสำรอง:</strong> Landline, Messenger, Pre-arranged Signals
+          </div>
+        </div>
+        <div class="box">
+          <div class="bh">EMCON Levels Reference</div>
+          <div class="bp">
+            <strong>Level I:</strong> ปกติ ไม่มีข้อจำกัด<br>
+            <strong>Level II:</strong> ควบคุม ลด EM ที่ไม่จำเป็น<br>
+            <strong>Level III:</strong> เข้มงวด ห้าม EM ทุกชนิดเว้น Emergency<br>
+            <strong>Level IV:</strong> สมบูรณ์ Radio Silence สมบูรณ์
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box purple">
+          <div class="bh">MILDEC — Military Deception Plan</div>
+          <div class="bp">
+            <strong>วัตถุประสงค์:</strong> ทำให้ WL เชื่อว่า AZ จะรุกที่ TALOS South<br><br>
+            <strong>D-10 ถึง D-7:</strong> วาง EM Baseline ที่ TALOS South (เหมือนกิจกรรมปกติ)<br>
+            <strong>D-7 ถึง D-3:</strong> เพิ่ม EM Activity Decoy ที่ South อย่างช้าๆ (Natural Pattern)<br>
+            <strong>D-2:</strong> Peak EM Decoy Activity ที่ South — WL DF มุ่งเป้า South<br>
+            <strong>D-Day:</strong> AZ รุกที่ TALOS North ขณะ WL วางกำลัง South<br><br>
+            <strong>Story:</strong> AZ สนใจท่าเรือ South เพราะเป็น VERDATA Logistics Hub
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">MILDEC Risk Control</div>
+          <div class="bp">
+            ตรวจสอบ Pattern ให้สอดคล้อง Historical Data ก่อน D-10<br>
+            N2 Monitor ว่า WL กำลัง Reposition หรือไม่<br>
+            Abort Trigger: ถ้า WL ไม่ตอบสนองต่อ Decoy ภายใน D-3 → ประเมิน MILDEC ใหม่
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">EMCON & MILDEC Plan</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 6: CYBER + EW -->
+<div class="slide" id="s6">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — Cyber & EW</div><div class="sh-tag">DEFNET Cyber Defense & Electronic Warfare</div></div></div>
+    <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">Cyber Defense & Electronic Warfare</div>
+    <div class="g2">
+      <div>
+        <div class="box blue">
+          <div class="bh">DEFNET — Cyber Defense</div>
+          <div class="bp">
+            <strong>ภัยคุกคาม WL ที่คาดการณ์:</strong><br>
+            → DDoS ต่อระบบ C2 AZ ก่อน D-Day<br>
+            → Phishing / Spear-Phishing ต่อ Staff AZ<br>
+            → Data Exfiltration จากระบบ Planning<br>
+            → False Signal Injection ใน Communication<br><br>
+            <strong>มาตรการ DEFNET:</strong><br>
+            → Network Segmentation C2 Critical Systems<br>
+            → Multi-Factor Authentication ทุก Access<br>
+            → Offline Backup C2 พร้อมใช้ก่อน D-2<br>
+            → 24/7 Network Monitoring D-7 ถึง D+7<br>
+            → Incident Response Team on Standby
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box cyan">
+          <div class="bh">EW — Electronic Warfare (Platform)</div>
+          <div class="bp">
+            <strong>ESM / SIGINT:</strong><br>
+            → DDG KDDX × ๒ — AESA Radar + EW Suite: Monitor WL EM ต่อเนื่อง<br>
+            → SSK Type 218SG × ๒ — Underwater SIGINT / Passive Sonar Track<br>
+            → P-8 Poseidon × ๒ — ASW + SIGINT เหนือ AO ตลอด ๒๔ ชม.<br><br>
+            <strong>ECM (D-Day H-Hour เท่านั้น):</strong><br>
+            → DDG KDDX: Jam WL UHF/VHF C2 frequencies เฉพาะจุด<br>
+            → FFG Mogami: Anti-Drone EW รับมือ WL UAV ISR Orion-class<br>
+            → Pre-authorized: ECM เฉพาะ D-Day และ Emergency เท่านั้น<br><br>
+            <strong>ECCM:</strong><br>
+            → Frequency Hopping ระบบ CEC ทุกลำ<br>
+            → Spread Spectrum / LPI Communications
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box green" style="margin-top:8px;">
+      <div class="bh">Integration Cyber + EW + EMCON</div>
+      <div class="bp">Cyber, EW, และ EMCON ต้องประสานงานผ่าน N7 IO Cell เพื่อไม่ให้ขัดแย้งกัน: EMCON ปิด EM → EW ยังต้อง Monitor → Cyber ใช้ Wired Network เป็นหลัก</div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">Cyber Defense & Electronic Warfare</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 7: STRATEGIC COMMUNICATIONS -->
+<div class="slide" id="s7">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — StratComm</div><div class="sh-tag">Strategic Communications Plan</div></div></div>
+    <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">StratComm — แผนการสื่อสารยุทธศาสตร์</div>
+    <div class="box orange" style="margin-bottom:10px;">
+      <div class="bh">AZ Master Narrative</div>
+      <div class="bp" style="font-size:13px;color:#c0a0e0;">"AZ ดำเนิน Legitimate Defense ของ TALOS ตามกฎหมายระหว่างประเทศ เพื่อปกป้องสิทธิของประชาชน TALOS และคืนอำนาจอธิปไตยที่ WL ละเมิด — AZ ไม่ใช่ผู้รุกราน แต่คือผู้พิทักษ์"</div>
+    </div>
+    <div class="g3">
+      <div class="box">
+        <div class="bh">Allied Audience</div>
+        <div class="bp">Regular Briefing กับ Allied Commanders ทุก 48 ชม.<br><br>Share Intelligence เพื่อยืนยัน WL Aggression<br><br>ขอ Political Support และ Logistics ต่อเนื่อง</div>
+      </div>
+      <div class="box blue">
+        <div class="bh">International Media</div>
+        <div class="bp">Press Release ทุก 24 ชม. ในช่วง Active Operations<br><br>Embed Media กับ AZ Forces (Approved Zone Only)<br><br>Counter WL Disinformation ทันที (Response within 2 hours)</div>
+      </div>
+      <div class="box green">
+        <div class="bh">Regional Audience</div>
+        <div class="bp">Radio & TV Broadcast ภาษา TALOS ต่อเนื่อง<br><br>Community Leader Engagement Program<br><br>Humanitarian Aid Messaging — แสดง AZ คือมิตร</div>
+      </div>
+    </div>
+    <div class="box red">
+      <div class="bh">StratComm Restrictions — สิ่งที่ห้ามสื่อสาร</div>
+      <div class="bp">ห้าม: ยืนยันข้อมูลที่ยังไม่ Verify | ห้าม: แสดงตัวเลข Casualty AZ ก่อนได้รับอนุมัติ | ห้าม: Comment เรื่อง Ongoing Ops ที่ยังดำเนินอยู่ | ห้าม: Statements ที่อาจก่อให้เกิด Escalation กับ WL Allies</div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">Strategic Communications Plan</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 8: IO SYNC MATRIX -->
+<div class="slide" id="s8">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO Synchronization Matrix</div><div class="sh-tag">การประสานงาน IO ตลอดปฏิบัติการ</div></div></div>
+    <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:10px;">IO Synchronization Matrix</div>
+    <div class="phase-bar">
+      <div class="phase-pill pp-shape">Phase 1<br>Shape (D-7)</div>
+      <div class="phase-pill pp-deter">Phase 2<br>Deter (D-3)</div>
+      <div class="phase-pill pp-seize">Phase 3<br>Seize (D-Day)</div>
+      <div class="phase-pill pp-exploit">Phase 4<br>Exploit (D+3)</div>
+      <div class="phase-pill pp-sustain">Phase 5<br>Sustain (D+7+)</div>
+    </div>
+    <table>
+      <tr>
+        <th style="width:22%;">IO Capability</th>
+        <th style="width:4%;text-align:center;font-size:10px;">แอลฯ</th>
+        <th style="width:15%;text-align:center;">Phase 1<br>Shape</th>
+        <th style="width:15%;text-align:center;">Phase 2<br>Deter</th>
+        <th style="width:15%;text-align:center;">Phase 3<br>Seize</th>
+        <th style="width:15%;text-align:center;">Phase 4<br>Exploit</th>
+        <th style="width:14%;text-align:center;">Phase 5<br>Sustain</th>
+      </tr>
+      <tr>
+        <td class="hl">PSYOP</td>
+        <td style="text-align:center;color:#d4a820;font-size:10px;">N7</td>
+        <td class="sm-cell sm-high">เตรียมสาร</td>
+        <td class="sm-cell sm-full">เต็มกำลัง</td>
+        <td class="sm-cell sm-full">เต็มกำลัง</td>
+        <td class="sm-cell sm-full">เต็มกำลัง</td>
+        <td class="sm-cell sm-high">ลดระดับ</td>
+      </tr>
+      <tr>
+        <td class="hl">EMCON</td>
+        <td style="text-align:center;color:#d4a820;font-size:10px;">N7/N6</td>
+        <td class="sm-cell sm-low">Level I</td>
+        <td class="sm-cell sm-full">Level III</td>
+        <td class="sm-cell sm-full">Level III→ยก</td>
+        <td class="sm-cell sm-med">Level I</td>
+        <td class="sm-cell sm-low">ปกติ</td>
+      </tr>
+      <tr>
+        <td class="hl">MILDEC</td>
+        <td style="text-align:center;color:#d4a820;font-size:10px;">N7/N2</td>
+        <td class="sm-cell sm-high">วาง Pattern</td>
+        <td class="sm-cell sm-full">Peak Decoy</td>
+        <td class="sm-cell sm-none">สิ้นสุด</td>
+        <td class="sm-cell sm-none">—</td>
+        <td class="sm-cell sm-none">—</td>
+      </tr>
+      <tr>
+        <td class="hl">DEFNET Cyber</td>
+        <td style="text-align:center;color:#d4a820;font-size:10px;">N7/N6</td>
+        <td class="sm-cell sm-med">เสริม Cyber</td>
+        <td class="sm-cell sm-full">สูงสุด</td>
+        <td class="sm-cell sm-full">สูงสุด</td>
+        <td class="sm-cell sm-high">สูง</td>
+        <td class="sm-cell sm-med">ปกติ</td>
+      </tr>
+      <tr>
+        <td class="hl">EW (ESM/ECM)</td>
+        <td style="text-align:center;color:#d4a820;font-size:10px;">N7</td>
+        <td class="sm-cell sm-med">ESM Monitor</td>
+        <td class="sm-cell sm-high">ESM+ECM สแตนบาย</td>
+        <td class="sm-cell sm-full">ECM เปิดใช้</td>
+        <td class="sm-cell sm-med">ESM Only</td>
+        <td class="sm-cell sm-low">ESM ลด</td>
+      </tr>
+      <tr>
+        <td class="hl">StratComm</td>
+        <td style="text-align:center;color:#d4a820;font-size:10px;">N7/PAO</td>
+        <td class="sm-cell sm-high">เตรียม Msg</td>
+        <td class="sm-cell sm-full">ต่อเนื่อง</td>
+        <td class="sm-cell sm-full">ต่อเนื่อง</td>
+        <td class="sm-cell sm-full">ต่อเนื่อง</td>
+        <td class="sm-cell sm-high">ต่อเนื่อง</td>
+      </tr>
+      <tr>
+        <td class="hl">CMO/KLE</td>
+        <td style="text-align:center;color:#d4a820;font-size:10px;">N7/N9</td>
+        <td class="sm-cell sm-low">เตรียม KLE</td>
+        <td class="sm-cell sm-med">KLE เริ่ม</td>
+        <td class="sm-cell sm-high">Humanitarian</td>
+        <td class="sm-cell sm-full">เต็มกำลัง</td>
+        <td class="sm-cell sm-full">ต่อเนื่อง</td>
+      </tr>
+    </table>
+    <div style="display:flex;gap:16px;margin-top:8px;font-size:10px;">
+      <span class="sm-cell sm-full" style="padding:2px 8px;border-radius:2px;">เต็มกำลัง</span>
+      <span class="sm-cell sm-high" style="padding:2px 8px;border-radius:2px;">สูง</span>
+      <span class="sm-cell sm-med" style="padding:2px 8px;border-radius:2px;">กลาง</span>
+      <span class="sm-cell sm-low" style="padding:2px 8px;border-radius:2px;">ต่ำ</span>
+      <span class="sm-cell sm-none" style="padding:2px 8px;border-radius:2px;">ไม่ดำเนิน</span>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO Synchronization Matrix</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 9: IO TIMELINE -->
+<div class="slide" id="s9">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO Timeline</div><div class="sh-tag">ห้วงเวลาปฏิบัติการ IO</div></div></div>
+    <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">IO Timeline — ห้วงเวลาปฏิบัติการสารสนเทศ</div>
+    <div class="g2">
+      <div>
+        <div class="tl-row"><div class="tl-mark" style="background:#60d090;"></div><div class="tl-body"><div class="tl-time">D-10 — เริ่มวาง MILDEC Baseline</div><div class="tl-act">กำหนด EM Pattern ที่ TALOS South เป็น Historical Baseline</div></div></div>
+        <div class="tl-row"><div class="tl-mark" style="background:#60d090;"></div><div class="tl-body"><div class="tl-time">D-7 — เริ่ม PSYOP + MILDEC เต็มรูปแบบ</div><div class="tl-act">เปิด Hidden Truth Campaign | EM Decoy Pattern เพิ่มขึ้นที่ South</div></div></div>
+        <div class="tl-row"><div class="tl-mark" style="background:#f0c840;"></div><div class="tl-body"><div class="tl-time">D-5 — DEFNET สูงสุด</div><div class="tl-act">Network Monitoring 24/7 | เสริมทุก Firewall | Incident Response on Standby</div></div></div>
+        <div class="tl-row"><div class="tl-mark" style="background:#f0c840;"></div><div class="tl-body"><div class="tl-time">D-3 — EMCON Level III</div><div class="tl-act">บังคับใช้ Radio Silence | Landline + Messenger สำรองทำงาน | Peak MILDEC Decoy</div></div></div>
+        <div class="tl-row"><div class="tl-mark" style="background:#ff9860;"></div><div class="tl-body"><div class="tl-time">D-2 — ติดตั้ง Offline Backup C2</div><div class="tl-act">ทดสอบ Backup C2 Systems | ยืนยัน EMCON Compliance ทุก Unit</div></div></div>
+        <div class="tl-row"><div class="tl-mark" style="background:#ff8080;"></div><div class="tl-body"><div class="tl-time">D-1 — IO Final Preparation</div><div class="tl-act">IO Brief ครั้งสุดท้าย | ยืนยัน PSYOP Materials พร้อม | ECM Standby Mode</div></div></div>
+      </div>
+      <div>
+        <div class="tl-row"><div class="tl-mark" style="background:#ff8080;"></div><div class="tl-body"><div class="tl-time">D-Day H-Hour — IO Full Activation</div><div class="tl-act">ECM เปิดใช้ | ยก EMCON (เฉพาะ C2 ที่จำเป็น) | PSYOP เพิ่มความเข้ม</div></div></div>
+        <div class="tl-row"><div class="tl-mark" style="background:#ff8080;"></div><div class="tl-body"><div class="tl-time">D-Day H+2 — StratComm Press Release</div><div class="tl-act">แถลงข่าวครั้งแรก — AZ Narrative ต่อสื่อนานาชาติ | Allied Briefing ทันที</div></div></div>
+        <div class="tl-row"><div class="tl-mark" style="background:#60a0f0;"></div><div class="tl-body"><div class="tl-time">D+1 — CMO/KLE เริ่มปฏิบัติการ</div><div class="tl-act">KLE กับ Community Leaders ในพื้นที่ที่ยึดได้ | Humanitarian Aid เริ่ม</div></div></div>
+        <div class="tl-row"><div class="tl-mark" style="background:#60a0f0;"></div><div class="tl-body"><div class="tl-time">D+3 — IO Assessment ครั้งแรก</div><div class="tl-act">ประเมิน IO Effectiveness | ปรับ PSYOP Message ตาม Feedback | รายงาน ผบ.</div></div></div>
+        <div class="tl-row"><div class="tl-mark" style="background:#c084fc;"></div><div class="tl-body"><div class="tl-time">D+7 — IO Transition to Sustain</div><div class="tl-act">ลดความเข้ม DEFNET + EMCON | เพิ่ม CMO/Reconstruction Support</div></div></div>
+        <div class="tl-row"><div class="tl-mark" style="background:#c084fc;"></div><div class="tl-body"><div class="tl-time">D+14 — IO Assessment ครั้งที่ 2</div><div class="tl-act">ประเมิน End State สรุปผล IO Campaign รายงานบทเรียน</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO Timeline</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 10: IO RESOURCES -->
+<div class="slide" id="s10">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO Resources</div><div class="sh-tag">ทรัพยากรและข้อจำกัด IO</div></div></div>
+    <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">IO Resources & Limitations</div>
+    <div class="g2">
+      <div>
+        <div class="box green">
+          <div class="bh">IO Resources Available</div>
+          <div class="bp">
+            <strong>PSYOP:</strong> ชุด PSYOP ๒ ชุด, เครื่องกระจายเสียง ๔ เครื่อง, เครื่องพิมพ์แผ่นพับ<br>
+            <strong>Cyber:</strong> DEFNET Team ๑ ชุด, Network Monitoring System<br>
+            <strong>EMCON:</strong> SOI ฉบับสำรอง ๓ ชุด, Landline เส้นทางหลัก + สำรอง<br>
+            <strong>EW:</strong> ESM System บนเรือรบ AZ ๓ ลำ, ECM Jammer ๑ ชุด<br>
+            <strong>StratComm:</strong> PAO Team ๑ ชุด, Media Center ๑ แห่ง<br>
+            <strong>CMO:</strong> CIMIC Team ๒ ชุด + Medical Team สำหรับ Humanitarian
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">IO Limitations</div>
+          <div class="bp">
+            <strong>PSYOP:</strong> ขาด Native Speaker TALOS สำหรับ Radio — ต้องใช้ล่าม<br>
+            <strong>Cyber:</strong> ระบบ Backup C2 รองรับได้เพียง 72 ชม.<br>
+            <strong>EW:</strong> ECM Coverage ไม่ครอบคลุม TALOS North ทั้งหมด<br>
+            <strong>StratComm:</strong> Media Access จำกัดในช่วง EMCON Level III
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box blue">
+          <div class="bh">IO Requirements จาก ผบ.</div>
+          <div class="bp">
+            <strong>R1:</strong> อนุมัติ MILDEC Plan (EM Decoy) ก่อน D-10<br>
+            <strong>R2:</strong> อนุมัติ Pre-authorized ECM สำหรับ D-Day<br>
+            <strong>R3:</strong> กำหนด StratComm Release Authority — ใครอนุมัติแถลงข่าว<br>
+            <strong>R4:</strong> งบประมาณ PSYOP Materials — แผ่นพับ + สื่อ<br>
+            <strong>R5:</strong> ประสานงาน N2 สำหรับ PIR ด้าน IO ที่ยังค้างอยู่
+          </div>
+        </div>
+        <div class="box orange">
+          <div class="bh">IO Coordination ระหว่างฝ่าย</div>
+          <div class="bp">
+            <strong>N7 ↔ N2:</strong> SIGINT/HUMINT สนับสนุน IO Assessment<br>
+            <strong>N7 ↔ N6:</strong> EMCON + DEFNET + EW บูรณาการ EM Spectrum<br>
+            <strong>N7 ↔ PAO:</strong> StratComm Message เป็นเอกภาพ<br>
+            <strong>N7 ↔ N9:</strong> CMO/CIMIC สนับสนุน PSYOP Legitimacy
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO Resources & Limitations</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 11: SUMMARY -->
+<div class="slide" id="s11">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — สรุป CONOPS</div><div class="sh-tag">IO CONOPS Summary</div></div></div>
+    <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">สรุป IO CONOPS — ภาพรวมสมบูรณ์</div>
+    <div class="g2">
+      <div>
+        <div class="box">
+          <div class="bh">IO CONOPS สรุป 5 ประการ</div>
+          <div class="bp">
+            <strong>1. PROTECT FIRST:</strong> DEFNET + EMCON คือ Priority หนึ่ง — ปกป้อง C2 AZ ก่อนทุกอย่าง<br><br>
+            <strong>2. DECEIVE BEFORE KINETIC:</strong> MILDEC ต้องเริ่ม D-7 ก่อน Physical Operations<br><br>
+            <strong>3. PSYOP CONTINUOUS:</strong> Hidden Truth Campaign ต่อเนื่องตลอด ไม่หยุดแม้ D-Day<br><br>
+            <strong>4. STRATCOMM UNIFIED:</strong> ทุก Statement ต้องผ่าน N7/PAO — Unified Narrative<br><br>
+            <strong>5. IO ASSESSMENT REGULAR:</strong> ประเมิน IO Effectiveness ทุก 24–48 ชม.
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box green">
+          <div class="bh">IO End States ที่ต้องบรรลุ</div>
+          <div class="bp">
+            ✓ WL ไม่สามารถระบุตำแหน่ง TF AZ ได้ก่อน H-Hour<br>
+            ✓ WL Garrison TALOS มี Morale ต่ำลง ยอมแพ้บางส่วน<br>
+            ✓ ประชาชน TALOS สนับสนุน AZ และโดดเดี่ยว WL<br>
+            ✓ C2 AZ ทำงานต่อเนื่องตลอด D-Day<br>
+            ✓ International Community ประณาม WL และสนับสนุน AZ
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">ประเด็นสุดท้ายที่ ผบ. ต้องตัดสิน</div>
+          <div class="bp">
+            → อนุมัติ MILDEC EM Decoy Plan หรือไม่<br>
+            → Pre-authorize ECM ในระดับใดก่อน D-Day<br>
+            → StrategicComm Release Authority: ผบ. เท่านั้นหรือมอบอำนาจ N7/PAO<br>
+            → IO Assessment Report: ความถี่และผู้รับ
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box blue">
+      <div class="bh">N7 IO พร้อมปฏิบัติการ</div>
+      <div class="bp">N7 IO กลุ่มที่ ๒ พร้อมดำเนิน IO เต็มรูปแบบตาม CONOPS Annex นี้ ขอเพียงการอนุมัติจาก ผบ. และทรัพยากรตามที่ร้องขอ — ทุก IO Capability พร้อม, Sync Matrix สมบูรณ์, Timeline ชัดเจน</div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO CONOPS Summary</span><span>สธ.๘๖ | ๒๙ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 12: Q&A -->
+<div class="slide" id="s12">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO</div><div class="sh-tag">CONOPS Brief Complete</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 04 สิ้นสุด</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+    <div style="opacity:0.3;margin-bottom:20px;"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:80px;width:auto;"></div>
+    <div style="font-size:32px;font-weight:800;color:#e8f0ff;margin-bottom:12px;">ขอบคุณครับ</div>
+    <div style="font-size:18px;color:#d4a820;margin-bottom:4px;">N7 IO พร้อมรับคำถามและการวิพากษ์</div>
+    <div style="font-size:14px;color:#3a5a7a;margin-bottom:20px;">IO CONOPS Annex — สิ้นสุดการนำเสนอ</div>
+    <div style="width:160px;height:2px;background:linear-gradient(90deg,transparent,#d4a820,transparent);margin:0 auto 20px;"></div>
+    <div style="font-size:12px;color:#4a6a8a;line-height:1.9;">N7 การปฏิบัติการสารสนเทศ | กลุ่มที่ ๒<br>IO CONOPS Annex | สธ.๘๖ | ๒๕–๒๙ มิ.ย. ๒๕๖๙<br><br></div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap;">
+      <a href="01_IPOE_IO.html" style="padding:6px 14px;border:1px solid #1a3a6a;color:#5070a0;background:rgba(10,22,40,0.5);border-radius:4px;font-size:11px;text-decoration:none;">01 IPOE IO</a>
+      <a href="02_IO_Matrix.html" style="padding:6px 14px;border:1px solid #1a3a6a;color:#5070a0;background:rgba(10,22,40,0.5);border-radius:4px;font-size:11px;text-decoration:none;">02 IO Matrix</a>
+      <a href="03_COA_IO.html" style="padding:6px 14px;border:1px solid #1a3a6a;color:#5070a0;background:rgba(10,22,40,0.5);border-radius:4px;font-size:11px;text-decoration:none;">03 COA IO</a>
+      <a href="index.html" style="padding:6px 14px;border:1px solid #d4a820;color:#d4a820;background:rgba(212,168,32,0.08);border-radius:4px;font-size:11px;text-decoration:none;">⌂ Dashboard</a>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO CONOPS Complete — สธ.๘๖</span><span>สธ.๘๖ | ๒๙ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+</div>
+<div id="nav">
+  <button onclick="prev()">◀</button>
+  <span id="ctr">1/12</span>
+  <button onclick="next()">▶</button>
+  <a id="home-btn" href="index.html">⌂</a>
+</div>
+<script>
+let cur=0;
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+function go(n){slides[cur].classList.remove('active');cur=Math.max(0,Math.min(n,total-1));slides[cur].classList.add('active');document.getElementById('ctr').textContent=(cur+1)+'/'+total;}
+function next(){go(cur+1);}
+function prev(){go(cur-1);}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
+  if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+  if(e.key==='h'||e.key==='H'){window.location.href='index.html';}
+});
+go(0);
+</script>
+</body>
+</html>

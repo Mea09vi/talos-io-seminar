@@ -1,0 +1,21 @@
+# ---------------------------------------------------------------
+# Whitelist mode: ignore EVERYTHING, then allow only published files
+# (กันเอกสารภายในหลักสูตร / ไฟล์เสียง / ข้อมูลสถานการณ์ ไม่ให้ขึ้น GitHub)
+# ---------------------------------------------------------------
+/*
+
+# repo meta
+!/.gitignore
+!/README.md
+!/index.html
+
+# shared assets
+!/Emblem_of_the_Royal_Thai_Navy.svg
+
+# presentations (HTML decks)
+!/03_การนำเสนอ/
+
+# map images — only the one referenced by the presentations
+!/06_แผนที่/
+/06_แผนที่/*
+!/06_แผนที่/talos_island.png

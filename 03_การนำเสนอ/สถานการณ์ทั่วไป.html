@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>สถานการณ์ทั่วไป — N7 IO | สธ.๘๖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,system-ui,sans-serif;background:#050d1a;color:#e8f0ff;height:100vh;overflow:hidden;}
+#pres{width:100vw;height:100vh;position:relative;}
+.slide{display:none;width:100%;height:100%;padding:32px 56px 20px;flex-direction:column;position:absolute;top:0;left:0;
+  background:linear-gradient(135deg,#050d1a 0%,#0a1628 60%,#0d2045 100%);}
+.slide.active{display:flex;}
+
+/* HEADER */
+.sh{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #d4a820;padding-bottom:10px;margin-bottom:18px;flex-shrink:0;}
+.sh-left{display:flex;align-items:center;gap:12px;}
+.sh-anchor{display:inline-flex;align-items:center;opacity:0.8;vertical-align:middle;}
+.sh-unit{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:10px;color:#d4a820;letter-spacing:1.5px;font-weight:700;}
+.sh-right{text-align:right;}
+.sh-label{font-size:9px;color:#4a6a8a;letter-spacing:1px;}
+.sh-tag{font-size:11px;color:#7090b0;font-weight:600;}
+
+/* CONTENT */
+.content{flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden;}
+
+/* BOX */
+.box{background:rgba(26,58,106,0.25);border:1px solid #1a3a6a;border-left:4px solid #d4a820;border-radius:4px;padding:14px 16px;margin-bottom:10px;}
+.box.blue{border-left-color:#2a7fd4;}
+.box.cyan{border-left-color:#2d8a8a;}
+.box.purple{border-left-color:#c084fc;}
+.box.red{border-left-color:#e05050;}
+.box.green{border-left-color:#2d8a5a;}
+.box.orange{border-left-color:#e07820;}
+.bh{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.8px;margin-bottom:6px;color:#d4a820;}
+.box.blue .bh{color:#60a0f0;} .box.cyan .bh{color:#40c0c0;} .box.purple .bh{color:#c084fc;}
+.box.red .bh{color:#ff8080;} .box.green .bh{color:#60d090;} .box.orange .bh{color:#f09840;}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:11px;}
+th{background:#0a1e40;color:#d4a820;padding:7px 10px;text-align:left;font-weight:700;border:1px solid #1a3a6a;letter-spacing:0.5px;}
+td{padding:7px 10px;border:1px solid #1a3a6a;color:#b0c8e0;vertical-align:top;}
+tr:nth-child(even) td{background:rgba(26,58,106,0.15);}
+td.hl{color:#e8f0ff;font-weight:600;}
+
+/* BADGES */
+.badge{display:inline-block;padding:1px 7px;border-radius:2px;font-size:10px;font-weight:700;}
+.bh-r{background:rgba(138,45,45,0.3);color:#ff8080;border:1px solid #8a2d2d;}
+.bh-y{background:rgba(180,120,0,0.3);color:#f0c840;border:1px solid #b47800;}
+.bh-g{background:rgba(45,138,90,0.3);color:#60d090;border:1px solid #2d8a5a;}
+.bh-b{background:rgba(30,95,168,0.3);color:#60a0f0;border:1px solid #1e5fa8;}
+
+/* COVER */
+.cover-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;}
+.cover-bg{position:absolute;opacity:0.04;user-select:none;}
+.cover-label{font-size:11px;color:#d4a820;letter-spacing:3px;font-weight:700;margin-bottom:16px;}
+.cover-h1{font-size:42px;font-weight:900;color:#e8f0ff;line-height:1.2;margin-bottom:8px;}
+.cover-h2{font-size:17px;color:#d4a820;margin-bottom:20px;}
+.cover-line{width:180px;height:2px;background:linear-gradient(90deg,transparent,#d4a820,transparent);margin:0 auto 20px;}
+.cover-meta{font-size:12px;color:#4a6a8a;line-height:1.8;}
+.cover-tags{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+.ctag{padding:4px 12px;border:1px solid;border-radius:3px;font-size:11px;font-weight:600;}
+.ctag-g{border-color:#d4a820;color:#d4a820;background:rgba(212,168,32,0.1);}
+.ctag-b{border-color:#1e5fa8;color:#60a0f0;background:rgba(30,95,168,0.1);}
+.ctag-r{border-color:#8a2d2d;color:#ff8080;background:rgba(138,45,45,0.1);}
+
+/* STAT CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px;}
+.stat-card{background:rgba(10,22,40,0.8);border:1px solid #1a3a6a;border-radius:4px;padding:10px;text-align:center;}
+.stat-val{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:22px;font-weight:700;color:#d4a820;}
+.stat-label{font-size:9px;color:#4a6a8a;letter-spacing:0.5px;margin-top:2px;}
+
+/* TIMELINE */
+.tl-item{display:flex;align-items:flex-start;gap:12px;padding:5px 0;}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:#d4a820;flex-shrink:0;margin-top:4px;}
+.tl-dot.red{background:#e05050;}
+.tl-dot.blue{background:#2a7fd4;}
+.tl-dot.green{background:#2d8a5a;}
+.tl-date{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:10px;color:#d4a820;font-weight:700;min-width:42px;margin-top:3px;}
+.tl-title{font-size:12px;font-weight:600;color:#e8f0ff;}
+.tl-sub{font-size:10px;color:#5070a0;margin-top:1px;}
+
+/* LAYOUT */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+/* LIST */
+ul.ml{list-style:none;padding:0;}
+ul.ml li{font-size:12px;color:#7090b0;padding:3px 0 3px 14px;border-left:2px solid #1a3a6a;margin-bottom:4px;line-height:1.5;}
+ul.ml li strong{color:#a0c0e0;}
+
+/* FOOTER */
+.sf{border-top:1px solid #1a3a6a;padding-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#2a4a6a;flex-shrink:0;margin-top:8px;}
+.sf-center{color:#4a6a8a;}
+
+/* NAV */
+#nav{position:fixed;bottom:18px;right:28px;display:flex;align-items:center;gap:10px;background:rgba(10,22,40,0.92);border:1px solid #1a3a6a;padding:6px 14px;border-radius:30px;z-index:200;}
+#nav button{background:none;border:1px solid #1a3a6a;color:#6080a0;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:11px;}
+#nav button:hover{background:#1a3a6a;color:#e8f0ff;}
+#ctr{color:#5070a0;font-size:11px;min-width:44px;text-align:center;}
+#home-btn{color:#4a6a8a;font-size:11px;text-decoration:none;padding:0 6px;border-left:1px solid #1a3a6a;}
+</style>
+</head>
+<body>
+<div id="pres">
+
+<!-- SLIDE 1: COVER -->
+<div class="slide active" id="s1">
+  <div class="sh">
+    <div class="sh-left">
+      <span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span>
+      <div><div class="sh-unit">N7 — INFORMATION OPERATIONS</div><div class="sh-tag">กลุ่มที่ ๒ | สธ.๘๖</div></div>
+    </div>
+    <div class="sh-right"><div class="sh-label">SITUATION BRIEF</div><div class="sh-tag">๑๐ มิ.ย. ๒๕๖๙</div></div>
+  </div>
+  <div class="cover-wrap">
+    <div class="cover-bg"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:200px;width:auto;"></div>
+    <div class="cover-label">กลุ่มที่ ๒ — N7 INFORMATION OPERATIONS</div>
+    <div class="cover-h1">สถานการณ์ทั่วไป</div>
+    <div class="cover-h2">General Situation — Operation RESTORE TALOS</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">
+      สัมมนาการวางแผนทางทหารแบบปราณีต | หลักสูตร สธ.๘๖<br>
+      กองทัพเรือ | ๑๐ มิถุนายน ๒๕๖๙
+    </div>
+    <div class="cover-tags">
+      <span class="ctag ctag-r">ฝึกเท่านั้น</span>
+      <span class="ctag ctag-g">กลุ่มที่ ๒</span>
+      <span class="ctag ctag-b">N7 — IO</span>
+      <span class="ctag ctag-g">IPOE Step 1</span>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่มที่ ๒ N7 IO</span><span class="sf-center">สัมมนาวางแผนทางทหารแบบปราณีต | สธ.๘๖</span><span>๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 2: STRATEGIC BACKGROUND -->
+<div class="slide" id="s2">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์ทั่วไป | ๑/๕</div><div class="sh-tag">ภูมิหลังเชิงยุทธศาสตร์</div></div></div>
+    <div class="sh-right"><div class="sh-label">STRATEGIC BACKGROUND</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-val">๒๔๐</div><div class="stat-label">ตร.กม. พื้นที่ TALOS</div></div>
+      <div class="stat-card"><div class="stat-val">๒๓M</div><div class="stat-label">ตัน VERDATA สำรอง</div></div>
+      <div class="stat-card"><div class="stat-val">๑๒,๐๐๐</div><div class="stat-label">ลำ/ปี ผ่าน SLOC</div></div>
+      <div class="stat-card"><div class="stat-val">D-45</div><div class="stat-label">วัน นับจาก WL ยึดครอง</div></div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="box">
+          <div class="bh">เกาะตาลอส — ความสำคัญเชิงยุทธศาสตร์</div>
+          <ul class="ml">
+            <li><strong>ที่ตั้ง:</strong> ๑๑°๔๕'N ๙๘°๓๐'E ควบคุมช่องแคบยุทธศาสตร์</li>
+            <li><strong>SLOC:</strong> เส้นทางเดินเรือพาณิชย์ ๑๒,๐๐๐ ลำ/ปี ผ่านพื้นที่</li>
+            <li><strong>VERDATA:</strong> แร่ธาตุหายาก (REE) สำรอง ๒๓ ล้านตัน — มูลค่า $๔.๗ ล้านล้าน USD มีความสำคัญต่ออุตสาหกรรมกลาโหมทั่วโลก</li>
+            <li><strong>ประชากร:</strong> ๑๘,๗๐๐ คน (ประมาณ ๘๐% สนับสนุนฝ่าย AZ)</li>
+          </ul>
+        </div>
+        <div class="box blue">
+          <div class="bh">มติ UNSC Resolution 2847</div>
+          <ul class="ml">
+            <li>เรียกร้อง WL ถอนกำลังออกจากเกาะตาลอสโดยทันที</li>
+            <li>อนุมัติ AZ และพันธมิตรดำเนินการตามบทที่ ๗ กฎบัตรสหประชาชาติ</li>
+            <li>กำหนดให้ AZ รายงานความคืบหน้าต่อ UNSC ทุก ๗ วัน</li>
+            <li>กำหนดกรอบเวลา: เริ่มปฏิบัติการภายใน ๓๐ วัน</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="box red">
+          <div class="bh">เหตุการณ์นำสู่วิกฤต — ลำดับเวลา</div>
+          <ul class="ml">
+            <li><strong>H-120 วัน:</strong> WL ประกาศอ้างสิทธิ์เหนือ TALOS โดยอ้างหลักฐานประวัติศาสตร์ พร้อมเปิดตัว IO Campaign #TalosOurHeritage</li>
+            <li><strong>H-90 วัน:</strong> WL IO Brigade เริ่มปฏิบัติการเต็มรูปแบบ — Social Media, Disinformation, Cyber Recon</li>
+            <li><strong>H-60 วัน:</strong> กองเรือ WL TF-77 เข้าสู่ EEZ ของ TALOS โดยอ้างสิทธิ์ประมง</li>
+            <li><strong>H-45 วัน:</strong> WL ยกพลขึ้นบก ยึด Port TALOS และ VERDATA Airport ภายใน ๗๒ ชม.</li>
+            <li><strong>H-30 วัน:</strong> UNSC Resolution 2847 มีมติ — AZ ได้รับอนุมัติดำเนินการ</li>
+          </ul>
+        </div>
+        <div class="box green">
+          <div class="bh">ฝ่ายสนับสนุน AZ</div>
+          <ul class="ml">
+            <li>ชาติพันธมิตร ๓ ประเทศ — กำลังพล ๑,๒๐๐ นาย + เรือรบ ๔ ลำ</li>
+            <li>การสนับสนุน ISR จากองค์กรระหว่างประเทศ</li>
+            <li>สิทธิ์ใช้ฐานทัพ Forward Staging ห่างจาก TALOS ๓๕๐ กม.</li>
+            <li>สื่อนานาชาติ ๑๕ สำนักประจำพื้นที่ใกล้เคียง — ช่องทาง StratComm</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์ทั่วไป — ภูมิหลังยุทธศาสตร์</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 3: AO/AOI -->
+<div class="slide" id="s3">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์ทั่วไป | ๒/๕</div><div class="sh-tag">พื้นที่ปฏิบัติการ</div></div></div>
+    <div class="sh-right"><div class="sh-label">AREA OF OPERATIONS / INTEREST</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="two-col">
+      <div>
+        <div class="box">
+          <div class="bh">AO — พื้นที่ปฏิบัติการ (รัศมี ๓๐๐ กม.)</div>
+          <ul class="ml">
+            <li><strong>ภูมิประเทศ:</strong> เนินสูงทางเหนือ (สูงสุด ๖๘๐ ม.) / พื้นที่ราบตอนใต้เหมาะแก่การยกพล</li>
+            <li><strong>ชายหาดยกพล:</strong> BEACH RED (กว้าง ๑.๒ กม.) / BLUE / GREEN ด้านตะวันตก ลาดชัน ๒-๔°</li>
+            <li><strong>ป่า:</strong> ร้อยละ ๔๕ ของพื้นที่ ขัดขวางยานเกราะ เอื้อต่อการซุ่มโจมตี</li>
+            <li><strong>ทะเล:</strong> คลื่น ๒-๓ ม. ช่วงมรสุม (พ.ค.-ต.ค.) ทัศนวิสัย ๘-๑๒ กม.</li>
+          </ul>
+        </div>
+        <div class="box blue">
+          <div class="bh">โครงสร้างพื้นฐานสำคัญ (Key Terrain)</div>
+          <ul class="ml">
+            <li><strong>Port TALOS:</strong> ท่าเรือน้ำลึก รองรับ ๑๕,๐๐๐ DWT — ปัจจุบัน WL ควบคุม</li>
+            <li><strong>VERDATA Intl. Airport:</strong> รันเวย์ ๓,๒๐๐ ม. — WL ใช้ฝูงบินขับไล่ประจำการ</li>
+            <li><strong>สถานีโทรคมนาคมกลาง:</strong> ควบคุม ICT ทั้งเกาะ — เป้า IO สำคัญ</li>
+            <li><strong>Route 1 (N-S) / Route 7 (E-W):</strong> ถนนหลัก แคบ รองรับยานหนักได้จำกัด</li>
+            <li><strong>Power Station:</strong> ศูนย์กลางไฟฟ้ากลางเกาะ — เป้า Critical Infrastructure</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="box orange">
+          <div class="bh">AOI — พื้นที่ความสนใจ (รัศมี ๕๐๐ กม.)</div>
+          <ul class="ml">
+            <li>WL Home Fleet Base — ห่าง ๔๒๐ กม. ทางเหนือ (เสริมกำลังได้ภายใน ๓๖ ชม.)</li>
+            <li>AZ Forward Staging Area — ห่าง ๓๕๐ กม. ทางใต้</li>
+            <li>เส้นทาง SLOC ผ่านช่องแคบ — มูลค่าทางพาณิชย์ $๒.๔ ล้านล้าน/ปี</li>
+            <li>สื่อมวลชนนานาชาติ ๑๕ สำนัก ประจำในพื้นที่ใกล้เคียง</li>
+          </ul>
+        </div>
+        <div class="box green">
+          <div class="bh">ประชากรและชุมชน TALOS (PMESII-PT)</div>
+          <table>
+            <tr><th>กลุ่มประชากร</th><th>จำนวน</th><th>ทัศนคติ IO</th></tr>
+            <tr><td class="hl">พลเรือนทั่วไป</td><td>๑๕,๒๐๐</td><td><span class="badge bh-g">สนับสนุน AZ ๖๐%</span></td></tr>
+            <tr><td class="hl">ชุมชน WL-origin</td><td>๒,๓๐๐</td><td><span class="badge bh-r">สนับสนุน WL ๗๘%</span></td></tr>
+            <tr><td class="hl">ผู้นำชุมชน / KIs</td><td>~๒๐๐</td><td><span class="badge bh-y">Neutral — เป้า PSYOP</span></td></tr>
+            <tr><td class="hl">สื่อท้องถิ่น</td><td>๕ สำนัก</td><td><span class="badge bh-r">WL ควบคุม ๔ สำนัก</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์ทั่วไป — พื้นที่ปฏิบัติการ</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 4: WL SITUATION -->
+<div class="slide" id="s4">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์ทั่วไป | ๓/๕</div><div class="sh-tag">สถานการณ์ข้าศึก</div></div></div>
+    <div class="sh-right"><div class="sh-label">ENEMY SITUATION — WL FORCES</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="two-col">
+      <div>
+        <div class="box red">
+          <div class="bh">กำลังภาคพื้น — กองพลนาวิกโยธิน WL ที่ ๓ (TALOS)</div>
+          <ul class="ml">
+            <li><strong>ผบ.:</strong> MAJ GEN VOLKOV — บก. ประจำ Port TALOS</li>
+            <li><strong>กำลังพลรวม:</strong> ๑๕,๔๐๐ นาย (จากกองทัพรวม ๕๕๐,๐๐๐ นาย)</li>
+            <li><strong>กรมทหารราบ:</strong> ๒ กรม | <strong>กรมยานเกราะ:</strong> ๑ กรม (T-80 × ๘๔)</li>
+            <li><strong>ปืนใหญ่:</strong> กองพัน MRL (จรวดหลายลำกล้อง) + ฮาวิทเซอร์ ๑๕๕ มม.</li>
+            <li><strong>กองทัพจรวด (Rocket Force):</strong> ขีปนาวุธ SSM สายสนับสนุน — ภัยคุกคาม A2/AD</li>
+            <li><strong>กองทัพสนับสนุนทางยุทธศาสตร์ (IO/EW):</strong> กองพลน้อยสงครามอิเล็กทรอนิกส์ + กองพลน้อยสนับสนุนปฏิบัติการข่าวสาร — รวม ๒,๔๐๐ นาย EW/Cyber/PSYOP</li>
+            <li><strong>ศูนย์บัญชาการ Sosnovka (ใต้ดิน):</strong> ดัดแปลงจากหลุมหลบภัยเก่า — ทางเข้ามิดชิด ISR เจาะไม่ได้</li>
+          </ul>
+        </div>
+        <div class="box red">
+          <div class="bh">กำลังทางเรือ — TF-77 (โครงสร้าง ๖ เหล่าทัพ)</div>
+          <ul class="ml">
+            <li>CV (เรือบรรทุกเครื่องบิน Conventional) ๑ ลำ — อากาศยาน ๒๔+ ลำ</li>
+            <li>เรือพิฆาต DDG ๔ ลำ + เรือฟริเกต FFG ๔ ลำ (SAM/ASW)</li>
+            <li>เรือดำน้ำ SSK ๔ ลำ (Kilo-class 636.3) — ตอร์ปิโดและ SLCM</li>
+            <li>เรือส่งกำลัง / Replenishment ๖ ลำ</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="box red">
+          <div class="bh">กำลังทางอากาศ (จาก VERDATA Airport + CV TF-77)</div>
+          <ul class="ml">
+            <li>MIG-35 × ๒๔ (Air Superiority — ครอง AO)</li>
+            <li>SU-30MK × ๒๔ (Strike / SEAD)</li>
+            <li>Mi-28 Havoc × ๑๖ (Attack Helicopter)</li>
+            <li>UAV ISR × ๘ (Orion-class — ISR เหนือ AO ตลอด ๒๔ ชม.)</li>
+          </ul>
+        </div>
+        <div class="box">
+          <div class="bh">ตำแหน่งที่ตั้งและเจตนา WL</div>
+          <table>
+            <tr><th>พื้นที่</th><th>กำลัง</th><th>เจตนา</th></tr>
+            <tr><td class="hl">Port TALOS</td><td>กรม ทบ. ที่ ๑ + บก.กองพล</td><td>รักษาท่าเรือ/Logistics</td></tr>
+            <tr><td class="hl">VERDATA Airport</td><td>กรมยานเกราะ + กองบิน</td><td>ควบคุมห้วงอากาศ</td></tr>
+            <tr><td class="hl">เนินเขาเหนือ (Hill 680)</td><td>กรม ทบ. ที่ ๒</td><td>ตั้งรับ / Observation</td></tr>
+            <tr><td class="hl">IO/EW Hub (ใจกลาง)</td><td>IO Brigade</td><td>ครอง Spectrum + Narrative</td></tr>
+            <tr><td class="hl">TF-77 (นอกชายฝั่ง)</td><td>กองเรือ</td><td>A2/AD + งดเสริมกำลัง AZ</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์ทั่วไป — กำลัง WL</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 5: AZ SITUATION -->
+<div class="slide" id="s5">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์ทั่วไป | ๔/๕</div><div class="sh-tag">สถานการณ์ฝ่ายเรา</div></div></div>
+    <div class="sh-right"><div class="sh-label">FRIENDLY SITUATION — AZ TF-51</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="two-col">
+      <div>
+        <div class="box green">
+          <div class="bh">กองกำลังสะเทิ้นน้ำสะเทิ้นบก TF-51 (Amphibious Ready Group)</div>
+          <ul class="ml">
+            <li><strong>ARG เรือยก:</strong> LHD Dokdo-class × ๒ (AZNS Minerva, AZNS Roma) + LPD Type 071E × ๒ + LCAC Type 726 × ๘</li>
+            <li><strong>MEB:</strong> ๖,๘๐๐ นายนาวิกโยธิน + ACV × ๔๐ + Light Tank × ๑๒ + ปืนใหญ่ ๑๕๕ มม. × ๑๘</li>
+            <li><strong>เรือคุ้มกัน:</strong> DDG KDDX-class × ๒ + FFG Mogami 30FFM × ๔ + SSK Type 218SG × ๒ + MCM Awaji-class × ๒</li>
+            <li><strong>อากาศยาน:</strong> F/A-18 Hornet × ๘ + P-8 Poseidon × ๒ (ASW) + MH-60R Seahawk × ๑๐ + AW101 Merlin × ๔</li>
+            <li><strong>IO ฝ่ายเรา:</strong> หน่วย PSYOP (๑๘๐ นาย) + N7 IO Cell</li>
+          </ul>
+        </div>
+        <div class="box blue">
+          <div class="bh">ชาติพันธมิตร (Coalition Forces)</div>
+          <ul class="ml">
+            <li><strong>ชาติ A:</strong> ๔๐๐ นาย + ฟริเกต ๒ (EW/SIGINT specialist)</li>
+            <li><strong>ชาติ B:</strong> ๕๐๐ นาย + SSK ๑ + SOF ๒ ทีม</li>
+            <li><strong>ชาติ C:</strong> ๓๐๐ นาย + ISR UAV + IO/StratComm specialists</li>
+            <li style="color:#7090b0;font-style:italic;">หมายเหตุ: National Caveats แตกต่างกัน — ต้อง coordinate IO อย่างระมัดระวัง</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="box">
+          <div class="bh">ภารกิจ (MISSION STATEMENT)</div>
+          <p style="font-size:13px;color:#b0c8e0;line-height:1.7;padding:8px 0;border-left:3px solid #d4a820;padding-left:12px;">
+            TF-51 ดำเนินการ <strong style="color:#d4a820;">ปฏิบัติการสะเทิ้นน้ำสะเทิ้นบก</strong> เพื่อขับไล่กำลัง WL ออกจากเกาะตาลอส ฟื้นฟูอำนาจอธิปไตย และสนับสนุน CMO เพื่อรักษาความมั่นคงของพลเรือน ภายในกรอบเวลา D+14 ตามมติ UNSC 2847
+          </p>
+        </div>
+        <div class="box orange">
+          <div class="bh">ข้อจำกัดหลัก (KEY CONSTRAINTS)</div>
+          <table>
+            <tr><th>ประเด็น</th><th>สถานะ</th></tr>
+            <tr><td class="hl">อัตรากำลัง AZ : WL</td><td><span class="badge bh-r">1 : 1.9 (เสียเปรียบ — WL ตั้งรับ ๔๕ วัน)</span></td></tr>
+            <tr><td class="hl">IO Advantage</td><td><span class="badge bh-r">WL ล่วงหน้า 90 วัน</span></td></tr>
+            <tr><td class="hl">ระยะทาง Logistics</td><td><span class="badge bh-y">350 กม. จาก FSA</span></td></tr>
+            <tr><td class="hl">พันธมิตร Coordination</td><td><span class="badge bh-y">National Caveats ต่างกัน</span></td></tr>
+            <tr><td class="hl">EMCON</td><td><span class="badge bh-g">Level II — บังคับใช้</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์ทั่วไป — กำลัง AZ TF-51</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 6: TIMELINE & SUMMARY -->
+<div class="slide" id="s6">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์ทั่วไป | ๕/๕</div><div class="sh-tag">กรอบเวลาและสรุป</div></div></div>
+    <div class="sh-right"><div class="sh-label">TIMELINE &amp; SUMMARY</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="two-col">
+      <div>
+        <div class="box">
+          <div class="bh">เส้นเวลาเหตุการณ์สำคัญ</div>
+          <div style="margin-top:6px;">
+            <div class="tl-item">
+              <div class="tl-dot red"></div>
+              <div style="flex:1;">
+                <div class="tl-date" style="color:#ff8080;">D-120</div>
+                <div class="tl-title">WL ประกาศอ้างสิทธิ์ + เปิด IO Campaign</div>
+                <div class="tl-sub">#TalosOurHeritage — ๘.๗M impressions ใน ๙๐ วัน</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot red"></div>
+              <div style="flex:1;">
+                <div class="tl-date" style="color:#ff8080;">D-45</div>
+                <div class="tl-title">WL ยึดครอง Port TALOS + VERDATA Airport</div>
+                <div class="tl-sub">IO Brigade เริ่มควบคุม Media Infrastructure ทั้งเกาะ</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div style="flex:1;">
+                <div class="tl-date">D-30</div>
+                <div class="tl-title">UNSC Resolution 2847 มีมติ</div>
+                <div class="tl-sub">AZ ได้รับอนุมัติ — เริ่มวางแผน TF-51</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot blue"></div>
+              <div style="flex:1;">
+                <div class="tl-date" style="color:#60a0f0;">D-14</div>
+                <div class="tl-title">TF-51 ออกเดินทาง — EMCON Level II บังคับ</div>
+                <div class="tl-sub">IO Plan อนุมัติ — เริ่ม Counter-Narrative ระดับนานาชาติ</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot blue"></div>
+              <div style="flex:1;">
+                <div class="tl-date" style="color:#60a0f0;">D-7</div>
+                <div class="tl-title">Assembly Area ห่าง ๓๐๐ nm</div>
+                <div class="tl-sub">PSYOP Phase 1: Leaflet Drop + Radio Broadcast เริ่มต้น</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot green"></div>
+              <div style="flex:1;">
+                <div class="tl-date" style="color:#60d090;">D-Day</div>
+                <div class="tl-title">ปฏิบัติการยกพลขึ้นบก BEACH RED / BLUE / GREEN</div>
+                <div class="tl-sub">IO Phase 3: Cyber/EW Active + MILDEC Diversion</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot green"></div>
+              <div style="flex:1;">
+                <div class="tl-date" style="color:#60d090;">D+14</div>
+                <div class="tl-title">เป้าหมาย: ควบคุมเกาะทั้งหมด + เริ่ม CMO</div>
+                <div class="tl-sub">Transition สู่ Stability Ops + UNSC Report</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box green">
+          <div class="bh">สรุปภาพรวมสถานการณ์</div>
+          <ul class="ml">
+            <li><strong>WL:</strong> ยึดครอง TALOS ๔๕ วัน มีกำลังรบและ IO เหนือกว่า — ดำเนินการ Narrative ล่วงหน้า ๙๐ วัน</li>
+            <li><strong>AZ:</strong> ได้รับมอบหมายภารกิจ มีความชอบธรรมตาม UNSC — แต่ด้อยกว่าด้าน IO Information Space</li>
+            <li><strong>COG:</strong> ประชาชน TALOS และชุมชนนานาชาติ — ใครครองใจได้จะชนะ IO Battle</li>
+            <li><strong>เร่งด่วน:</strong> ต้องสร้าง Counter-Narrative ก่อน D-Day เพื่อลดความเสียเปรียบ</li>
+          </ul>
+        </div>
+        <div class="box blue">
+          <div class="bh">นัยสำคัญด้าน IO (IO Implications)</div>
+          <ul class="ml">
+            <li>WL ล่วงหน้า ๙๐ วัน = ความได้เปรียบ Narrative ระดับนานาชาติแล้ว</li>
+            <li>AZ ต้องสร้าง Information Superiority ก่อน Amphibious Window เปิด</li>
+            <li>ประชากร TALOS ๘๐% เป็น AZ Sympathizer — เป็น CoG และ Asset ด้าน IO</li>
+            <li>Synchronize IO กับ Amphibious Phase = กุญแจสู่ความสำเร็จ</li>
+          </ul>
+        </div>
+        <div style="background:rgba(212,168,32,0.08);border:1px solid #8a6010;border-radius:4px;padding:10px;text-align:center;margin-top:4px;">
+          <div style="font-size:10px;color:#d4a820;letter-spacing:1px;margin-bottom:4px;">สไลด์ถัดไป</div>
+          <div style="font-size:14px;color:#e8f0ff;font-weight:700;">สถานการณ์เฉพาะด้าน IO</div>
+          <div style="font-size:11px;color:#5070a0;margin-top:2px;">IPOE — Information Operations Domain Assessment</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์ทั่วไป — กรอบเวลาและสรุป</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 7: Q&A -->
+<div class="slide" id="s7">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO</div><div class="sh-tag">Q&amp;A</div></div></div>
+    <div class="sh-right"><div class="sh-label">END OF BRIEF</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content" style="align-items:center;text-align:center;">
+    <div style="opacity:0.3;margin-bottom:20px;"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:80px;width:auto;"></div>
+    <div style="font-size:36px;font-weight:900;color:#e8f0ff;margin-bottom:8px;">ถาม — ตอบ</div>
+    <div style="font-size:16px;color:#d4a820;margin-bottom:24px;">Questions &amp; Answers | สถานการณ์ทั่วไป</div>
+    <div style="width:120px;height:2px;background:linear-gradient(90deg,transparent,#d4a820,transparent);margin:0 auto 24px;"></div>
+    <div style="font-size:13px;color:#4a6a8a;line-height:2;max-width:560px;">
+      กลุ่มที่ ๒ — N7 การปฏิบัติการสารสนเทศ<br>
+      สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖<br>
+      ขอบคุณครับ / ค่ะ
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
+      <a href="สถานการณ์เฉพาะ_IO.html" style="padding:8px 18px;border:1px solid #d4a820;color:#d4a820;background:rgba(212,168,32,0.08);border-radius:4px;text-decoration:none;font-size:12px;">→ สถานการณ์เฉพาะ IO</a>
+      <a href="01_IPOE_IO.html" style="padding:8px 18px;border:1px solid #1a3a6a;color:#60a0f0;background:rgba(30,95,168,0.08);border-radius:4px;text-decoration:none;font-size:12px;">→ IPOE IO Analysis</a>
+      <a href="index.html" style="padding:8px 18px;border:1px solid #1a3a6a;color:#7090b0;background:rgba(26,58,106,0.08);border-radius:4px;text-decoration:none;font-size:12px;">⌂ Dashboard</a>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์ทั่วไป — Complete</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+</div><!-- end #pres -->
+
+<div id="nav">
+  <button onclick="prev()" title="Previous (←)">◀</button>
+  <span id="ctr">1/7</span>
+  <button onclick="next()" title="Next (→ or Space)">▶</button>
+  <a id="home-btn" href="index.html" title="Dashboard">⌂</a>
+</div>
+
+<script>
+let cur=0;
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+function go(n){
+  slides[cur].classList.remove('active');
+  cur=Math.max(0,Math.min(n,total-1));
+  slides[cur].classList.add('active');
+  document.getElementById('ctr').textContent=(cur+1)+'/'+total;
+}
+function next(){go(cur+1);}
+function prev(){go(cur-1);}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
+  if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+  if(e.key==='h'||e.key==='H'){window.location.href='index.html';}
+});
+go(0);
+</script>
+</body>
+</html>

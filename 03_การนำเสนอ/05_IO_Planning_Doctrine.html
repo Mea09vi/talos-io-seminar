@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>การวางแผน IO บทที่ ๔ — Op RESTORE TALOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,system-ui,sans-serif;
+  background:#050d1a;
+  color:#e8f0ff;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  user-select:none;
+}
+.nav-bar {
+  background:linear-gradient(90deg,#0d2045,#1a3a6a);
+  border-bottom:2px solid #d4a820;
+  padding:8px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-shrink:0;
+  gap:12px;
+}
+.nav-left { display:flex; align-items:center; gap:10px; }
+.nav-left a { color:#4a8ad4; text-decoration:none; font-size:12px; padding:3px 8px; border:1px solid #1a3a6a; border-radius:3px; transition:all 0.2s; }
+.nav-left a:hover { color:#60a0f0; border-color:#2a7fd4; }
+.nav-title { font-family:'Chakra Petch','Sarabun',sans-serif; font-size:14px; font-weight:700; color:#d4a820; letter-spacing:0.5px; }
+.nav-doc { font-size:11px; color:#4a6a8a; }
+.nav-right { display:flex; align-items:center; gap:10px; }
+.nav-btn { background:rgba(30,95,168,0.2); border:1px solid #1e5fa8; color:#60a0f0; padding:5px 14px; border-radius:4px; font-size:13px; font-family:'Sarabun',sans-serif; cursor:pointer; transition:all 0.2s; }
+.nav-btn:hover { background:rgba(30,95,168,0.4); }
+.nav-btn:disabled { opacity:0.3; cursor:default; }
+.slide-counter { font-size:12px; color:#6080a0; min-width:60px; text-align:center; font-weight:600; }
+#slideContainer { flex:1; overflow:hidden; position:relative; }
+.slide { display:none; height:100%; flex-direction:column; overflow-y:auto; }
+.slide.active { display:flex; }
+.sh { background:linear-gradient(90deg,#0d2045,#0a1a3a); border-bottom:1px solid #1a3a6a; padding:14px 40px; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; }
+.sh-label { font-size:10px; color:#d4a820; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:3px; }
+.sh-title { font-family:'Chakra Petch','Sarabun',sans-serif; font-size:20px; font-weight:700; color:#e8f0ff; line-height:1.2; }
+.sh-sub { font-size:13px; color:#6080a0; margin-top:3px; }
+.sh-badge { padding:4px 12px; border-radius:3px; font-size:11px; font-weight:700; letter-spacing:0.5px; white-space:nowrap; }
+.badge-gold { background:rgba(212,168,32,0.2); color:#d4a820; border:1px solid #8a6010; }
+.badge-blue { background:rgba(30,95,168,0.2); color:#60a0f0; border:1px solid #1e5fa8; }
+.badge-purple { background:rgba(192,132,252,0.2); color:#c084fc; border:1px solid #7c3aed; }
+.badge-red { background:rgba(138,45,45,0.25); color:#ff8080; border:1px solid #8a2d2d; }
+.badge-green { background:rgba(45,138,90,0.2); color:#60d090; border:1px solid #2d8a5a; }
+.badge-teal { background:rgba(32,178,170,0.2); color:#5dd0c8; border:1px solid #1a8080; }
+.content { flex:1; padding:20px 32px; display:flex; flex-direction:column; gap:14px; }
+.content-row { display:flex; gap:16px; flex:1; }
+.content-col { flex:1; display:flex; flex-direction:column; gap:12px; }
+.box { background:rgba(13,32,69,0.6); border:1px solid #1a3a6a; border-radius:8px; padding:14px 18px; }
+.box.gold { border-left:3px solid #d4a820; }
+.box.blue { border-left:3px solid #1e5fa8; }
+.box.purple { border-left:3px solid #7c3aed; }
+.box.red { border-left:3px solid #8a2d2d; }
+.box.green { border-left:3px solid #2d8a5a; }
+.box.teal { border-left:3px solid #1a8080; }
+.box.orange { border-left:3px solid #d47820; }
+.box h4 { font-size:11px; font-weight:700; letter-spacing:1px; margin-bottom:8px; text-transform:uppercase; }
+.box h4.gold { color:#d4a820; }
+.box h4.blue { color:#60a0f0; }
+.box h4.purple { color:#c084fc; }
+.box h4.red { color:#ff8080; }
+.box h4.green { color:#60d090; }
+.box h4.teal { color:#5dd0c8; }
+.box h4.orange { color:#f09840; }
+.io-list { list-style:none; display:flex; flex-direction:column; gap:5px; }
+.io-list li { font-size:12.5px; color:#a0b8d4; padding-left:14px; position:relative; line-height:1.5; }
+.io-list li::before { content:''; position:absolute; left:0; top:7px; width:5px; height:5px; border-radius:50%; background:#2a7fd4; }
+.io-list li span.hi { color:#e8f0ff; font-weight:600; }
+.io-list li span.gold { color:#d4a820; }
+.io-list li span.blue { color:#60a0f0; }
+.io-list li span.purple { color:#c084fc; }
+.io-list li span.red { color:#ff8080; }
+.io-list li span.green { color:#60d090; }
+.io-list li span.teal { color:#5dd0c8; }
+.num-list { list-style:none; display:flex; flex-direction:column; gap:6px; }
+.num-list li { display:flex; align-items:baseline; gap:8px; font-size:12.5px; color:#a0b8d4; line-height:1.5; }
+.num-list li .num { flex-shrink:0; width:20px; height:20px; background:rgba(30,95,168,0.3); border:1px solid #1e5fa8; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#60a0f0; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.pill { display:inline-block; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; border:1px solid; margin:2px; }
+.pill-gold { background:rgba(212,168,32,0.15); color:#d4a820; border-color:#8a6010; }
+.pill-blue { background:rgba(30,95,168,0.15); color:#60a0f0; border-color:#1e5fa8; }
+.pill-purple { background:rgba(192,132,252,0.15); color:#c084fc; border-color:#7c3aed; }
+.pill-red { background:rgba(138,45,45,0.2); color:#ff8080; border-color:#8a2d2d; }
+.pill-green { background:rgba(45,138,90,0.15); color:#60d090; border-color:#2d8a5a; }
+.pill-teal { background:rgba(32,178,170,0.15); color:#5dd0c8; border-color:#1a8080; }
+.pill-gray { background:rgba(60,80,110,0.2); color:#8090b0; border-color:#3c5070; }
+.sec-div { font-size:10px; font-weight:700; letter-spacing:2px; color:#d4a820; text-transform:uppercase; padding-bottom:5px; border-bottom:1px solid #1a3a6a; margin-bottom:4px; }
+.step-chain { display:flex; gap:0; align-items:stretch; flex-wrap:wrap; }
+.step-item { flex:1; min-width:110px; background:rgba(13,32,69,0.6); border:1px solid #1a3a6a; border-right:none; padding:10px 12px; position:relative; }
+.step-item:last-child { border-right:1px solid #1a3a6a; border-radius:0 6px 6px 0; }
+.step-item:first-child { border-radius:6px 0 0 6px; }
+.step-num { font-size:10px; color:#d4a820; font-weight:700; margin-bottom:3px; }
+.step-name { font-size:11.5px; color:#e8f0ff; font-weight:600; line-height:1.3; }
+.step-desc { font-size:10px; color:#5070a0; margin-top:3px; line-height:1.3; }
+.step-arrow { position:absolute; right:-9px; top:50%; transform:translateY(-50%); width:0; height:0; border-top:9px solid transparent; border-bottom:9px solid transparent; border-left:9px solid #1a3a6a; z-index:1; }
+.formula { background:rgba(13,32,69,0.8); border:2px solid #d4a820; border-radius:8px; padding:16px 24px; display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; }
+.formula-part { text-align:center; }
+.formula-part .label { font-size:10px; color:#6080a0; letter-spacing:1px; text-transform:uppercase; margin-bottom:3px; }
+.formula-part .value { font-size:16px; font-weight:700; }
+.formula-plus { font-size:20px; color:#d4a820; font-weight:700; }
+.formula-eq { font-size:20px; color:#60a0f0; font-weight:700; }
+.io-table { width:100%; border-collapse:collapse; font-size:11.5px; }
+.io-table th { background:rgba(13,32,69,0.9); color:#d4a820; font-size:10.5px; font-weight:700; letter-spacing:0.5px; padding:7px 10px; border:1px solid #1a3a6a; text-align:left; }
+.io-table td { padding:6px 10px; border:1px solid #1a3a6a; color:#a0b8d4; vertical-align:top; line-height:1.5; }
+.io-table tr:nth-child(even) td { background:rgba(30,60,120,0.1); }
+.io-table td.hi { color:#e8f0ff; font-weight:600; }
+.io-table td.gold { color:#d4a820; }
+.io-table td.blue { color:#60a0f0; }
+.io-table td.purple { color:#c084fc; }
+.io-table td.red { color:#ff8080; }
+.io-table td.green { color:#60d090; }
+.io-table td.teal { color:#5dd0c8; }
+.io-table td.orange { color:#f09840; }
+.callout { background:rgba(212,168,32,0.08); border:1px solid rgba(212,168,32,0.3); border-radius:6px; padding:10px 14px; font-size:12px; color:#c0a840; line-height:1.6; }
+.callout strong { color:#d4a820; }
+.title-slide-body { flex:1; display:flex; align-items:center; justify-content:center; padding:40px; background:radial-gradient(ellipse at center, #0d1f40 0%, #050d1a 70%); }
+.title-center { text-align:center; max-width:820px; }
+.title-emblem { margin:0 auto 20px; }
+.title-emblem img { height:80px; opacity:0.7; }
+.title-tag { display:inline-block; padding:4px 14px; border-radius:3px; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; background:rgba(212,168,32,0.15); color:#d4a820; border:1px solid #8a6010; margin-bottom:16px; }
+.title-main { font-family:'Chakra Petch','Sarabun',sans-serif; font-size:36px; font-weight:800; color:#e8f0ff; line-height:1.2; margin-bottom:10px; }
+.title-eng { font-size:15px; color:#60a0f0; margin-bottom:14px; font-weight:500; }
+.title-source { font-size:13px; color:#5070a0; margin-bottom:22px; line-height:1.7; }
+.title-pills { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.sf { padding:7px 32px; border-top:1px solid #0e1e3a; display:flex; align-items:center; justify-content:space-between; font-size:10px; color:#2a4a6a; flex-shrink:0; background:#020810; }
+.sf-ref { color:#3a5a8a; }
+
+/* ─── AZ SCENARIO CONNECTION BOX ─── */
+.az-connect {
+  background:rgba(212,168,32,0.07);
+  border:1px solid rgba(212,168,32,0.35);
+  border-left:3px solid #d4a820;
+  border-radius:6px;
+  padding:12px 14px;
+}
+.az-connect-hdr {
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  color:#d4a820;
+  text-transform:uppercase;
+  margin-bottom:8px;
+  border-bottom:1px solid rgba(212,168,32,0.2);
+  padding-bottom:5px;
+}
+.az-connect-hdr em { color:#ff8080; font-style:normal; }
+.az-list { list-style:none; display:flex; flex-direction:column; gap:5px; }
+.az-list li { font-size:12px; color:#c0a840; padding-left:12px; position:relative; line-height:1.5; }
+.az-list li::before { content:'▸'; position:absolute; left:0; color:#d4a820; font-size:9px; top:2px; }
+.az-list li .ahi { color:#f0e080; font-weight:600; }
+.az-list li .ablu { color:#80c0ff; }
+.az-list li .agrn { color:#80d4a0; }
+.az-list li .ared { color:#ff9090; }
+.az-list li .apurp { color:#d0a0ff; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <div class="nav-left">
+    <a href="index.html">← กลับหน้าหลัก</a>
+    <span class="nav-title">การวางแผน IO — บทที่ ๔</span>
+    <span class="nav-doc">อทร.3107 | Op RESTORE TALOS</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn" id="btnPrev" onclick="changeSlide(-1)">◀ ก่อนหน้า</button>
+    <span class="slide-counter" id="slideCounter">1 / 9</span>
+    <button class="nav-btn" id="btnNext" onclick="changeSlide(1)">ถัดไป ▶</button>
+  </div>
+</div>
+
+<div id="slideContainer">
+
+<!-- ══════════════════════════════════════════════════ S1 — TITLE -->
+<div class="slide active" id="s1">
+  <div class="title-slide-body">
+    <div class="title-center">
+      <div class="title-emblem"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"></div>
+      <div class="title-tag">อทร.3107 (ร่าง) พ.ศ.๒๕๖๕ — กรมยุทธการทหารเรือ</div>
+      <div class="title-main">การวางแผน<br>ปฏิบัติการข่าวสาร</div>
+      <div class="title-eng">IO Planning — บทที่ ๔ (Exclusive) · Applied to Op RESTORE TALOS</div>
+      <div class="title-source">
+        คู่มือปฏิบัติการข่าวสาร อทร.3107 (ร่าง) | <strong style="color:#d4a820;">บทที่ ๔ เท่านั้น</strong><br>
+        เชื่อมโยงกับบ่งการ N7 IO กองกำลัง AZ | ปฏิบัติการ RESTORE TALOS
+      </div>
+      <div class="title-pills">
+        <span class="pill pill-gold">บทที่ ๔ — IO Planning</span>
+        <span class="pill pill-red">Op RESTORE TALOS</span>
+        <span class="pill pill-blue">MDMP ๖ ขั้น</span>
+        <span class="pill pill-purple">IO Objectives AZ</span>
+        <span class="pill pill-teal">MOE / MOP</span>
+        <span class="pill pill-green">N7 IO — AZ Force</span>
+      </div>
+    </div>
+  </div>
+  <div class="sf">
+    <span>กลุ่มที่ ๒ — N7 IO | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖</span>
+    <span class="sf-ref">อทร.3107 (ร่าง) พ.ศ.๒๕๖๕ | บทที่ ๔ เท่านั้น</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ S2 — PLANNING OVERVIEW -->
+<div class="slide" id="s2">
+  <div class="sh">
+    <div class="sh-left">
+      <div class="sh-label">บทที่ ๔ — กล่าวนำ | IO Planning Overview</div>
+      <div class="sh-title">ลักษณะการวางแผนปฏิบัติการข่าวสาร</div>
+      <div class="sh-sub">๒ โหมดการวางแผน ✦ ๒ สถานการณ์ ✦ บูรณาการกับกระบวนการวางแผนทหาร</div>
+    </div>
+    <span class="sh-badge badge-gold">CH.4 OVERVIEW</span>
+  </div>
+  <div class="content">
+    <div class="content-row">
+      <div class="content-col" style="flex:1.5;">
+        <div class="callout">
+          <strong>หลักการพื้นฐาน (อทร.3107 ข้อ ๔-๑):</strong> การวางแผน IO ต้องบูรณาการกับกระบวนการวางแผนทางทหารหลักตั้งแต่ต้นจนถึงการปฏิบัติ และต้องดำเนินการควบคู่กับทุกขั้นตอน
+        </div>
+        <div class="grid2" style="flex:1;">
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="sec-div">โหมดการวางแผน — ๒ ประเภท</div>
+            <div class="box gold" style="flex:1;">
+              <h4 class="gold">๑. การวางแผนในภาพรวม</h4>
+              <p style="font-size:11.5px;color:#c0a840;margin-bottom:7px;">Overall IO Planning</p>
+              <ul class="io-list">
+                <li>กำหนดวัตถุประสงค์ IO รวม ผลกระทบ TA และ Theme</li>
+                <li>จัดทำ IO Planning Matrix (ภาพที่ ๗)</li>
+                <li>ประสาน/บูรณาการสาขา IO ทั้งหมดให้สอดคล้อง</li>
+              </ul>
+            </div>
+            <div class="box blue" style="flex:1;">
+              <h4 class="blue">๒. การวางแผนตามสาขา</h4>
+              <p style="font-size:11.5px;color:#4a8ad4;margin-bottom:7px;">Branch-Specific IO Planning</p>
+              <ul class="io-list">
+                <li>วางแผนรายสาขา: PSYOP / MILDEC / OPSEC / EW / CNO</li>
+                <li>แต่ละสาขา ๔ ขั้น: วิเคราะห์ → COA → Wargame → ข้อตกลงใจ</li>
+                <li>ผนวกรายละเอียดเป็น Annex ต่อแผนหลัก</li>
+              </ul>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="sec-div">สถานการณ์ — ๒ ภาวะ</div>
+            <div class="box green" style="flex:1;">
+              <h4 class="green">ภาวะปกติ — Peacetime</h4>
+              <p style="font-size:11px;color:#60d090;margin-bottom:6px;">ใช้กระบวนการ "การสื่อสารองค์กร"</p>
+              <ul class="io-list">
+                <li><span class="green">ขั้น ๑:</span> ติดตามสถานการณ์</li>
+                <li><span class="green">ขั้น ๒:</span> วิเคราะห์ วางแผน ออกแบบ IO (๘ ขั้นย่อย)</li>
+                <li>ผลลัพธ์: IO Planning Matrix</li>
+              </ul>
+            </div>
+            <div class="box red" style="flex:1;">
+              <h4 class="red">ภาวะวิกฤติ-สงคราม — Crisis-War</h4>
+              <p style="font-size:11px;color:#ff8080;margin-bottom:6px;">ใช้กระบวนการวางแผนทหาร (MDMP)</p>
+              <ul class="io-list">
+                <li>บูรณาการกับ MDMP ตั้งแต่ Mission Analysis</li>
+                <li><span class="red">๖ ขั้น:</span> Initial Frame → MA → COA → Wargame → Decide → Branch</li>
+                <li>ขั้น ๖ = Branch Planning รายสาขา</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="width:230px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;">
+        <div class="az-connect" style="flex:1;">
+          <div class="az-connect-hdr">▶ บ่งการ — <em>Op RESTORE TALOS</em></div>
+          <ul class="az-list">
+            <li><span class="ahi">สถานการณ์ AZ-WL</span> = ภาวะวิกฤติ-สงคราม → <span class="ared">ใช้ MDMP ๖ ขั้น</span></li>
+            <li><span class="ahi">N7 IO</span> วางแผน <span class="ablu">ในภาพรวม</span> ก่อน แล้วมอบ Branch Planning ให้แต่ละสาขา</li>
+            <li><span class="ahi">TA หลัก AZ:</span> <span class="agrn">ประชาชน WL, กองกำลัง WL, ผู้นำ WL</span></li>
+            <li>กิจ IO รวม: Counter-PSYOP · OPSEC/EMCON · MILDEC · Hidden Truth · DEFNET · StratComm · CMO/KLE</li>
+            <li><span class="ahi">พื้นที่:</span> เกาะ TALOS · แหล่ง VERDATA Rare Earth</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf">
+    <span>กลุ่มที่ ๒ — N7 IO | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖</span>
+    <span class="sf-ref">อทร.3107 บทที่ ๔ — ๔-๑ ถึง ๔-๒</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ S3 — PEACE PLANNING -->
+<div class="slide" id="s3">
+  <div class="sh">
+    <div class="sh-left">
+      <div class="sh-label">บทที่ ๔ — ภาวะปกติ | Peace Planning</div>
+      <div class="sh-title">การวางแผน IO ในภาวะปกติ — ๒ ขั้น / ๘ ขั้นย่อย</div>
+      <div class="sh-sub">Corporate Communication Framework · ผลลัพธ์: IO Planning Matrix (ภาพที่ ๗)</div>
+    </div>
+    <span class="sh-badge badge-green">PEACETIME IO</span>
+  </div>
+  <div class="content">
+    <div class="content-row">
+      <div class="content-col" style="flex:1.1;">
+        <div class="box green">
+          <h4 class="green">ขั้นที่ ๑ — ติดตามสถานการณ์</h4>
+          <p style="font-size:12px;color:#a0b8d4;margin-bottom:7px;">ผลลัพธ์: <span style="color:#60d090;font-weight:600;">สรุปเหตุการณ์สำคัญ</span> ครอบคลุม</p>
+          <ul class="io-list">
+            <li>สถานการณ์ปัจจุบันที่มีผลกระทบต่อ IO</li>
+            <li>ผลกระทบต่อหน่วยและภารกิจ · แนวโน้มในอนาคต</li>
+            <li>การอ้างอิงเจตนารมณ์ผู้บังคับบัญชา</li>
+          </ul>
+        </div>
+        <div class="box blue">
+          <h4 class="blue">ขั้นที่ ๒ — วิเคราะห์ วางแผน ออกแบบแนวทาง IO</h4>
+          <ul class="num-list">
+            <li><span class="num" style="font-size:9px;">๒.๑</span><span>ทบทวนเจตนารมณ์ ผบ. (จุดหมาย + วิธีการ + สภาวะสิ้นสุด)</span></li>
+            <li><span class="num" style="font-size:9px;">๒.๒</span><span>กำหนดวัตถุประสงค์ IO</span></li>
+            <li><span class="num" style="font-size:9px;">๒.๓</span><span>กำหนดผลกระทบที่ต้องการ (ใช้คำมาตรฐาน ภาพที่ ๖)</span></li>
+            <li><span class="num" style="font-size:9px;">๒.๔</span><span>กำหนดกลุ่มเป้าหมาย (TA) ให้เจาะจง</span></li>
+            <li><span class="num" style="font-size:9px;">๒.๕</span><span>กำหนดประเด็นสื่อสารหลัก / Theme</span></li>
+            <li><span class="num" style="font-size:9px;">๒.๖</span><span>กำหนดกิจและหน่วยรับผิดชอบ</span></li>
+            <li><span class="num" style="font-size:9px;">๒.๗</span><span>กำหนดมาตรวัดความสำเร็จ (MOE)</span></li>
+            <li><span class="num" style="font-size:9px;">๒.๘</span><span style="color:#60a0f0;font-weight:600;">จัดทำแผนกำหนดแผนงาน IO Matrix</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-col">
+        <div class="sec-div">IO Planning Matrix (ภาพที่ ๗) — ตัวอย่าง Op RESTORE TALOS</div>
+        <div style="overflow-x:auto;">
+          <table class="io-table" style="min-width:480px;">
+            <thead>
+              <tr>
+                <th>ลำดับ</th><th>กิจ</th><th>เป้าหมาย (TA)</th><th>Theme</th><th>สาขา IO</th><th>หน่วยปฏิบัติ</th><th>ห้วงเวลา</th><th>MOE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hi" style="text-align:center;">๑</td>
+                <td class="red">Counter-PSYOP</td>
+                <td>ประชาชน AZ</td>
+                <td class="purple">ความเชื่อมั่น</td>
+                <td class="blue">PSYOP</td>
+                <td>N7 IO</td>
+                <td class="gold">ตลอด</td>
+                <td class="teal">MOE-1</td>
+              </tr>
+              <tr>
+                <td class="hi" style="text-align:center;">๒</td>
+                <td class="gold">MILDEC</td>
+                <td>ผู้นำ WL</td>
+                <td class="purple">หลอกทิศขึ้นบก</td>
+                <td class="blue">MILDEC+EW</td>
+                <td>N7 IO</td>
+                <td class="gold">D–D+3</td>
+                <td class="teal">MOE-2</td>
+              </tr>
+              <tr>
+                <td class="hi" style="text-align:center;">๓</td>
+                <td class="green">OPSEC/EMCON</td>
+                <td>ฝ่ายเรา (AZ)</td>
+                <td class="purple">ปกปิด EEFI</td>
+                <td class="blue">OPSEC+EW</td>
+                <td>ทุกหน่วย</td>
+                <td class="gold">ตลอด</td>
+                <td class="teal">MOE-3</td>
+              </tr>
+              <tr>
+                <td class="hi" style="text-align:center;">๔</td>
+                <td style="color:#f09840;">StratComm</td>
+                <td>สาธารณชน</td>
+                <td class="purple">ความชอบธรรม</td>
+                <td class="blue">PA+StratComm</td>
+                <td>N7/N1</td>
+                <td class="gold">ตลอด</td>
+                <td class="teal">MOE-4</td>
+              </tr>
+              <tr>
+                <td class="hi" style="text-align:center;">๕</td>
+                <td style="color:#5dd0c8;">DEFNET</td>
+                <td>ระบบ C4 AZ</td>
+                <td class="purple">ป้องกัน Cyber</td>
+                <td class="blue">CNO-CND</td>
+                <td>N6/N7</td>
+                <td class="gold">ตลอด</td>
+                <td class="teal">MOE-5</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="az-connect" style="margin-top:6px;">
+          <div class="az-connect-hdr">▶ บ่งการ — <em>Op RESTORE TALOS</em></div>
+          <ul class="az-list">
+            <li>Matrix นี้คือ <span class="ahi">ผลลัพธ์ขั้น ๒.๘</span> ของกระบวนการวางแผนภาวะปกติ</li>
+            <li>ใน Op RESTORE TALOS: <span class="ablu">N7 IO จัดทำ IO Matrix</span> ก่อน D-Day ไม่น้อยกว่า ๓๐ วัน เพื่อให้แต่ละสาขาวางแผนรายละเอียดต่อได้</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf">
+    <span>กลุ่มที่ ๒ — N7 IO | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖</span>
+    <span class="sf-ref">อทร.3107 บทที่ ๔ — ๔-๓ ถึง ๔-๗ (ภาพที่ ๗)</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ S4 — IO EFFECTS TABLE -->
+<div class="slide" id="s4">
+  <div class="sh">
+    <div class="sh-left">
+      <div class="sh-label">บทที่ ๔ — คำศัพท์มาตรฐาน | IO Effects (ภาพที่ ๖)</div>
+      <div class="sh-title">ตารางผลกระทบปฏิบัติการข่าวสาร — ๑๖ ผลกระทบ</div>
+      <div class="sh-sub">Standardized IO Effects Vocabulary — ใช้ในการกำหนด Desired Effects (ขั้น ๒.๓ / ขั้น ๓)</div>
+    </div>
+    <span class="sh-badge badge-purple">IO EFFECTS TABLE</span>
+  </div>
+  <div class="content">
+    <div class="grid2">
+      <div>
+        <div class="sec-div" style="color:#60d090;">ผลกระทบเชิงรับ / ส่งผลต่อฝ่ายเรา — Protective / Informational</div>
+        <table class="io-table" style="margin-top:7px;">
+          <thead><tr><th>คำศัพท์</th><th>English</th><th>ความหมาย</th></tr></thead>
+          <tbody>
+            <tr><td class="red">ปกป้อง</td><td>Protect</td><td>คุ้มครองจากการเปิดเผย ความเสียหาย หรือการทำลาย</td></tr>
+            <tr><td class="red">ป้องกัน/ขัดขวาง</td><td>Prevent</td><td>ขัดขวางความหวัง พลังการปฏิบัติ หรือความสำเร็จ</td></tr>
+            <tr><td class="green">แจ้งให้ทราบ</td><td>Inform</td><td>แจ้งข่าวสารและความรู้แก่กลุ่มเป้าหมาย</td></tr>
+            <tr><td class="green">เปิดเผย</td><td>Expose</td><td>ทำให้สาธารณชนทราบหรือเห็น</td></tr>
+            <tr><td class="blue">ทำให้เชื่อ</td><td>Convince</td><td>อธิบายโดยใช้ข้อเหตุผลที่น่าเชื่อถือ</td></tr>
+            <tr><td class="blue">ปรับสภาพแวดล้อม</td><td>Shape</td><td>กำหนดทิศทางสภาวะ ทำให้ปฏิบัติตามรูปแบบที่ต้องการ</td></tr>
+            <tr><td class="blue">บังคับ</td><td>Compel</td><td>ผลักดันให้กระทำ สร้างความจำเป็น</td></tr>
+            <tr><td class="purple">สร้างอิทธิพล</td><td>Influence</td><td>จูงใจให้ปฏิบัติที่เป็นประโยชน์ฝ่ายเรา</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="sec-div" style="color:#ff8080;">ผลกระทบเชิงรุก / ส่งผลต่อข้าศึก — Offensive / Degrading</div>
+        <table class="io-table" style="margin-top:7px;">
+          <thead><tr><th>คำศัพท์</th><th>English</th><th>ความหมาย</th></tr></thead>
+          <tbody>
+            <tr><td class="gold">ทำให้เข้าใจผิด</td><td>Mislead</td><td>สร้างความรับรู้ที่ไม่เป็นจริง</td></tr>
+            <tr><td class="gold">ลวง</td><td>Deceive</td><td>ทำให้เชื่อในสิ่งที่ไม่เป็นความจริง</td></tr>
+            <tr><td class="orange">หาประโยชน์</td><td>Exploit</td><td>ให้ฝ่ายตรงข้ามปฏิบัติที่เป็นประโยชน์ฝ่ายเรา</td></tr>
+            <tr><td class="teal">ลิดรอน</td><td>Neutralize</td><td>ไม่ให้มีประสิทธิภาพในการปฏิบัติกิจ</td></tr>
+            <tr><td class="teal">ก่อกวน</td><td>Disrupt</td><td>สร้างความเสียหาย/ขัดขวางบางส่วนของระบบ</td></tr>
+            <tr><td class="red">ลดประสิทธิภาพ</td><td>Degrade</td><td>สร้างความเสียหาย/ลดสมรรถนะบางส่วน</td></tr>
+            <tr><td class="red">ปฏิเสธ</td><td>Deny</td><td>สร้างความเสียหายต่อหน้าที่ทุกส่วน</td></tr>
+            <tr><td class="red" style="font-weight:700;">ทำลาย</td><td>Destroy</td><td>สร้างความเสียหายต่อหน้าที่ทุกส่วนของฝ่ายตรงข้าม</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="az-connect">
+      <div class="az-connect-hdr">▶ ผลกระทบที่ N7 IO เลือกใช้ใน <em>Op RESTORE TALOS</em></div>
+      <ul class="az-list" style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;">
+        <li><span class="ahi">Convince</span> → ประชาชน WL (จิตวิทยา) — สร้างแรงกดดันถอนกำลัง <span class="apurp">[PSYOP]</span></li>
+        <li><span class="ahi">Deceive</span> → ผู้นำทหาร WL (สารสนเทศ) — ปกปิดทิศทาง D-Day <span class="apurp">[MILDEC]</span></li>
+        <li><span class="ahi">Protect</span> → EEFI ฝ่าย AZ (สารสนเทศ) — รักษาความได้เปรียบ <span class="apurp">[OPSEC]</span></li>
+        <li><span class="ahi">Disrupt</span> → ระบบ C2 WL (กายภาพ) — ขัดขวางการสั่งการ D-Day <span class="apurp">[EW/CNO]</span></li>
+        <li><span class="ahi">Inform</span> → ประชาชน AZ — สร้างความเชื่อมั่นต่อรัฐบาล <span class="apurp">[StratComm]</span></li>
+        <li><span class="ahi">Neutralize</span> → PSYOP ของ WL — ลดผลกระทบ Hybrid Warfare <span class="apurp">[Counter-PSYOP]</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="sf">
+    <span>กลุ่มที่ ๒ — N7 IO | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖</span>
+    <span class="sf-ref">อทร.3107 บทที่ ๔ — ภาพที่ ๖ (๔-๘ ถึง ๔-๙)</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ S5 — CRISIS-WAR PLANNING -->
+<div class="slide" id="s5">
+  <div class="sh">
+    <div class="sh-left">
+      <div class="sh-label">บทที่ ๔ — ภาวะวิกฤติ-สงคราม | Crisis-War Planning</div>
+      <div class="sh-title">การวางแผน IO ในภาวะวิกฤติ-สงคราม — ๖ ขั้น</div>
+      <div class="sh-sub">Military Decision Making Process (MDMP) — บูรณาการตั้งแต่ Mission Analysis</div>
+    </div>
+    <span class="sh-badge badge-red">MDMP IO PLANNING</span>
+  </div>
+  <div class="content">
+    <div class="step-chain" style="flex-shrink:0;margin-bottom:12px;">
+      <div class="step-item">
+        <div class="step-num">ขั้น ๑</div>
+        <div class="step-name">กำหนดกรอบเบื้องต้น</div>
+        <div class="step-desc">Initial Frame</div>
+        <div class="step-arrow"></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">ขั้น ๒</div>
+        <div class="step-name">วิเคราะห์ภารกิจ</div>
+        <div class="step-desc">Mission Analysis</div>
+        <div class="step-arrow"></div>
+      </div>
+      <div class="step-item" style="border-left:2px solid #d4a820;">
+        <div class="step-num" style="color:#e8f0ff;">ขั้น ๓</div>
+        <div class="step-name" style="color:#d4a820;">กำหนดหนทางปฏิบัติ</div>
+        <div class="step-desc">COA Development</div>
+        <div class="step-arrow"></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">ขั้น ๔</div>
+        <div class="step-name">จำลองยุทธ์</div>
+        <div class="step-desc">Wargaming</div>
+        <div class="step-arrow"></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">ขั้น ๕</div>
+        <div class="step-name">เปรียบเทียบ &amp; ข้อตกลงใจ</div>
+        <div class="step-desc">Compare &amp; Decide</div>
+        <div class="step-arrow"></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">ขั้น ๖</div>
+        <div class="step-name">วางแผนตามสาขา</div>
+        <div class="step-desc">Branch Planning</div>
+      </div>
+    </div>
+    <div class="content-row" style="flex:1;">
+      <div class="content-col">
+        <div class="box blue">
+          <h4 class="blue">ขั้น ๑ — กรอบเบื้องต้น (Initial Frame)</h4>
+          <ul class="io-list">
+            <li>รวบรวมข้อเท็จจริง IO ปัจจุบัน (IO capabilities)</li>
+            <li>รวบรวมข้อมูลข่าวสารกลุ่มเป้าหมาย (TA intelligence)</li>
+            <li>ประวัติและกระบวนการตัดสินใจของผู้นำ ขตก.</li>
+            <li>ประเมินสภาพแวดล้อมสารสนเทศ (IE Assessment)</li>
+          </ul>
+        </div>
+        <div class="box gold">
+          <h4 class="gold">ขั้น ๒ — วิเคราะห์ภารกิจ (Mission Analysis)</h4>
+          <ul class="io-list">
+            <li>วิเคราะห์เจตนารมณ์ ผบ.: <span class="gold">จุดหมาย + วิธีการ + สภาวะสิ้นสุด</span></li>
+            <li>วิเคราะห์องค์ประกอบยุทธศิลป์: <span class="gold">COG → CC → CR → CV</span></li>
+            <li>กำหนดภารกิจ IO: กิจ + จุดหมาย</li>
+            <li>ตรวจสอบข้อจำกัด IO (Constraint / Restraint)</li>
+            <li>กำหนด <span class="gold">หวส. / PIR / EEFI</span></li>
+          </ul>
+        </div>
+        <div class="box red">
+          <h4 class="red">ขั้น ๓ — กำหนดหนทางปฏิบัติ (COA Dev)</h4>
+          <ul class="io-list">
+            <li>กำหนดวัตถุประสงค์ IO + ระดับชั้น + กรอบเวลา</li>
+            <li>รูปแบบ: <span class="red">ผลกระทบ + เป้าหมาย + ความมุ่งหมาย</span></li>
+            <li>กำหนด MOE สำหรับแต่ละวัตถุประสงค์</li>
+            <li>จัดทำ IO Matrix ฉบับสมบูรณ์</li>
+            <li><span style="color:#6080a0;font-size:11px;">ขั้น ๔–๕: IO เข้าร่วม Wargame ปรับปรุงหนทางปฏิบัติ</span></li>
+          </ul>
+        </div>
+      </div>
+      <div style="width:235px;flex-shrink:0;">
+        <div class="az-connect" style="height:100%;">
+          <div class="az-connect-hdr">▶ บ่งการ — <em>Op RESTORE TALOS</em></div>
+          <ul class="az-list">
+            <li><span class="ahi">ขั้น ๑ — Initial Frame:</span> ประเมิน IE ในพื้นที่ TALOS — SIGINT WL, Hybrid Warfare Capabilities, PSYOP Channels</li>
+            <li><span class="ahi">ขั้น ๒ — Mission Analysis:</span>
+              <br>· COG WL = เจตจำนงรัฐบาล WL + กำลังรบ TALOS
+              <br>· EEFI AZ = แผน D-Day, เส้นทางขึ้นบก
+              <br>· PIR = ระบบ AD WL, C2 WL ใน TALOS</li>
+            <li><span class="ahi">ขั้น ๓ — COA Dev:</span> กำหนด ๔ IO Objectives หลัก (Convince / Deceive / Protect / Disrupt)</li>
+            <li><span class="ahi">ขั้น ๔–๕ — Wargame:</span> ทดสอบว่า MILDEC จะหลอก WL ได้ก่อน D-Day หรือไม่</li>
+            <li><span class="ahi">ขั้น ๖ — Branch:</span> มอบ PSYOP/MILDEC/OPSEC/EW/CNO วางแผนรายสาขา</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf">
+    <span>กลุ่มที่ ๒ — N7 IO | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖</span>
+    <span class="sf-ref">อทร.3107 บทที่ ๔ — ๔-๑ ถึง ๔-๑๒</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ S6 — IO OBJECTIVE FORMULA -->
+<div class="slide" id="s6">
+  <div class="sh">
+    <div class="sh-left">
+      <div class="sh-label">บทที่ ๔ — ขั้น ๓ | IO Objective Formulation</div>
+      <div class="sh-title">รูปแบบการกำหนดวัตถุประสงค์ IO</div>
+      <div class="sh-sub">IO Objective Format — ผลกระทบ + เป้าหมาย (มิติ) + ความมุ่งหมาย</div>
+    </div>
+    <span class="sh-badge badge-purple">IO OBJECTIVE FORMAT</span>
+  </div>
+  <div class="content">
+    <div class="formula">
+      <div class="formula-part">
+        <div class="label">ผลกระทบ</div>
+        <div class="value" style="color:#ff8080;">Effect</div>
+        <div style="font-size:11px;color:#5070a0;margin-top:3px;">Convince / Deceive / Protect / Disrupt ฯลฯ</div>
+      </div>
+      <div class="formula-plus">+</div>
+      <div class="formula-part">
+        <div class="label">เป้าหมาย + มิติ</div>
+        <div class="value" style="color:#d4a820;">Target (Dimension)</div>
+        <div style="font-size:11px;color:#5070a0;margin-top:3px;">กายภาพ / สารสนเทศ / จิตวิทยา</div>
+      </div>
+      <div class="formula-plus">+</div>
+      <div class="formula-part">
+        <div class="label">ความมุ่งหมาย</div>
+        <div class="value" style="color:#60a0f0;">Purpose</div>
+        <div style="font-size:11px;color:#5070a0;margin-top:3px;">Allow / Cause / Create / Enable / Support</div>
+      </div>
+      <div class="formula-eq">=</div>
+      <div class="formula-part">
+        <div class="label">วัตถุประสงค์ IO</div>
+        <div class="value" style="color:#60d090;">IO Objective</div>
+      </div>
+    </div>
+    <div class="grid2" style="flex:1;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="box gold">
+          <h4 class="gold">มิติของเป้าหมาย — Target Dimensions</h4>
+          <ul class="io-list">
+            <li><span class="hi">กายภาพ (Physical)</span> — ระบบ เครื่องมือ สถานีสัญญาณ โครงสร้างพื้นฐาน</li>
+            <li><span class="hi">สารสนเทศ (Information)</span> — ข้อมูล ข่าวสาร กระแสการสื่อสาร</li>
+            <li><span class="hi">จิตวิทยา (Cognitive)</span> — ความคิด ทัศนคติ การรับรู้ ขวัญกำลังใจ</li>
+          </ul>
+        </div>
+        <div class="box blue">
+          <h4 class="blue">คำเชื่อมความมุ่งหมาย — Purpose Connectors</h4>
+          <ul class="io-list">
+            <li><span class="blue">Allow</span> — เพื่ออนุญาต/เปิดโอกาสให้...</li>
+            <li><span class="blue">Cause</span> — เพื่อทำให้เกิด...</li>
+            <li><span class="blue">Create</span> — เพื่อสร้าง...</li>
+            <li><span class="blue">Enable</span> — เพื่อเอื้อให้...</li>
+            <li><span class="blue">Support</span> — เพื่อสนับสนุน...</li>
+          </ul>
+        </div>
+      </div>
+      <div class="az-connect" style="display:flex;flex-direction:column;gap:8px;">
+        <div class="az-connect-hdr">▶ IO Objectives ของ AZ — <em>Op RESTORE TALOS</em></div>
+        <div style="background:rgba(13,32,69,0.5);border:1px solid #1a3a6a;border-radius:5px;padding:10px 12px;">
+          <p style="font-size:11px;color:#ff8080;font-weight:700;margin-bottom:4px;">IO OBJ ๑ — PSYOP</p>
+          <p style="font-size:12px;color:#c0a840;line-height:1.6;"><span style="color:#ff9090;">Convince</span> <span style="color:#d4a820;">ประชาชน WL (มิติจิตวิทยา)</span> → <span style="color:#80c0ff;">Create</span> แรงกดดันต่อรัฐบาล WL ถอนกำลังออกจาก TALOS</p>
+        </div>
+        <div style="background:rgba(13,32,69,0.5);border:1px solid #1a3a6a;border-radius:5px;padding:10px 12px;">
+          <p style="font-size:11px;color:#d4a820;font-weight:700;margin-bottom:4px;">IO OBJ ๒ — MILDEC</p>
+          <p style="font-size:12px;color:#c0a840;line-height:1.6;"><span style="color:#ff9090;">Deceive</span> <span style="color:#d4a820;">ผู้นำทหาร WL (มิติสารสนเทศ/จิตวิทยา)</span> → <span style="color:#80c0ff;">Enable</span> ปฏิบัติการขึ้นบก D-Day</p>
+        </div>
+        <div style="background:rgba(13,32,69,0.5);border:1px solid #1a3a6a;border-radius:5px;padding:10px 12px;">
+          <p style="font-size:11px;color:#60d090;font-weight:700;margin-bottom:4px;">IO OBJ ๓ — OPSEC</p>
+          <p style="font-size:12px;color:#c0a840;line-height:1.6;"><span style="color:#ff9090;">Protect</span> <span style="color:#d4a820;">EEFI ฝ่าย AZ (มิติสารสนเทศ)</span> → <span style="color:#80c0ff;">Support</span> ความได้เปรียบยุทธการ</p>
+        </div>
+        <div style="background:rgba(13,32,69,0.5);border:1px solid #1a3a6a;border-radius:5px;padding:10px 12px;">
+          <p style="font-size:11px;color:#5dd0c8;font-weight:700;margin-bottom:4px;">IO OBJ ๔ — EW/CNO</p>
+          <p style="font-size:12px;color:#c0a840;line-height:1.6;"><span style="color:#ff9090;">Disrupt</span> <span style="color:#d4a820;">ระบบ C2 WL ใน TALOS (มิติกายภาพ)</span> → <span style="color:#80c0ff;">Enable</span> การโจมตี D-Day</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf">
+    <span>กลุ่มที่ ๒ — N7 IO | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖</span>
+    <span class="sf-ref">อทร.3107 บทที่ ๔ — ๔-๙ ถึง ๔-๑๐</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ S7 — MOE/MOP -->
+<div class="slide" id="s7">
+  <div class="sh">
+    <div class="sh-left">
+      <div class="sh-label">บทที่ ๔ — การประเมินผล | Assessment</div>
+      <div class="sh-title">มาตรวัดประสิทธิผล (MOE) และมาตรวัดการปฏิบัติ (MOP)</div>
+      <div class="sh-sub">Assessment Framework — ภาพที่ ๙ Assessment Levels and Measures</div>
+    </div>
+    <span class="sh-badge badge-teal">MOE / MOP</span>
+  </div>
+  <div class="content">
+    <div class="grid2">
+      <div class="box teal">
+        <h4 class="teal">MOE — Measurement of Effectiveness</h4>
+        <p style="font-size:12.5px;color:#5dd0c8;font-style:italic;margin-bottom:8px;">"Are we doing the right things?" — เรากำลังทำสิ่งที่ถูกต้องหรือไม่?</p>
+        <ul class="io-list">
+          <li>วัดระดับผลกระทบต่อวัตถุประสงค์ IO ที่กำหนด</li>
+          <li>ผลกระทบที่ต้องการเกิดขึ้นจริงหรือไม่?</li>
+          <li>ใช้ระดับ <span class="teal">ยุทธศาสตร์และยุทธการ</span></li>
+        </ul>
+        <div style="margin-top:8px;padding:7px 10px;background:rgba(32,178,170,0.1);border-radius:4px;font-size:11.5px;color:#5dd0c8;">
+          <strong>Indicators (สิ่งบอกเหตุ):</strong> ข้อมูลเชิงประจักษ์ที่บอกว่า MOE กำลังเป็นไปได้ดี เช่น ผลสำรวจความคิดเห็น, รายงาน SIGINT
+        </div>
+      </div>
+      <div class="box orange">
+        <h4 class="orange">MOP — Measurement of Performance</h4>
+        <p style="font-size:12.5px;color:#f09840;font-style:italic;margin-bottom:8px;">"Are we doing things right?" — เราดำเนินการถูกวิธีหรือไม่?</p>
+        <ul class="io-list">
+          <li>วัดว่ากิจกรรมถูกดำเนินการตามที่กำหนดหรือไม่</li>
+          <li>ใช้ระดับ <span style="color:#f09840;">ยุทธการและยุทธวิธี</span></li>
+          <li>ตัวอย่าง MOP: จำนวนครั้งออกอากาศ, EEFI ที่ปกปิด, จำนวนการพบปะ KLE</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sec-div" style="margin-top:4px;">ระดับการประเมิน — Assessment Levels (ภาพที่ ๙)</div>
+    <table class="io-table">
+      <thead>
+        <tr><th>ระดับ</th><th>แนวทาง</th><th>เครื่องมือวัด</th><th>คำถามหลัก</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="hi">ยุทธศาสตร์ชาติ</td><td>End State &amp; Objectives</td><td class="teal">MOE</td><td>Are we doing the right things?</td></tr>
+        <tr><td class="hi">ยุทธศาสตร์โรงละคร</td><td>End State, Mission, Effects, Tasks</td><td class="teal">MOE</td><td>Are we doing the right things?</td></tr>
+        <tr><td class="hi">ยุทธการ</td><td>Mission, Objectives, Effects, Tasks</td><td class="orange">MOP</td><td>Are we doing things right?</td></tr>
+        <tr><td class="hi">ยุทธวิธี</td><td>Mission, Objectives, Tasks</td><td class="orange">MOP + Combat Assessment</td><td>Are we doing things right?</td></tr>
+      </tbody>
+    </table>
+    <div class="az-connect">
+      <div class="az-connect-hdr">▶ MOE/MOP ของ N7 IO — <em>Op RESTORE TALOS</em></div>
+      <ul class="az-list" style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;">
+        <li><span class="ahi">MOE-1 (PSYOP):</span> % ประชาชน WL สนับสนุนให้รัฐบาล WL ถอนกำลัง (เป้า &gt;40%)</li>
+        <li><span class="ahi">MOE-2 (MILDEC):</span> ผู้นำ WL เชื่อว่าการขึ้นบก AZ จะเป็น TP-South (ไม่ใช่ TALOS Main)</li>
+        <li><span class="ahi">MOP-1 (PSYOP):</span> จำนวนครั้งออกอากาศ/โพสต์ SM ≥ X ครั้ง/วัน</li>
+        <li><span class="ahi">MOP-2 (OPSEC):</span> รายการ EEFI ที่ปกปิดครบ 100% ก่อน D–3</li>
+        <li><span class="ahi">MOP-3 (EW):</span> จำนวนชั่วโมง Electronic Jamming ต่อ C2 WL</li>
+        <li><span class="ahi">MOE-3 (StratComm):</span> ความเชื่อมั่นสาธารณชนนานาชาติต่อปฏิบัติการ AZ</li>
+      </ul>
+    </div>
+  </div>
+  <div class="sf">
+    <span>กลุ่มที่ ๒ — N7 IO | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖</span>
+    <span class="sf-ref">อทร.3107 บทที่ ๔ — ๔-๑๐ ถึง ๔-๑๒ (ภาพที่ ๙)</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ S8 — BRANCH PLANNING -->
+<div class="slide" id="s8">
+  <div class="sh">
+    <div class="sh-left">
+      <div class="sh-label">บทที่ ๔ — ขั้น ๖ | Branch-Specific Planning</div>
+      <div class="sh-title">การวางแผนตามสาขา IO — ๕ สาขา</div>
+      <div class="sh-sub">PSYOP ✦ MILDEC ✦ OPSEC ✦ EW ✦ CNO — แต่ละสาขามี ๔ ขั้น: วิเคราะห์ → COA → Wargame → ข้อตกลงใจ</div>
+    </div>
+    <span class="sh-badge badge-red">BRANCH PLANNING</span>
+  </div>
+  <div class="content">
+    <div class="grid3" style="flex:1;">
+      <div class="box red">
+        <h4 class="red">PSYOP — ปฏิบัติการจิตวิทยา</h4>
+        <ul class="io-list">
+          <li><strong>วิเคราะห์ TA:</strong> ผู้ตัดสินใจ ระบบ C2 กลุ่มเป้าหมาย</li>
+          <li><strong>กำหนดสิ่งพึงประสงค์:</strong> สร้าง/เสริมความเชื่อ กำหนด Cue</li>
+          <li><strong>พัฒนา Narrative:</strong> น่าเชื่อ เชื่อมต่อ สม่ำเสมอ</li>
+          <li><strong>กำหนดกิจกรรม:</strong> TA เห็นได้และเชื่อถือได้</li>
+        </ul>
+        <div style="margin-top:8px;padding:6px 8px;background:rgba(138,45,45,0.15);border-radius:4px;font-size:11px;color:#ff9090;">
+          <strong>AZ:</strong> Counter-PSYOP WL + Hidden Truth Campaign "ภาระของ WL"
+        </div>
+      </div>
+      <div class="box gold">
+        <h4 class="gold">MILDEC — การลวงทางทหาร</h4>
+        <ul class="io-list">
+          <li><strong>กำหนดเป้าหมายลวง:</strong> ผบ. ขตก. ผู้ตัดสินใจ</li>
+          <li><strong>วิเคราะห์ช่องทาง:</strong> ผ่าน EW/กิจกรรม/เอกสาร</li>
+          <li><strong>สร้างเรื่องราวลวง:</strong> น่าเชื่อ ส่งผ่านได้ วัดผลได้</li>
+          <li><strong>ประสาน OPSEC:</strong> ปกปิดไม่ให้ ขตก. รู้ว่าถูกลวง</li>
+        </ul>
+        <div style="margin-top:8px;padding:6px 8px;background:rgba(212,168,32,0.12);border-radius:4px;font-size:11px;color:#d4a820;">
+          <strong>AZ:</strong> หลอกว่าจะขึ้นบกที่ TP-South → ปกปิดทิศจริง D-Day
+        </div>
+      </div>
+      <div class="box green">
+        <h4 class="green">OPSEC — รักษาความปลอดภัยปฏิบัติการ</h4>
+        <ul class="io-list">
+          <li><strong>กำหนด EEFI:</strong> ข้อมูลสำคัญยิ่งที่ต้องปกปิด</li>
+          <li><strong>วิเคราะห์ช่องทาง ขตก.:</strong> สเปกตรัม SIGINT</li>
+          <li><strong>วิเคราะห์สิ่งบอกเหตุ:</strong> อะไรที่ ขตก. รับรู้ได้</li>
+          <li><strong>พัฒนามาตรการ OPSEC:</strong> ยุทธการ/ส่งกำลัง/EW</li>
+        </ul>
+        <div style="margin-top:8px;padding:6px 8px;background:rgba(45,138,90,0.15);border-radius:4px;font-size:11px;color:#60d090;">
+          <strong>AZ:</strong> EMCON ก่อน D–3 · ปกปิดแผนขึ้นบก TALOS Main
+        </div>
+      </div>
+      <div class="box teal">
+        <h4 class="teal">EW — สงครามอิเล็กทรอนิกส์</h4>
+        <ul class="io-list">
+          <li><strong>ES:</strong> สเปกตรัม EM · SIGINT · TA</li>
+          <li><strong>EA:</strong> กำหนดเป้าหมาย RSTA · Jamming</li>
+          <li><strong>EP:</strong> ป้องกันไม่ให้ ขตก. ใช้คลื่นฝ่ายเรา</li>
+          <li><strong>I&amp;W:</strong> แจ้งเตือนการโจมตี EW ของ ขตก.</li>
+        </ul>
+        <div style="margin-top:8px;padding:6px 8px;background:rgba(32,178,170,0.12);border-radius:4px;font-size:11px;color:#5dd0c8;">
+          <strong>AZ:</strong> รบกวน/ดักฟัง C2 WL ใน TALOS · EMCON ฝ่าย AZ
+        </div>
+      </div>
+      <div class="box blue">
+        <h4 class="blue">CNO — ปฏิบัติการเครือข่ายคอมพิวเตอร์</h4>
+        <ul class="io-list">
+          <li><strong>CNA (Attack):</strong> โจมตีเครือข่าย C4 ขตก.</li>
+          <li><strong>CND (Defense):</strong> ป้องกันระบบควบคุมฝ่ายเรา</li>
+          <li><strong>CNE (Exploitation):</strong> รวบรวมข้อมูลจากเครือข่าย ขตก.</li>
+          <li><strong>ประสาน EW/SIGINT:</strong> สนับสนุนกำหนดเป้าหมาย</li>
+        </ul>
+        <div style="margin-top:8px;padding:6px 8px;background:rgba(30,95,168,0.15);border-radius:4px;font-size:11px;color:#60a0f0;">
+          <strong>AZ:</strong> DEFNET ป้องกัน Cyber WL · CNE ข้อมูล C2 WL
+        </div>
+      </div>
+      <div class="az-connect" style="border-left-color:#d4a820;">
+        <div class="az-connect-hdr">▶ โครงสร้างรวม — <em>Op RESTORE TALOS</em></div>
+        <ul class="az-list">
+          <li>ทุกสาขาส่ง <span class="ahi">Branch Plan</span> ให้ N7 IO ภายใน D–21</li>
+          <li>N7 IO บูรณาการเป็น <span class="ablu">IO Annex</span> ต่อ OPORD RESTORE TALOS</li>
+          <li>แต่ละสาขามี <span class="agrn">MOE/MOP รายสาขา</span> รายงานรอบ ๒๔ ชม.</li>
+          <li>ประสานงาน: PSYOP ↔ MILDEC ↔ OPSEC ต้องไม่ขัดแย้งกัน — Narrative เดียวกัน</li>
+          <li>IO Cell ใน JOC ติดตาม Battle Rhythm ทุก Shift</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="sf">
+    <span>กลุ่มที่ ๒ — N7 IO | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖</span>
+    <span class="sf-ref">อทร.3107 บทที่ ๔ — ๔-๑๓ ถึง ๔-๒๕</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ S9 — IO CONCEPT PARAGRAPH (Op RESTORE TALOS) -->
+<div class="slide" id="s9">
+  <div class="sh">
+    <div class="sh-left">
+      <div class="sh-label">บทที่ ๔ — ผลลัพธ์การวางแผน | IO Concept Paragraph</div>
+      <div class="sh-title">แนวความคิดในการปฏิบัติการข่าวสาร — Op RESTORE TALOS</div>
+      <div class="sh-sub">IO Concept Paragraph · ผลลัพธ์สุดท้ายของกระบวนการวางแผน IO ทั้ง ๖ ขั้น</div>
+    </div>
+    <span class="sh-badge badge-gold">IO CONCEPT / ANNEX</span>
+  </div>
+  <div class="content">
+    <div class="callout" style="border-color:rgba(212,168,32,0.5);background:rgba(212,168,32,0.06);">
+      <strong>รูปแบบมาตรฐาน (อทร.3107 ข้อ ๔-๒๕):</strong> "IO จะดำเนินการโดย [หน่วย] ดำเนินการต่อ [TA] โดยใช้ [วิธีการ/สาขา] เพื่อ [ผลกระทบ/จุดหมาย] ตั้งแต่ [H–X] จนถึง [H+X]"
+    </div>
+    <div class="content-row" style="flex:1;">
+      <div class="content-col">
+        <div class="sec-div">แนวความคิด IO — N7 IO | กองกำลัง AZ</div>
+        <div class="box gold">
+          <h4 class="gold">IO OBJ ๑ — Counter-PSYOP / StratComm</h4>
+          <p style="font-size:12.5px;color:#c0a840;line-height:1.7;">
+            <span style="color:#d4a820;">N7 IO</span> จะดำเนินการ <span style="color:#ff9090;font-weight:600;">Convince + Inform</span> ต่อ <span style="color:#d4a820;">ประชาชน WL และประชาคมนานาชาติ (TA/มิติจิตวิทยา)</span> โดยใช้ <span style="color:#80c0ff;">PSYOP + StratComm + Social Media</span> — เพื่อ <span style="color:#80d090;">Create</span> แรงกดดันทางการเมืองต่อรัฐบาล WL ให้ถอนกำลังออกจาก TALOS ตั้งแต่ <span style="color:#d4a820;">D–30 จนถึง EOO</span>
+          </p>
+        </div>
+        <div class="box" style="border-left:3px solid #d4a820;">
+          <h4 class="gold">IO OBJ ๒ — MILDEC</h4>
+          <p style="font-size:12.5px;color:#c0a840;line-height:1.7;">
+            <span style="color:#d4a820;">N7 IO (MILDEC Cell)</span> จะดำเนินการ <span style="color:#ff9090;font-weight:600;">Deceive</span> ต่อ <span style="color:#d4a820;">ผู้บัญชาการกองกำลัง WL ใน TALOS (TA/มิติสารสนเทศ-จิตวิทยา)</span> โดยใช้ <span style="color:#80c0ff;">MILDEC Story + EW Signatures + Feint Operations</span> — เพื่อ <span style="color:#80d090;">Enable</span> ปฏิบัติการขึ้นบกหลัก D-Day ตั้งแต่ <span style="color:#d4a820;">D–14 ถึง D+0</span>
+          </p>
+        </div>
+        <div class="box green">
+          <h4 class="green">IO OBJ ๓ — OPSEC</h4>
+          <p style="font-size:12.5px;color:#c0a840;line-height:1.7;">
+            <span style="color:#d4a820;">ทุกหน่วยใน AZ TF</span> จะดำเนินการ <span style="color:#ff9090;font-weight:600;">Protect</span> ต่อ <span style="color:#d4a820;">EEFI ฝ่ายเรา (TA/มิติสารสนเทศ)</span> โดยใช้ <span style="color:#80c0ff;">OPSEC Measures + EMCON + EW-EP</span> — เพื่อ <span style="color:#80d090;">Support</span> ความได้เปรียบยุทธการ ตั้งแต่ <span style="color:#d4a820;">D–30 ถึง D+5</span>
+          </p>
+        </div>
+        <div class="box teal">
+          <h4 class="teal">IO OBJ ๔ — EW/CNO</h4>
+          <p style="font-size:12.5px;color:#c0a840;line-height:1.7;">
+            <span style="color:#d4a820;">N7 IO (EW/CNO Cell)</span> จะดำเนินการ <span style="color:#ff9090;font-weight:600;">Disrupt</span> ต่อ <span style="color:#d4a820;">ระบบ C2 WL ใน TALOS (TA/มิติกายภาพ)</span> โดยใช้ <span style="color:#80c0ff;">EW-EA + CNA (DEFNET) + SIGINT-ES</span> — เพื่อ <span style="color:#80d090;">Enable</span> ปฏิบัติการโจมตี D-Day ตั้งแต่ <span style="color:#d4a820;">H–2 ถึง H+6</span>
+          </p>
+        </div>
+      </div>
+      <div style="width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;">
+        <div class="az-connect" style="flex:1;">
+          <div class="az-connect-hdr">▶ เชื่อมโยงกระบวนการ — <em>อทร.3107 บทที่ ๔</em></div>
+          <ul class="az-list">
+            <li>IO Concept Paragraph คือ <span class="ahi">ผลลัพธ์สุดท้าย</span> ของ MDMP ขั้น ๑–๖ ทั้งหมด</li>
+            <li>สร้างจาก <span class="ablu">IO Matrix (ขั้น ๒.๘/๓)</span> + ผลการ Wargame (ขั้น ๔–๕)</li>
+            <li>ผนวกใน <span class="ahi">OPORD RESTORE TALOS</span> เป็น Annex IO</li>
+            <li>แต่ละ OBJ มี <span class="agrn">MOE + MOP</span> ชัดเจน (วัดผลได้)</li>
+            <li>ใช้คำศัพท์มาตรฐาน <span class="apurp">ภาพที่ ๖</span> ตลอด (Convince / Deceive / Protect / Disrupt)</li>
+          </ul>
+        </div>
+        <div class="box" style="border-left:3px solid #2d8a5a;background:rgba(13,32,69,0.8);">
+          <h4 class="green" style="margin-bottom:8px;">กำหนดการ N7 IO</h4>
+          <ul class="io-list" style="gap:4px;">
+            <li><span class="green">D–30:</span> เริ่ม StratComm + Counter-PSYOP</li>
+            <li><span class="green">D–21:</span> Branch Plans ครบทุกสาขา</li>
+            <li><span class="green">D–14:</span> เริ่ม MILDEC Story</li>
+            <li><span class="green">D–3:</span> EMCON เต็มรูปแบบ</li>
+            <li><span class="red">H–2:</span> EW-EA เริ่มปฏิบัติการ</li>
+            <li><span class="red">H+0:</span> D-Day — IO เต็มรูปแบบ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf">
+    <span>กลุ่มที่ ๒ — N7 IO | สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖</span>
+    <span class="sf-ref">อทร.3107 บทที่ ๔ — สรุป | Op RESTORE TALOS IO Concept</span>
+  </div>
+</div>
+
+</div><!-- end slideContainer -->
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('slideCounter');
+const btnPrev = document.getElementById('btnPrev');
+const btnNext = document.getElementById('btnNext');
+let cur = 0;
+
+function updateNav() {
+  counter.textContent = `${cur + 1} / ${slides.length}`;
+  btnPrev.disabled = cur === 0;
+  btnNext.disabled = cur === slides.length - 1;
+}
+
+function changeSlide(dir) {
+  slides[cur].classList.remove('active');
+  cur = Math.max(0, Math.min(slides.length - 1, cur + dir));
+  slides[cur].classList.add('active');
+  updateNav();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+});
+
+updateNav();
+</script>
+</body>
+</html>

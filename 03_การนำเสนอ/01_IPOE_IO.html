@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>IPOE IO Analysis — N7 | สธ.๘๖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,system-ui,sans-serif;background:#050d1a;color:#e8f0ff;height:100vh;overflow:hidden;}
+#pres{width:100vw;height:100vh;position:relative;}
+.slide{display:none;width:100%;height:100%;padding:32px 56px 20px;flex-direction:column;position:absolute;top:0;left:0;
+  background:linear-gradient(135deg,#050d1a 0%,#0a1628 60%,#0d2045 100%);}
+.slide.active{display:flex;}
+
+/* HEADER */
+.sh{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #d4a820;padding-bottom:10px;margin-bottom:18px;flex-shrink:0;}
+.sh-left{display:flex;align-items:center;gap:12px;}
+.sh-anchor{display:inline-flex;align-items:center;opacity:0.8;vertical-align:middle;}
+.sh-unit{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:10px;color:#d4a820;letter-spacing:1.5px;font-weight:700;}
+.sh-title{font-size:24px;font-weight:800;color:#e8f0ff;line-height:1.2;}
+.sh-right{text-align:right;}
+.sh-label{font-size:9px;color:#4a6a8a;letter-spacing:1px;}
+.sh-tag{font-size:11px;color:#7090b0;font-weight:600;}
+
+/* CONTENT */
+.content{flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden;}
+
+/* BOX */
+.box{background:rgba(26,58,106,0.25);border:1px solid #1a3a6a;border-left:4px solid #d4a820;border-radius:4px;padding:14px 16px;margin-bottom:10px;}
+.box.blue{border-left-color:#2a7fd4;}
+.box.cyan{border-left-color:#2d8a8a;}
+.box.purple{border-left-color:#c084fc;}
+.box.red{border-left-color:#e05050;}
+.box.green{border-left-color:#2d8a5a;}
+.bh{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.8px;margin-bottom:6px;color:#d4a820;}
+.box.blue .bh{color:#60a0f0;}
+.box.cyan .bh{color:#40c0c0;}
+.box.purple .bh{color:#c084fc;}
+.box.red .bh{color:#ff8080;}
+.box.green .bh{color:#60d090;}
+.bp{font-size:12px;color:#7090b0;line-height:1.65;}
+.bp strong{color:#a0c0e0;font-weight:600;}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.g32{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:11px;}
+th{background:#0a1e40;color:#d4a820;padding:7px 10px;text-align:left;font-weight:700;border:1px solid #1a3a6a;letter-spacing:0.5px;}
+td{padding:7px 10px;border:1px solid #1a3a6a;color:#b0c8e0;vertical-align:top;}
+tr:nth-child(even) td{background:rgba(26,58,106,0.15);}
+td.hl{color:#e8f0ff;font-weight:600;}
+
+/* BADGES */
+.badge{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:700;}
+.bh-r{background:rgba(138,45,45,0.3);color:#ff8080;border:1px solid #8a2d2d;}
+.bh-y{background:rgba(180,120,0,0.3);color:#f0c840;border:1px solid #b47800;}
+.bh-g{background:rgba(45,138,90,0.3);color:#60d090;border:1px solid #2d8a5a;}
+.bh-b{background:rgba(30,95,168,0.3);color:#60a0f0;border:1px solid #1e5fa8;}
+
+/* LIST */
+ul.ml{list-style:none;padding:0;}
+ul.ml li{font-size:12px;color:#7090b0;padding:3px 0 3px 14px;border-left:2px solid #1a3a6a;margin-bottom:4px;line-height:1.5;}
+ul.ml li strong{color:#a0c0e0;}
+ul.ml li::before{display:none;}
+
+/* COVER */
+.cover-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;}
+.cover-bg{position:absolute;opacity:0.04;user-select:none;}
+.cover-label{font-size:11px;color:#d4a820;letter-spacing:3px;font-weight:700;margin-bottom:16px;}
+.cover-h1{font-size:38px;font-weight:900;color:#e8f0ff;line-height:1.25;margin-bottom:8px;}
+.cover-h2{font-size:18px;color:#d4a820;margin-bottom:20px;}
+.cover-line{width:180px;height:2px;background:linear-gradient(90deg,transparent,#d4a820,transparent);margin:0 auto 20px;}
+.cover-meta{font-size:12px;color:#4a6a8a;line-height:1.8;}
+.cover-tags{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+.ctag{padding:4px 12px;border:1px solid;border-radius:3px;font-size:11px;font-weight:600;}
+.ctag-g{border-color:#d4a820;color:#d4a820;background:rgba(212,168,32,0.1);}
+.ctag-b{border-color:#1e5fa8;color:#60a0f0;background:rgba(30,95,168,0.1);}
+
+/* DIM BOXES */
+.dim{border-radius:6px;padding:14px;margin-bottom:10px;border:1px solid;}
+.dim-p{background:rgba(45,138,138,0.1);border-color:#2d8a8a;}
+.dim-p .dim-title{color:#40c0c0;}
+.dim-i{background:rgba(212,168,32,0.1);border-color:#8a6010;}
+.dim-i .dim-title{color:#d4a820;}
+.dim-c{background:rgba(192,132,252,0.1);border-color:#7c3aed;}
+.dim-c .dim-title{color:#c084fc;}
+.dim-title{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.dim-content{font-size:11px;color:#6080a0;line-height:1.65;}
+
+/* PIR */
+.pir-item{background:rgba(10,22,40,0.8);border:1px solid #1a3a6a;border-radius:4px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;}
+.pir-num{background:#0d2045;border:1px solid #1a3a6a;color:#d4a820;font-size:12px;font-weight:700;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:3px;flex-shrink:0;}
+.pir-text{flex:1;}
+.pir-title{font-size:13px;font-weight:600;color:#e8f0ff;margin-bottom:3px;}
+.pir-desc{font-size:11px;color:#5070a0;line-height:1.5;}
+.pir-why{font-size:10px;color:#3a5a7a;margin-top:4px;font-style:italic;}
+
+/* FOOTER */
+.sf{border-top:1px solid #1a3a6a;padding-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#2a4a6a;flex-shrink:0;margin-top:8px;}
+.sf-center{color:#4a6a8a;}
+
+/* NAV */
+#nav{position:fixed;bottom:18px;right:28px;display:flex;align-items:center;gap:10px;background:rgba(10,22,40,0.92);border:1px solid #1a3a6a;padding:6px 14px;border-radius:30px;z-index:200;}
+#nav button{background:none;border:1px solid #1a3a6a;color:#6080a0;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:11px;}
+#nav button:hover{background:#1a3a6a;color:#e8f0ff;}
+#ctr{color:#5070a0;font-size:11px;min-width:44px;text-align:center;}
+#home-btn{color:#4a6a8a;font-size:11px;text-decoration:none;padding:0 6px;border-left:1px solid #1a3a6a;}
+</style>
+</head>
+<body>
+<div id="pres">
+
+<!-- SLIDE 1: COVER -->
+<div class="slide active" id="s1">
+  <div class="sh">
+    <div class="sh-left">
+      <span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span>
+      <div><div class="sh-unit">N7 — INFORMATION OPERATIONS</div><div class="sh-tag">กลุ่มที่ ๒ | สธ.๘๖</div></div>
+    </div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01 OF 04</div><div class="sh-tag">10–12 มิ.ย. ๒๕๖๙</div></div>
+  </div>
+  <div class="cover-wrap">
+    <div class="cover-bg"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:200px;width:auto;"></div>
+    <div class="cover-label">BRIEFING 01 — N7 INFORMATION OPERATIONS</div>
+    <div class="cover-h1">IPOE<br>ด้านการปฏิบัติการสารสนเทศ</div>
+    <div class="cover-h2">Intelligence Preparation of the Operational Environment (IO)</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">
+      สัมมนาการวางแผนทางทหารแบบปราณีต | หลักสูตร สธ.๘๖<br>
+      สถานการณ์ AZ–WL | พื้นที่ปฏิบัติการเกาะ TALOS<br>
+      ผู้นำเสนอ: N7 IO กลุ่มที่ ๒
+    </div>
+    <div class="cover-tags">
+      <span class="ctag ctag-g">IPOE Stage 1–4</span>
+      <span class="ctag ctag-b">3-D IO Analysis</span>
+      <span class="ctag ctag-g">PIR สำหรับ IO</span>
+      <span class="ctag ctag-b">IO Threat Assessment</span>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่มที่ ๒ N7 IO</span><span class="sf-center">สัมมนาวางแผนทางทหารแบบปราณีต | สธ.๘๖</span><span>10 มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 2: IPOE FRAMEWORK -->
+<div class="slide" id="s2">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO</div><div class="sh-tag">IPOE Framework</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:22px;font-weight:800;color:#e8f0ff;margin-bottom:6px;">กรอบการวิเคราะห์ IPOE — 4 ขั้นตอน</div>
+    <div style="font-size:13px;color:#5070a0;margin-bottom:18px;">N7 ใช้กรอบ IPOE เพื่อกำหนดสภาพแวดล้อมสารสนเทศและประเมินภัยคุกคาม IO ของฝ่ายตรงข้าม</div>
+    <div class="g2">
+      <div>
+        <div class="box">
+          <div class="bh">ขั้นที่ 1 — กำหนดสภาพแวดล้อมปฏิบัติการ</div>
+          <div class="bp">กำหนด <strong>AO/AOI ด้านสารสนเทศ</strong> วิเคราะห์ผ่าน 3 มิติ (Physical / Information / Cognitive) และใช้ <strong>ASCOPE Framework</strong> เพื่อระบุองค์ประกอบสำคัญ</div>
+        </div>
+        <div class="box blue">
+          <div class="bh">ขั้นที่ 2 — อธิบายภัยคุกคาม IO</div>
+          <div class="bp">ระบุ <strong>IO Capabilities ของ WL</strong> — DF Network, PSYOP Infrastructure, Cyber Attack Capabilities, Disinformation Apparatus และ EW Systems</div>
+        </div>
+      </div>
+      <div>
+        <div class="box cyan">
+          <div class="bh">ขั้นที่ 3 — ประเมินภัยคุกคาม IO</div>
+          <div class="bp">วิเคราะห์ว่า WL จะใช้ IO capabilities อย่างไรใน AO/AOI ประเมิน <strong>IO COAs ของ WL</strong> ทั้งด้านป้องกัน รุก และหลอกลวง</div>
+        </div>
+        <div class="box purple">
+          <div class="bh">ขั้นที่ 4 — ผนวกภัยคุกคามเข้าสู่แผน</div>
+          <div class="bp">กำหนด <strong>PIR (Priority Intelligence Requirements)</strong> ด้าน IO สำหรับ N7 และเสนอแนะภารกิจ IO เพื่อสนับสนุนแผนหลัก</div>
+        </div>
+      </div>
+    </div>
+    <div class="box green" style="margin-top:4px;">
+      <div class="bh">จุดมุ่งหมาย N7 IPOE</div>
+      <div class="bp">เพื่อให้ <strong>ผบ. และ ฝ่ายอำนวยการ</strong> เข้าใจสภาพแวดล้อมสารสนเทศ ทราบความสามารถ IO ของ WL และกำหนดแนวทาง IO ที่เหมาะสมสำหรับกองกำลัง AZ ในพื้นที่เกาะ TALOS</div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IPOE Framework — 4 ขั้นตอน</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 3: PHASE 1 - INFO ENV DEFINITION -->
+<div class="slide" id="s3">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | IPOE STAGE 1</div><div class="sh-tag">กำหนดสภาพแวดล้อมสารสนเทศ</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:16px;">ขั้นที่ ๑: กำหนดสภาพแวดล้อมสารสนเทศ</div>
+    <div class="g2">
+      <div>
+        <div class="box">
+          <div class="bh">พื้นที่ปฏิบัติการด้านสารสนเทศ</div>
+          <div class="bp">
+            <strong>AO (Area of Operations):</strong> เกาะ TALOS และน่านน้ำรอบเกาะ รัศมี 50 ไมล์ทะเล<br><br>
+            <strong>AOI (Area of Interest):</strong> พื้นที่ VERDATA รวมถึงเส้นทาง SLOC หลักในภูมิภาค และเครือข่าย IO ของ WL ใน Ventimiglia
+          </div>
+        </div>
+        <div class="box blue">
+          <div class="bh">ASCOPE Framework — สภาพแวดล้อมสารสนเทศ</div>
+          <div class="bp">
+            <strong>A — Areas:</strong> โหนดส่งสัญญาณ, ฐาน DF WL<br>
+            <strong>S — Structures:</strong> สายเคเบิลใต้น้ำ, เสาสัญญาณ<br>
+            <strong>C — Capabilities:</strong> EW, PSYOP, Cyber<br>
+            <strong>O — Organizations:</strong> หน่วย IO WL, กลุ่ม Proxy<br>
+            <strong>P — People:</strong> Influencer, Bot Operators<br>
+            <strong>E — Events:</strong> การเลือกตั้ง, กิจกรรม CMO
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#d4a820;margin-bottom:10px;">สภาพแวดล้อมสารสนเทศ 3 มิติ</div>
+        <div class="dim dim-p">
+          <div class="dim-title">🔷 PHYSICAL DIMENSION<br><span style="font-size:10px;font-weight:400;color:#4a7a7a;">(มิติกายภาพ)</span></div>
+          <div class="dim-content">โครงสร้างพื้นฐาน ICT บนเกาะ TALOS | เครือข่าย C2 ของ AZ | ระบบ Satellite/Microwave | สายส่งสัญญาณใต้น้ำ</div>
+        </div>
+        <div class="dim dim-i">
+          <div class="dim-title">🔶 INFORMATION DIMENSION<br><span style="font-size:10px;font-weight:400;color:#7a6020;">(มิติสารสนเทศ)</span></div>
+          <div class="dim-content">การไหลเวียนข้อมูล | Narrative ของ WL บน Social Media | PSYOP Messages | Intelligence Cycle</div>
+        </div>
+        <div class="dim dim-c">
+          <div class="dim-title">🔮 COGNITIVE DIMENSION<br><span style="font-size:10px;font-weight:400;color:#6a4a9a;">(มิติความคิด)</span></div>
+          <div class="dim-content">ทัศนคติประชาชนในพื้นที่ | ความเชื่อมั่นของพันธมิตร TALOS | Perception ของ ผบ. AZ และ WL | Will to Fight</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IPOE Stage 1 — Info Environment Definition</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 4: PHYSICAL DIMENSION -->
+<div class="slide" id="s4">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | มิติกายภาพ</div><div class="sh-tag">Physical Dimension Analysis</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#40c0c0;margin-bottom:16px;">🔷 มิติกายภาพ — Physical Dimension</div>
+    <div class="g2">
+      <div>
+        <div class="box cyan">
+          <div class="bh">โครงสร้างพื้นฐานสารสนเทศ AZ (Friendly)</div>
+          <div class="bp">
+            <strong>ระบบ C2:</strong> ศูนย์ปฏิบัติการร่วม บน TALOS | เชื่อมต่อผ่าน Satellite + Fiber<br><br>
+            <strong>เครือข่าย:</strong> VHF/UHF Tactical Radio | SATCOM Link 16/17 | Naval CEC (DDG KDDX × ๒ + FFG Mogami × ๔)<br><br>
+            <strong>จุดอ่อน:</strong> SATCOM Node นอกเรือเป็นเป้า Rocket Force WL | Bandwidth จำกัดในสภาวะ EMCON Level III
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">โครงสร้างพื้นฐาน IO WL (Adversary)</div>
+          <div class="bp">
+            <strong>สถานี DF:</strong> ≥3 สถานี รอบ TALOS ครอบคลุม 360°<br><br>
+            <strong>โหนด Satellite:</strong> บนเกาะ TALOS (ยึดครองบางส่วน) และ Ventimiglia<br><br>
+            <strong>ระบบ Microwave:</strong> เชื่อม Relay บน TALOS กับ HQ WL<br><br>
+            <strong>EW Platform:</strong> เรือ EW ลำที่ ๑–๒ ติดตั้ง Jamming + SIGINT
+          </div>
+        </div>
+      </div>
+      <div>
+        <table>
+          <tr><th colspan="3">สิ่งอำนวยการ ICT สำคัญในพื้นที่</th></tr>
+          <tr><th>สิ่งอำนวยการ</th><th>ที่ตั้ง</th><th>ความสำคัญ</th></tr>
+          <tr><td class="hl">SATCOM Node Alpha</td><td>TALOS North</td><td><span class="badge bh-r">สูงมาก</span></td></tr>
+          <tr><td class="hl">สถานี DF WL-1</td><td>TALOS East</td><td><span class="badge bh-r">สูงมาก</span></td></tr>
+          <tr><td class="hl">Microwave Relay</td><td>TALOS Peak</td><td><span class="badge bh-y">สูง</span></td></tr>
+          <tr><td class="hl">Fiber Landing</td><td>Port TALOS</td><td><span class="badge bh-y">สูง</span></td></tr>
+          <tr><td class="hl">Radio Mast AZ</td><td>AZ FOB</td><td><span class="badge bh-b">กลาง</span></td></tr>
+          <tr><td class="hl">Internet Exchange</td><td>TALOS City</td><td><span class="badge bh-y">สูง</span></td></tr>
+        </table>
+        <div class="box green" style="margin-top:10px;">
+          <div class="bh">ข้อสรุป — มิติกายภาพ</div>
+          <div class="bp">DF Network ของ WL สามารถ <strong>ระบุตำแหน่ง</strong> หน่วยที่ส่งสัญญาณของ AZ ได้ทั่วพื้นที่ TALOS การปฏิบัติ EMCON เป็นข้อกำหนดเร่งด่วน</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">Physical Dimension — TALOS AO/AOI</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 5: INFORMATION DIMENSION -->
+<div class="slide" id="s5">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | มิติสารสนเทศ</div><div class="sh-tag">Information Dimension Analysis</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#d4a820;margin-bottom:16px;">🔶 มิติสารสนเทศ — Information Dimension</div>
+    <div class="g2">
+      <div>
+        <div class="box">
+          <div class="bh">การไหลเวียนสารสนเทศในพื้นที่</div>
+          <div class="bp">
+            <strong>ช่องทางหลัก:</strong> Social Media (Facebook, Twitter, Telegram) | สื่อท้องถิ่น TALOS | วิทยุกระจายเสียง WL<br><br>
+            <strong>ช่องทางทหาร:</strong> Tactical Radio AZ | SATCOM Link | Naval Messaging System<br><br>
+            <strong>จุดวิกฤต:</strong> เครือข่าย Internet ของ TALOS City เป็นจุดส่งผ่านข้อมูลหลักของทั้งสองฝ่าย
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">IO Activities ของ WL — ด้านสารสนเทศ</div>
+          <div class="bp">
+            <strong>Disinformation:</strong> ปล่อย Fake News ว่า AZ ใช้กำลังเกินขอบเขต<br>
+            <strong>Influencer Ops:</strong> จ้าง Influencer ใน TALOS ปล่อย Narrative สนับสนุน WL<br>
+            <strong>Bot Network:</strong> Bot Accounts &gt;10,000 บัญชีใน Social Media<br>
+            <strong>Cyber:</strong> DDoS ต่อระบบเว็บไซต์รัฐบาล AZ | Phishing ต่อ ฝอ. AZ
+          </div>
+        </div>
+      </div>
+      <div>
+        <table>
+          <tr><th colspan="3">Narrative หลักของ WL</th></tr>
+          <tr><th>Narrative</th><th>กลุ่มเป้าหมาย</th><th>ระดับผลกระทบ</th></tr>
+          <tr><td>"AZ คือผู้รุกราน"</td><td>ประชาชน TALOS</td><td><span class="badge bh-r">สูงมาก</span></td></tr>
+          <tr><td>"VERDATA เป็นสมบัติ WL"</td><td>สากล</td><td><span class="badge bh-r">สูง</span></td></tr>
+          <tr><td>"พันธมิตร AZ ไม่น่าเชื่อถือ"</td><td>พันธมิตร TALOS</td><td><span class="badge bh-y">กลาง-สูง</span></td></tr>
+          <tr><td>"ทหาร AZ ละเมิดสิทธิ์"</td><td>องค์กรสากล</td><td><span class="badge bh-y">กลาง</span></td></tr>
+          <tr><td>"WL ปกป้องสันติภาพ"</td><td>ทั่วไป</td><td><span class="badge bh-y">กลาง</span></td></tr>
+        </table>
+        <div class="box green" style="margin-top:10px;">
+          <div class="bh">ข้อสรุป — มิติสารสนเทศ</div>
+          <div class="bp">WL ดำเนิน <strong>Full-Spectrum IO</strong> ใน Information Dimension ต้องการ Counter-Narrative และ Cyber Defense โดยด่วน</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">Information Dimension — WL IO Activities</span><span>สธ.๘๖ | ๑๑ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 6: COGNITIVE DIMENSION -->
+<div class="slide" id="s6">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | มิติความคิด</div><div class="sh-tag">Cognitive Dimension Analysis</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#c084fc;margin-bottom:16px;">🔮 มิติความคิด — Cognitive Dimension</div>
+    <div class="g3">
+      <div class="box purple">
+        <div class="bh">ประชาชนบนเกาะ TALOS</div>
+        <div class="bp">
+          <strong>ทัศนคติ:</strong> เป็นกลาง-ลังเล<br>
+          <strong>ความกังวลหลัก:</strong> ความมั่นคงทางเศรษฐกิจและความปลอดภัย<br>
+          <strong>จุดอ่อน:</strong> เชื่อ Social Media สูง ขาดแหล่งข้อมูลที่เชื่อถือได้<br>
+          <strong>โอกาส:</strong> CMO ให้ความช่วยเหลือเพื่อสร้างความเชื่อมั่น AZ
+        </div>
+      </div>
+      <div class="box cyan">
+        <div class="bh">พันธมิตร TALOS Alliance</div>
+        <div class="bp">
+          <strong>ความเชื่อมั่น:</strong> ปานกลาง กังวลการลากยาวของความขัดแย้ง<br>
+          <strong>ความเสี่ยง:</strong> WL PSYOP มุ่งทำลายเอกภาพ Alliance<br>
+          <strong>ต้องการ:</strong> ข้อมูลชัดเจน บ่อยครั้ง เกี่ยวกับความคืบหน้า<br>
+          <strong>แนวทาง:</strong> Regular StratComm Briefing ต่อพันธมิตร
+        </div>
+      </div>
+      <div class="box blue">
+        <div class="bh">ผู้บังคับบัญชา AZ & WL</div>
+        <div class="bp">
+          <strong>ผบ. AZ:</strong> ตัดสินใจบนฐานข้อมูลที่ถูกต้องและทันเวลา<br>
+          <strong>ผบ. WL:</strong> อาจ overestimate IO capabilities ของตนเอง<br>
+          <strong>จุดอ่อน WL:</strong> Cognitive Bias ต่อ VERDATA Narrative<br>
+          <strong>MILDEC:</strong> ใช้หลอกลวง Decision-Making ของ WL
+        </div>
+      </div>
+    </div>
+    <div class="box" style="margin-top:8px;">
+      <div class="bh">Cognitive Warfare — WL Strategy ต่อ AZ</div>
+      <div class="bp" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+        <div><strong>เป้าหมาย 1:</strong> ทำลาย Will to Fight ของทหาร AZ ผ่าน PSYOP โดยตรง (Radio, Leaflet, SMS)</div>
+        <div><strong>เป้าหมาย 2:</strong> สร้าง Doubt ในพันธมิตร TALOS Alliance ให้แยกตัวออก</div>
+        <div><strong>เป้าหมาย 3:</strong> Influence ความคิดเห็นสาธารณะสากล ให้กดดัน AZ ถอนกำลัง</div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">Cognitive Dimension — Warfare Analysis</span><span>สธ.๘๖ | ๑๑ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 7: WL IO THREAT -->
+<div class="slide" id="s7">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | IPOE STAGE 2</div><div class="sh-tag">อธิบายภัยคุกคาม IO ของ WL</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:16px;">ขั้นที่ ๒: ขีดความสามารถ IO ของ WOADLAND (WL)</div>
+    <table>
+      <tr>
+        <th style="width:22%;">IO Capability</th>
+        <th style="width:28%;">รายละเอียด</th>
+        <th style="width:15%;">ระดับภัยคุกคาม</th>
+        <th style="width:35%;">ผลกระทบต่อ AZ</th>
+      </tr>
+      <tr>
+        <td class="hl">🎯 PSYOP</td>
+        <td>ยุทธศาสตร์ "อุดมการณ์นำการปฏิบัติ" — Radio/SMS/Leaflet + กล่าวหา AZ สนับสนุน PPTT/Bersat</td>
+        <td><span class="badge bh-r">สูงมาก</span></td>
+        <td>ทำลายขวัญกำลังใจทหาร AZ, สร้างความชอบธรรม WL ในสายตาสากล — AZ ต้อง Counter N5 ทันที</td>
+      </tr>
+      <tr>
+        <td class="hl">📡 EW (EMSO)</td>
+        <td>DF Network 3 สถานี + EW Ship 2 ลำ ครอบคลุมพื้นที่ TALOS</td>
+        <td><span class="badge bh-r">สูงมาก</span></td>
+        <td>ระบุตำแหน่งหน่วย AZ จากการส่งสัญญาณ ขัดขวาง C2</td>
+      </tr>
+      <tr>
+        <td class="hl">💻 Cyber</td>
+        <td>DDoS, Phishing, Ransomware ต่อระบบ C2 และโครงสร้างพื้นฐาน</td>
+        <td><span class="badge bh-r">สูง</span></td>
+        <td>ขัดขวางระบบ C2 ขโมยข้อมูลลับ ทำลาย Morale</td>
+      </tr>
+      <tr>
+        <td class="hl">🎭 MILDEC</td>
+        <td>สร้างภาพลวง EM Signature ลวง ปฏิบัติการ Maskirovka</td>
+        <td><span class="badge bh-y">กลาง-สูง</span></td>
+        <td>หลอกลวงการตัดสินใจของ ผบ. AZ ให้วางกำลังผิดทิศ</td>
+      </tr>
+      <tr>
+        <td class="hl">🌐 CNO/Info</td>
+        <td>Bot Network, Disinformation, Fake News Website</td>
+        <td><span class="badge bh-r">สูงมาก</span></td>
+        <td>บิดเบือนข้อมูล สร้างความสับสนในพื้นที่และสากล</td>
+      </tr>
+      <tr>
+        <td class="hl">🤝 CMO Hostile</td>
+        <td>จ้าง NGO/สื่อท้องถิ่น ใช้ Key Leader ที่สนับสนุน WL</td>
+        <td><span class="badge bh-y">กลาง</span></td>
+        <td>สร้าง Narrative ว่า WL คือ "ผู้ปลดปล่อย" TALOS</td>
+      </tr>
+      <tr>
+        <td class="hl">🚀 Rocket Force</td>
+        <td>SSM ขีปนาวุธพิสัยกลาง — Kinetic / EMP ต่อ SATCOM Node และ ICT Infrastructure</td>
+        <td><span class="badge bh-r">สูงมาก</span></td>
+        <td>ทำลาย Hard Infrastructure Comms AZ ก่อน D-Day — ขาดการสั่งการและ Link 16/17</td>
+      </tr>
+      <tr>
+        <td class="hl">🔒 CI / OPSEC</td>
+        <td>กระทรวงความปลอดภัยแห่งรัฐ + หน่วยตำรวจลับ + ศูนย์บัญชาการใต้ดิน Sosnovka (ทางเข้ามิดชิด)</td>
+        <td><span class="badge bh-y">กลาง-สูง</span></td>
+        <td>ISR AZ ไม่สามารถประเมิน WL C2 บน TALOS ได้ — HUMINT ถูกปิดกั้นโดยตำรวจลับ</td>
+      </tr>
+    </table>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IPOE Stage 2 — WL IO Capabilities</span><span>สธ.๘๖ | ๑๑ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 8: WL IO COA -->
+<div class="slide" id="s8">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | IPOE STAGE 3</div><div class="sh-tag">ประเมิน IO COA ของ WL</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:16px;">ขั้นที่ ๓: ประเมินแนวทาง IO ของ WL</div>
+    <div class="g2">
+      <div>
+        <div class="box red">
+          <div class="bh">WL IO COA 1 — Full PSYOP Campaign (โอกาสสูง)</div>
+          <div class="bp">
+            WL ดำเนิน <strong>PSYOP เต็มรูปแบบ</strong> ทั้งก่อนและระหว่างปฏิบัติการ ใช้ Influencer, Bot, Radio เพื่อสร้าง "AZ เป็นผู้ร้าย" ใน Cognitive Space ของประชาชนและพันธมิตร<br><br>
+            <strong>เงื่อนไข:</strong> WL ต้องการ International Support ก่อนใช้กำลังทหาร<br>
+            <strong>สัญญาณเตือน:</strong> เพิ่ม Bot Activity, จ้าง Influencer รายใหม่
+          </div>
+        </div>
+        <div class="box">
+          <div class="bh">WL IO COA 2 — EW/SIGINT First Strike</div>
+          <div class="bp">
+            WL ใช้ DF Network ระบุตำแหน่ง C2 AZ แล้ว <strong>Jam/Strike</strong> ก่อนเปิดปฏิบัติการทางทหาร เพื่อ "ตาบอด" ระบบ C2<br><br>
+            <strong>เงื่อนไข:</strong> WL วางกำลัง EW Ship ในระยะ Jamming<br>
+            <strong>สัญญาณเตือน:</strong> EW Ship เคลื่อนที่เข้าใกล้ TALOS
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box blue">
+          <div class="bh">WL IO COA 3 — Cyber + Hybrid</div>
+          <div class="bp">
+            DDoS ต่อระบบ AZ พร้อมกัน + Phishing ต่อ Key Personnel + Ransomware ต่อ Logistics — เพื่อสร้าง <strong>Decision Paralysis</strong> ใน ผบ. AZ<br><br>
+            <strong>เงื่อนไข:</strong> WL มี Foothold ใน Network AZ<br>
+            <strong>สัญญาณเตือน:</strong> Network anomaly, ความพยายาม Login ผิดปกติ
+          </div>
+        </div>
+        <div class="box green">
+          <div class="bh">IO COA ที่น่าจะเกิดขึ้นมากที่สุด (MLCOA)</div>
+          <div class="bp">
+            <strong>WL จะใช้ COA 1 + COA 3 พร้อมกัน:</strong> PSYOP Campaign ต่อเนื่องควบคู่กับ Cyber Operations เพื่อบั่นทอนความเชื่อมั่นทั้งใน Physical และ Cognitive Space ก่อนปฏิบัติการทางกายภาพ
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IPOE Stage 3 — WL IO COA Assessment</span><span>สธ.๘๖ | ๑๑ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 9: PIR -->
+<div class="slide" id="s9">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | IPOE STAGE 4</div><div class="sh-tag">PIR ด้าน IO</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:18px;font-weight:800;color:#e8f0ff;margin-bottom:6px;">ขั้นที่ ๔: PIR ด้าน IO — กรอบ <span style="color:#d4a820;">๖ หมวดหมู่</span> (IO PIR Framework)</div>
+    <div style="font-size:10px;color:#4a6a8a;margin-bottom:10px;padding:6px 10px;background:rgba(26,58,106,0.2);border-left:3px solid #d4a820;border-radius:2px;">IO มุ่งสร้างผลกระทบต่อกระบวนการตัดสินใจและระบบสารสนเทศ — PIR จึงต้องครอบคลุม ๖ มิติ: ผู้นำ / จิตวิทยา / C2-Comms / ไซเบอร์ / โครงสร้างพื้นฐาน / CI-OPSEC</div>
+    <table style="font-size:10.5px;">
+      <tr>
+        <th style="width:5%;text-align:center;">#</th>
+        <th style="width:17%;">หมวด IO PIR</th>
+        <th style="width:37%;">คำถาม PIR (เฉพาะ AZ–WL / TALOS)</th>
+        <th style="width:24%;">IO Function ที่สนับสนุน</th>
+        <th style="width:9%;text-align:center;">ลำดับ</th>
+        <th style="width:8%;text-align:center;">แหล่ง</th>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;color:#d4a820;">1</td>
+        <td class="hl">👤 ผู้นำ &amp; ตัดสินใจ</td>
+        <td>ผู้บัญชาการ WL บน TALOS ใช้รูปแบบตัดสินใจแบบใด? ใครเป็นเสนาธิการ/ที่ปรึกษาหลัก? มีอคติหรือ Cognitive Bias ที่ MILDEC ใช้ประโยชน์ได้?</td>
+        <td><span class="badge bh-b">MILDEC</span> — ทำนาย &amp; ควบคุมปฏิกิริยา WL ก่อน D-Day</td>
+        <td style="text-align:center;"><span class="badge bh-y">สูง</span></td>
+        <td style="text-align:center;font-size:9px;color:#5070a0;">HUMINT OSINT</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;color:#d4a820;">2</td>
+        <td class="hl">🧠 จิตวิทยา &amp; PSYOP</td>
+        <td>WL Garrison + ประชาชน TALOS มีค่านิยม/อคติ/จุดอ่อนด้านจิตใจใด? JORINO + N5 (PPTT/Bersat) กระทบ UNSC Member ใด? Madrasa Campaign เปลี่ยน Sentiment ได้แค่ไหน?</td>
+        <td><span class="badge bh-p">PSYOP</span> <span class="badge bh-b">StratComm</span> — ออกแบบ Message + Counter-N5 ก่อน Narrative แพร่ UNSC</td>
+        <td style="text-align:center;"><span class="badge bh-r">สูงมาก</span></td>
+        <td style="text-align:center;font-size:9px;color:#5070a0;">OSINT HUMINT</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;color:#d4a820;">3</td>
+        <td class="hl">📡 C2 &amp; สื่อสาร</td>
+        <td>DF Network WL ครอบคลุมพิกัดใด (Marseille/Toulon/TALOS)? Sosnovka ใต้ดินเชื่อม Fiber กี่จุด? คลื่น HF/VHF WL ใช้รูปแบบใด?</td>
+        <td><span class="badge bh-y">EMCON</span> <span class="badge bh-b">MILDEC</span> <span class="badge bh-r">EW/EA</span> — กำหนด Safe Window &amp; ตัด C2 WL</td>
+        <td style="text-align:center;"><span class="badge bh-r">สูงมาก</span></td>
+        <td style="text-align:center;font-size:9px;color:#5070a0;">SIGINT HUMINT</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;color:#d4a820;">4</td>
+        <td class="hl">💻 ไซเบอร์ &amp; CNO</td>
+        <td>WL กำหนด AZ System ใดเป็น Priority CNE/CNA Target? Malware ที่ฝังใน AZ DEFNET (๒๕๖๕) จะ Activate เมื่อใด? มี Pre-positioned Code ในระบบอื่นอีก?</td>
+        <td><span class="badge bh-g">DCO-IDM</span> <span class="badge bh-g">DEFNET</span> — อุดช่องโหว่ก่อน H-Hour WL เปิดใช้ Malware</td>
+        <td style="text-align:center;"><span class="badge bh-r">สูงมาก</span></td>
+        <td style="text-align:center;font-size:9px;color:#5070a0;">TECHINT CNE</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;color:#d4a820;">5</td>
+        <td class="hl">🏗️ โครงสร้างพื้นฐาน</td>
+        <td>SAT Node, Microwave Relay, อุโมงค์ Fiber ใต้ดิน TALOS อยู่พิกัดใด? ศูนย์ Sosnovka มีทางเข้า-ออกกี่จุดและอยู่ที่ใด?</td>
+        <td><span class="badge bh-r">PHYATK</span> — ระบุ HVI ตัด Comms WL ระหว่าง TALOS–แผ่นดินใหญ่</td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง</span></td>
+        <td style="text-align:center;font-size:9px;color:#5070a0;">IMINT SIGINT</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;color:#d4a820;">6</td>
+        <td class="hl">🔐 OPSEC &amp; CI</td>
+        <td>กระทรวงความปลอดภัยแห่งรัฐ WL กำลังรวบรวม EEFI ใดของ AZ? มีสายลับ WL ในกองกำลังพันธมิตร? ตำรวจลับ WL ใช้วิธีใดปิดกั้น HUMINT AZ?</td>
+        <td><span class="badge bh-g">Counter-CI</span> <span class="badge bh-g">OPSEC</span> — ปกป้องความลับปฏิบัติการ AZ จาก WL MSS</td>
+        <td style="text-align:center;"><span class="badge bh-r">สูงมาก</span></td>
+        <td style="text-align:center;font-size:9px;color:#5070a0;">HUMINT CI</td>
+      </tr>
+    </table>
+    <div style="margin-top:8px;font-size:9px;color:#3a5a7a;text-align:right;">หมวด ๑ (ผู้นำ) และหมวด ๖ (CI) เป็น PIR ใหม่ที่ยังไม่มีในแบบการรบตามแบบ — จำเป็นสำหรับ IO โดยเฉพาะ</div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IPOE Stage 4 — IO PIR Framework (๖ หมวด)</span><span>สธ.๘๖ | ๑๒ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 10: IO TASK RECOMMENDATIONS -->
+<div class="slide" id="s10">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | ข้อเสนอแนะ</div><div class="sh-tag">IO Task Recommendations</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">ภารกิจ IO ที่เสนอแนะสำหรับ N7</div>
+    <div class="g2">
+      <div>
+        <div class="box">
+          <div class="bh">🔒 OPSEC & EMCON</div>
+          <div class="bp">บังคับใช้ EMCON Level III + River City ก่อน D-3 — WL มีสถานี DF หนาแน่น (Marseille, Toulon) สกัดสัญญาณกองเรือ AZ ใน อ่าว Venezia ได้ ใช้ Burst Transmission / Frequency Hopping / Link 16 CEC แทน Open Voice</div>
+        </div>
+        <div class="box blue">
+          <div class="bh">🎭 MILDEC — Counter Ventimiglia Pretext</div>
+          <div class="bp">WL ใช้ "ชายนิรนามชุดดำ" ลอบวางเพลิงใน Ventimiglia แล้วโยนความผิดให้ AZ — ต้องเตรียม ISR (ภาพดาวเทียม) + COMCAM เผยแพร่หลักฐานจริงทันที พร้อมสร้าง False EM Signature ทิศใต้เบี่ยงเบน DF WL</div>
+        </div>
+        <div class="box purple">
+          <div class="bh">📢 Counter-PSYOP — Counter-N5 (PPTT/Bersat)</div>
+          <div class="bp"><strong>Priority 1:</strong> โต้ข้อกล่าวหา N5 — WL ใช้ JORINO (Influencer) + บัญชีปลอมแพร่ข่าว AZ สนับสนุน PPTT/Bersat — เตรียม Counter-Evidence ก่อน Narrative แพร่ถึง UNSC<br><strong>Priority 2:</strong> ตอบโต้ Madrasa Campaign — WL ล้างสมองเยาวชน TALOS ๒๐๐,๐๐๐ คน ผ่านโรงเรียน ๑๐๐,๐๐๐ แห่ง — ใช้ผู้นำศาสนาเป็นสื่อกลาง</div>
+        </div>
+      </div>
+      <div>
+        <div class="box cyan">
+          <div class="bh">💻 DEFNET — DCO-IDM (ด่วนที่สุด)</div>
+          <div class="bp"><strong>⚠ ปี ๒๕๖๕:</strong> กองทัพสนับสนุนทางยุทธศาสตร์ WL เจาะ DEFNET AZ ผ่าน VPN (DDoS APT) — ความลับแผนปฏิบัติการ AZ เสี่ยงรั่วไหล<br>ต้องดำเนิน <strong>DCO-IDM</strong> ก่อน D-5: อุด VPN Vulnerability + เปลี่ยน Key + เสริม IDS/IPS + ทดสอบ Offline Backup C2</div>
+        </div>
+        <div class="box green">
+          <div class="bh">🤝 CMO & KLE — ต้านทาน Madrasa Influence</div>
+          <div class="bp">ปฏิบัติการ Civil-Military ใน TALOS — KLE กับผู้นำศาสนาที่ WL ใช้ Madrasa ครอบงำ ๒๐๐,๐๐๐ เยาวชน เร่ง Humanitarian Aid สร้างความเชื่อมั่น AZ ก่อน D-Day</div>
+        </div>
+        <div class="box red">
+          <div class="bh">⚡ EW — Electronic Attack &amp; C2 Isolation</div>
+          <div class="bp">ใช้ DDG KDDX + FFG Mogami ดำเนิน EA ตัดการเชื่อมต่อ HF/Microwave/SAT ระหว่าง WL แผ่นดินใหญ่กับ TALOS ในช่วง H-Hour — ป้องกัน WL EW Brigade Jamming กำลังแนวหน้า AZ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO Task Recommendations — N7 AZ</span><span>สธ.๘๖ | ๑๒ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 11: SUMMARY -->
+<div class="slide" id="s11">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | สรุป</div><div class="sh-tag">IPOE IO Conclusions</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:16px;">สรุปผลการวิเคราะห์ IPOE ด้าน IO</div>
+    <div class="g2">
+      <div>
+        <div class="box">
+          <div class="bh">ข้อสรุปหลัก 3 ประการ</div>
+          <div class="bp">
+            <strong>1. WL มีศักยภาพ IO สูง:</strong> ครอบคลุมทั้ง 3 มิติ (Physical/Information/Cognitive) ต้องการการตอบโต้เชิงรุก<br><br>
+            <strong>2. EMCON คือความจำเป็นเร่งด่วน:</strong> DF Network ของ WL เป็นภัยคุกคามโดยตรงต่อการอยู่รอดของหน่วย AZ<br><br>
+            <strong>3. Cognitive Domain คือสมรภูมิหลัก:</strong> WL มุ่ง PSYOP ต่อประชาชนและพันธมิตร ต้องการ Counter-Narrative ที่เข้มแข็ง
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">ความเสี่ยงหากไม่ดำเนิน IO</div>
+          <div class="bp">
+            หน่วย AZ จะถูก DF ระบุตำแหน่ง → ถูก Strike<br>
+            Narrative WL จะครอง Cognitive Space → พันธมิตรถอนตัว<br>
+            ระบบ C2 ถูก Cyber Attack → Decision Paralysis
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box green">
+          <div class="bh">ข้อเสนอแนะต่อ ผบ.</div>
+          <div class="bp">
+            <strong>เร่งด่วนที่สุด:</strong> สั่งปฏิบัติ EMCON และเสริม DEFNET ทันที<br><br>
+            <strong>ระยะสั้น (1–7 วัน):</strong> เริ่ม Hidden Truth Campaign + KLE กับ Key Leaders TALOS<br><br>
+            <strong>ระยะกลาง (7–14 วัน):</strong> ดำเนิน MILDEC ตาม COA หลัก<br><br>
+            <strong>ตลอดปฏิบัติการ:</strong> StratComm ต่อเนื่องกับพันธมิตร TALOS Alliance
+          </div>
+        </div>
+        <div class="box blue">
+          <div class="bh">ขั้นตอนต่อไป</div>
+          <div class="bp">
+            → จัดทำ IO Matrix ฉบับสมบูรณ์ (Back Brief 22 มิ.ย.)<br>
+            → ประสานงาน N2 เพื่อตอบ PIR ทั้ง 4 ข้อ<br>
+            → เสนอ IO Framework สำหรับ COA Development
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IPOE IO — Summary & Recommendations</span><span>สธ.๘๖ | ๑๒ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 12: QUESTIONS -->
+<div class="slide" id="s12">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO</div><div class="sh-tag">Q&A</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 01</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="cover-wrap" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+    <div style="opacity:0.3;margin-bottom:20px;"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:80px;width:auto;"></div>
+    <div style="font-size:32px;font-weight:800;color:#e8f0ff;margin-bottom:12px;">ขอบคุณครับ</div>
+    <div style="font-size:18px;color:#d4a820;margin-bottom:8px;">พร้อมตอบคำถาม</div>
+    <div style="width:160px;height:2px;background:linear-gradient(90deg,transparent,#d4a820,transparent);margin:16px auto;"></div>
+    <div style="font-size:13px;color:#4a6a8a;line-height:1.8;">
+      N7 การปฏิบัติการสารสนเทศ | กลุ่มที่ ๒<br>
+      IPOE IO Analysis — สถานการณ์ AZ–WL | TALOS<br>
+      สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖ | ๒๕๖๙
+    </div>
+    <div style="margin-top:24px;font-size:12px;color:#2a4a6a;">← กด ◀ เพื่อกลับ | กด H เพื่อกลับหน้าแรก</div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IPOE IO Analysis — Complete</span><span>สธ.๘๖ | ๑๒ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+</div><!-- end #pres -->
+
+<div id="nav">
+  <button onclick="prev()" title="Previous (←)">◀</button>
+  <span id="ctr">1/12</span>
+  <button onclick="next()" title="Next (→ or Space)">▶</button>
+  <a id="home-btn" href="index.html" title="Dashboard">⌂</a>
+</div>
+
+<script>
+let cur=0;
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+function go(n){
+  slides[cur].classList.remove('active');
+  cur=Math.max(0,Math.min(n,total-1));
+  slides[cur].classList.add('active');
+  document.getElementById('ctr').textContent=(cur+1)+'/'+total;
+}
+function next(){go(cur+1);}
+function prev(){go(cur-1);}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
+  if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+  if(e.key==='h'||e.key==='H'){window.location.href='index.html';}
+});
+go(0);
+</script>
+</body>
+</html>

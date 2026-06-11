@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>COA IO Analysis — N7 | สธ.๘๖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,system-ui,sans-serif;background:#050d1a;color:#e8f0ff;height:100vh;overflow:hidden;}
+#pres{width:100vw;height:100vh;position:relative;}
+.slide{display:none;width:100%;height:100%;padding:32px 56px 20px;flex-direction:column;position:absolute;top:0;left:0;
+  background:linear-gradient(135deg,#050d1a 0%,#0a1628 60%,#0d2045 100%);}
+.slide.active{display:flex;}
+.sh{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #d4a820;padding-bottom:10px;margin-bottom:18px;flex-shrink:0;}
+.sh-left{display:flex;align-items:center;gap:12px;}
+.sh-anchor{display:inline-flex;align-items:center;opacity:0.8;vertical-align:middle;}
+.sh-unit{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:10px;color:#d4a820;letter-spacing:1.5px;font-weight:700;}
+.sh-right{text-align:right;}
+.sh-label{font-size:9px;color:#4a6a8a;letter-spacing:1px;}
+.sh-tag{font-size:11px;color:#7090b0;font-weight:600;}
+.content{flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden;}
+.box{background:rgba(26,58,106,0.25);border:1px solid #1a3a6a;border-left:4px solid #d4a820;border-radius:4px;padding:14px 16px;margin-bottom:10px;}
+.box.blue{border-left-color:#2a7fd4;} .box.cyan{border-left-color:#2d8a8a;}
+.box.purple{border-left-color:#c084fc;} .box.red{border-left-color:#e05050;}
+.box.green{border-left-color:#2d8a5a;} .box.orange{border-left-color:#e07820;}
+.bh{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.8px;margin-bottom:6px;color:#d4a820;}
+.box.blue .bh{color:#60a0f0;} .box.cyan .bh{color:#40c0c0;} .box.purple .bh{color:#c084fc;}
+.box.red .bh{color:#ff8080;} .box.green .bh{color:#60d090;} .box.orange .bh{color:#f09840;}
+.bp{font-size:12px;color:#7090b0;line-height:1.65;}
+.bp strong{color:#a0c0e0;font-weight:600;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+table{width:100%;border-collapse:collapse;font-size:11px;}
+th{background:#0a1e40;color:#d4a820;padding:7px 10px;text-align:left;font-weight:700;border:1px solid #1a3a6a;}
+td{padding:7px 10px;border:1px solid #1a3a6a;color:#b0c8e0;vertical-align:middle;}
+tr:nth-child(even) td{background:rgba(26,58,106,0.15);}
+td.hl{color:#e8f0ff;font-weight:600;}
+.badge{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:700;}
+.bh-r{background:rgba(138,45,45,0.3);color:#ff8080;border:1px solid #8a2d2d;}
+.bh-y{background:rgba(180,120,0,0.3);color:#f0c840;border:1px solid #b47800;}
+.bh-g{background:rgba(45,138,90,0.3);color:#60d090;border:1px solid #2d8a5a;}
+.bh-b{background:rgba(30,95,168,0.3);color:#60a0f0;border:1px solid #1e5fa8;}
+.bh-p{background:rgba(124,58,237,0.3);color:#c084fc;border:1px solid #7c3aed;}
+.sf{border-top:1px solid #1a3a6a;padding-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#2a4a6a;flex-shrink:0;margin-top:8px;}
+.sf-center{color:#4a6a8a;}
+#nav{position:fixed;bottom:18px;right:28px;display:flex;align-items:center;gap:10px;background:rgba(10,22,40,0.92);border:1px solid #1a3a6a;padding:6px 14px;border-radius:30px;z-index:200;}
+#nav button{background:none;border:1px solid #1a3a6a;color:#6080a0;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:11px;}
+#nav button:hover{background:#1a3a6a;color:#e8f0ff;}
+#ctr{color:#5070a0;font-size:11px;min-width:44px;text-align:center;}
+#home-btn{color:#4a6a8a;font-size:11px;text-decoration:none;padding:0 6px;border-left:1px solid #1a3a6a;}
+/* COA cards */
+.coa-card{border-radius:6px;padding:16px;border:1px solid;}
+.coa1{background:rgba(45,138,138,0.08);border-color:#2d8a8a;}
+.coa1 .coa-label{color:#40c0c0;}
+.coa2{background:rgba(212,168,32,0.08);border-color:#8a6010;}
+.coa2 .coa-label{color:#d4a820;}
+.coa3{background:rgba(192,132,252,0.08);border-color:#7c3aed;}
+.coa3 .coa-label{color:#c084fc;}
+.coa-label{font-size:11px;font-weight:700;letter-spacing:0.8px;margin-bottom:4px;}
+.coa-title{font-size:14px;font-weight:700;color:#e8f0ff;margin-bottom:8px;}
+.coa-body{font-size:11px;color:#6080a0;line-height:1.6;}
+/* Risk matrix */
+.risk-cell{text-align:center;font-size:11px;padding:8px;border:1px solid #1a3a6a;}
+.rc-vhigh{background:rgba(138,45,45,0.35);color:#ff8080;}
+.rc-high{background:rgba(180,60,0,0.3);color:#ff9860;}
+.rc-med{background:rgba(180,120,0,0.25);color:#f0c840;}
+.rc-low{background:rgba(45,138,90,0.2);color:#60d090;}
+/* Wargame */
+.wg-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;padding:10px;background:rgba(10,22,40,0.5);border:1px solid #1a3a6a;border-radius:4px;}
+.wg-icon{font-size:18px;flex-shrink:0;margin-top:2px;}
+.wg-body{flex:1;}
+.wg-action{font-size:12px;font-weight:600;color:#e8f0ff;}
+.wg-react{font-size:11px;color:#6080a0;margin-top:2px;}
+.wg-result{font-size:11px;color:#3a8060;margin-top:2px;}
+</style>
+</head>
+<body>
+<div id="pres">
+
+<!-- SLIDE 1: COVER -->
+<div class="slide active" id="s1">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — INFORMATION OPERATIONS</div><div class="sh-tag">กลุ่มที่ ๒ | สธ.๘๖</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 03 OF 04</div><div class="sh-tag">COA Briefing — 24–25 มิ.ย. ๒๕๖๙</div></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;">
+    <div style="position:absolute;user-select:none;opacity:0.04;"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:200px;width:auto;"></div>
+    <div style="font-size:11px;color:#d4a820;letter-spacing:3px;font-weight:700;margin-bottom:16px;">BRIEFING 03 — COA ANALYSIS | N7 IO</div>
+    <div style="font-size:38px;font-weight:900;color:#e8f0ff;line-height:1.25;margin-bottom:8px;">IO ใน Course of Action Analysis</div>
+    <div style="font-size:18px;color:#d4a820;margin-bottom:20px;">การผนวก IO เข้ากับการวิเคราะห์แนวทางปฏิบัติการ</div>
+    <div style="width:180px;height:2px;background:linear-gradient(90deg,transparent,#d4a820,transparent);margin:0 auto 20px;"></div>
+    <div style="font-size:12px;color:#4a6a8a;line-height:1.8;">COA Briefing &amp; Decision Brief | ๒๔–๒๕ มิถุนายน ๒๕๖๙<br>สถานการณ์ AZ–WL | เกาะ TALOS | N7 IO กลุ่มที่ ๒</div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap;">
+      <span style="padding:4px 12px;border:1px solid #2d8a8a;color:#40c0c0;background:rgba(45,138,138,0.1);border-radius:3px;font-size:11px;">COA 1 IO</span>
+      <span style="padding:4px 12px;border:1px solid #d4a820;color:#d4a820;background:rgba(212,168,32,0.1);border-radius:3px;font-size:11px;">COA 2 IO</span>
+      <span style="padding:4px 12px;border:1px solid #7c3aed;color:#c084fc;background:rgba(124,58,237,0.1);border-radius:3px;font-size:11px;">IO Risk</span>
+      <span style="padding:4px 12px;border:1px solid #2d8a5a;color:#60d090;background:rgba(45,138,90,0.1);border-radius:3px;font-size:11px;">Info Advantage</span>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO in COA Analysis — 24–25 มิ.ย.</span><span>สธ.๘๖ | ๒๔ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 2: IO SUPPORT CONCEPT -->
+<div class="slide" id="s2">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO Support Concept</div><div class="sh-tag">หลักการ IO สนับสนุน COA</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 03</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:16px;">หลักการ IO สนับสนุนแนวทางปฏิบัติการ</div>
+    <div class="g3">
+      <div class="box">
+        <div class="bh">IO กับ Phase ปฏิบัติการ</div>
+        <div class="bp">IO ต้องนำหน้า Kinetic Operations เสมอ<br><br>
+        <strong>Shape:</strong> IO สร้างสภาพแวดล้อมที่เอื้อต่อ COA<br>
+        <strong>Synchronize:</strong> IO ประสานกับ D-Day H-Hour<br>
+        <strong>Sustain:</strong> IO รักษา Information Advantage</div>
+      </div>
+      <div class="box blue">
+        <div class="bh">IO กับ Centers of Gravity</div>
+        <div class="bp">IO มุ่งโจมตี <strong>Cognitive CoG ของ WL</strong><br><br>
+        Will to Fight ของ WL ผู้นำ<br>
+        ความเชื่อมั่นของพันธมิตร WL<br>
+        การสนับสนุน International ต่อ WL<br><br>
+        และปกป้อง Cognitive CoG ของ AZ</div>
+      </div>
+      <div class="box green">
+        <div class="bh">IO กับ Decision Points</div>
+        <div class="bp">IO ต้องส่งผลต่อ <strong>WL Decision Cycle</strong><br><br>
+        DP1: ก่อน WL ตัดสินใจเพิ่มกำลัง<br>
+        DP2: ก่อน WL ตัดสินใจ Escalate<br>
+        DP3: ก่อน WL ขอ International Support<br><br>
+        IO หน่วงเวลา WL OODA Loop</div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="bh">IO Commander's Intent (Draft)</div>
+      <div class="bp">IO AZ มุ่งรักษา <strong>Information Advantage</strong> ทั้ง 3 มิติ (Physical/Information/Cognitive) เพื่อปกป้องระบบ C2 AZ และพันธมิตร บั่นทอน Will to Fight และ Decision-Making ของ WL โดยการดำเนิน Full-Spectrum IO ที่ประสานงานกับปฏิบัติการทางทหารทุกระยะ — เพื่อสร้างเงื่อนไขที่เอื้อต่อการบรรลุวัตถุประสงค์ของ กองกำลัง AZ บนเกาะ TALOS และพื้นที่ VERDATA</div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO Support Concept</span><span>สธ.๘๖ | ๒๔ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 3: COA 1 IO -->
+<div class="slide" id="s3">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | COA 1</div><div class="sh-tag">IO Framework สำหรับ COA 1</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 03</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#40c0c0;margin-bottom:14px;">COA 1 — IO Support Framework</div>
+    <div style="font-size:12px;color:#4a7a7a;margin-bottom:14px;padding:8px 12px;background:rgba(45,138,138,0.1);border:1px solid #2d8a8a;border-radius:4px;">
+      <strong style="color:#40c0c0;">COA 1 (สมมติ):</strong> กองกำลัง AZ ดำเนินการรุกอย่างรวดเร็วเพื่อยึดคืนพื้นที่สำคัญบน TALOS North โดยใช้ขีดความสามารถ Naval + Amphibious ของ TALOS Alliance
+    </div>
+    <div class="g2">
+      <div>
+        <div class="coa-card coa1">
+          <div class="coa-label">COA 1 — IO TASKS</div>
+          <div class="coa-title">IO สนับสนุนการรุกทางสะเทิ้นน้ำสะเทิ้นบก</div>
+          <div class="coa-body">
+            <strong style="color:#40c0c0;">EMCON:</strong> EMCON Level III ก่อน H-Hour 72 ชม. — CEC ผ่าน LHD Dokdo<br>
+            <strong style="color:#40c0c0;">MILDEC:</strong> DDG KDDX ปล่อย EM Decoy ที่ TALOS South เบี่ยงเบน DF WL<br>
+            <strong style="color:#40c0c0;">PSYOP:</strong> Radio Broadcast ต่อ WL Garrison + P-8 Poseidon ส่ง Leaflet<br>
+            <strong style="color:#40c0c0;">Cyber:</strong> DEFNET สูงสุด + SSK Type 218SG เฝ้าระวัง Kilo-class WL<br>
+            <strong style="color:#40c0c0;">CMO:</strong> เตรียม CIMIC Team สำหรับพื้นที่หลัง Exploitation
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box">
+          <div class="bh">IO Advantage ใน COA 1</div>
+          <div class="bp">
+            <strong>+ MILDEC บน TALOS South</strong> ทำให้ WL วางกำลังผิดทิศ ก่อนการรุกจริงที่ TALOS North<br><br>
+            <strong>+ PSYOP ต่อ WL Garrison</strong> บน TALOS North ลด Will to Fight ก่อน Landing<br><br>
+            <strong>+ EMCON + CEC</strong> DDG KDDX + LHD Dokdo รักษา C2 ผ่าน Link 16/17 ระหว่าง EMCON Level III
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">IO Risk ใน COA 1</div>
+          <div class="bp">
+            <strong>R: EMCON Level III</strong> อาจทำให้ประสานงาน TF ล่าช้า<br>
+            <strong>R: MILDEC</strong> อาจถูก WL ตรวจจับหาก Pattern ไม่ตรงกับ History<br>
+            <strong>มาตรการ:</strong> ใช้ Landline + Messenger สำรอง | วาง MILDEC Pattern ล่วงหน้า 7 วัน
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">COA 1 — IO Support Framework</span><span>สธ.๘๖ | ๒๔ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 4: COA 2 IO -->
+<div class="slide" id="s4">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO | COA 2</div><div class="sh-tag">IO Framework สำหรับ COA 2</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 03</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#d4a820;margin-bottom:14px;">COA 2 — IO Support Framework</div>
+    <div style="font-size:12px;color:#7a6020;margin-bottom:14px;padding:8px 12px;background:rgba(212,168,32,0.08);border:1px solid #8a6010;border-radius:4px;">
+      <strong style="color:#d4a820;">COA 2 (สมมติ):</strong> กองกำลัง AZ ดำเนิน Blockade + Information Campaign เพื่อบีบให้ WL ถอนตัวจาก TALOS โดยไม่ต้องใช้ Kinetic Force ขนาดใหญ่
+    </div>
+    <div class="g2">
+      <div>
+        <div class="coa-card coa2">
+          <div class="coa-label">COA 2 — IO TASKS</div>
+          <div class="coa-title">IO เป็นกำลังหลักใน Coercive Strategy</div>
+          <div class="coa-body">
+            <strong style="color:#d4a820;">PSYOP:</strong> Full PSYOP Campaign บั่นทอน Morale WL Garrison<br>
+            <strong style="color:#d4a820;">StratComm:</strong> International Pressure Campaign ต่อ WL<br>
+            <strong style="color:#d4a820;">CMO/KLE:</strong> Winning Hearts &amp; Minds บน TALOS อย่างเต็มรูปแบบ<br>
+            <strong style="color:#d4a820;">Cyber:</strong> Psychological Cyber Ops (ไม่ Destructive)<br>
+            <strong style="color:#d4a820;">EMCON:</strong> Moderate เพื่อรักษา Presence ใน Media
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box blue">
+          <div class="bh">IO Advantage ใน COA 2</div>
+          <div class="bp">
+            <strong>+ IO เป็น Main Effort</strong> ใช้จุดแข็งด้าน StratComm และ International Support ของ AZ<br><br>
+            <strong>+ ลด Kinetic Risk</strong> ลด Escalation และ Collateral Damage<br><br>
+            <strong>+ CMO</strong> สร้างฐาน Support จากประชาชน TALOS ระยะยาว
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">IO Risk ใน COA 2</div>
+          <div class="bp">
+            <strong>R: ใช้เวลานาน</strong> WL อาจเสริมกำลังก่อน IO มีผล<br>
+            <strong>R: WL Counter-IO</strong> อาจรุนแรงขึ้นเพื่อตอบโต้<br>
+            <strong>R: Cognitive Domain</strong> ผลลัพธ์ไม่แน่นอน ยากประเมิน<br>
+            <strong>มาตรการ:</strong> กำหนด Trigger ชัดเจนสำหรับเปลี่ยนกลับ COA 1
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">COA 2 — IO Support Framework</span><span>สธ.๘๖ | ๒๔ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 5: WARGAMING IO -->
+<div class="slide" id="s5">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — Wargaming IO</div><div class="sh-tag">Action-Reaction-Counteraction</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 03</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">Wargaming IO — การโต้ตอบด้านสารสนเทศ</div>
+    <div class="wg-row">
+      <div class="wg-icon">🔵</div>
+      <div class="wg-body">
+        <div class="wg-action">AZ Action: เริ่ม EMCON Level II + MILDEC (EM Decoy) ที่ TALOS South</div>
+        <div class="wg-react">WL Reaction: สังเกตเห็นความเงียบของ AZ + EM Activity ที่ TALOS South → วิเคราะห์ว่า AZ วางกำลังที่ South</div>
+        <div class="wg-result">✓ ผลลัพธ์: WL เบนทรัพยากร DF และ ISR ไปที่ South — AZ ชนะ Deception</div>
+      </div>
+    </div>
+    <div class="wg-row">
+      <div class="wg-icon">🔴</div>
+      <div class="wg-body">
+        <div class="wg-action">WL Counter: เพิ่ม PSYOP Intensity ต่อทหาร AZ — ส่ง SMS, วิทยุ "AZ จะแพ้, ยอมแพ้ตอนนี้"</div>
+        <div class="wg-react">AZ Counter-Counter: Hidden Truth Campaign ตอบโต้ทันที + Commander's Message ยืนยัน Morale</div>
+        <div class="wg-result">✓ ผลลัพธ์: PSYOP WL มีผลลดลง ทหาร AZ ได้รับข้อมูลถูกต้อง</div>
+      </div>
+    </div>
+    <div class="wg-row">
+      <div class="wg-icon">🔵</div>
+      <div class="wg-body">
+        <div class="wg-action">AZ Action: เปิด Full PSYOP ต่อ WL Garrison TALOS + KLE กับ Community Leaders</div>
+        <div class="wg-react">WL Reaction: ยึด/ข่มขู่ Community Leaders ที่ติดต่อ AZ — Backlash ต่อ WL เพิ่มขึ้น</div>
+        <div class="wg-result">✓ ผลลัพธ์: WL สูญเสีย Legitimacy ในชุมชน TALOS — AZ Narrative ได้เปรียบ</div>
+      </div>
+    </div>
+    <div class="wg-row">
+      <div class="wg-icon">🔴</div>
+      <div class="wg-body">
+        <div class="wg-action">WL Counter: DDoS Attack ต่อระบบ C2 AZ ก่อน H-Hour</div>
+        <div class="wg-react">AZ Counter-Counter: DEFNET รับ DDoS ได้ + Backup C2 Offline ทำงานแทน</div>
+        <div class="wg-result">✓ ผลลัพธ์: C2 AZ ไม่หยุดชะงัก ปฏิบัติการดำเนินต่อตาม Timeline</div>
+      </div>
+    </div>
+    <div class="wg-row">
+      <div class="wg-icon">🔴</div>
+      <div class="wg-body">
+        <div class="wg-action">WL Rocket Force: ยิง SSM โจมตี SATCOM Node Alpha บน TALOS North ก่อน D-Day</div>
+        <div class="wg-react">AZ Counter-Counter: CEC บน DDG KDDX + Backup UHF LOS Comms ทำงานแทน — LHD Dokdo เป็น Alternate C2 Node</div>
+        <div class="wg-result">⚠ ผลลัพธ์: Comms ลดประสิทธิภาพชั่วคราว — เน้นความจำเป็นของ Distributed C2 และ Backup ก่อน D-Day</div>
+      </div>
+    </div>
+    <div class="wg-row">
+      <div class="wg-icon">🔴</div>
+      <div class="wg-body">
+        <div class="wg-action">WL MILDEC: ส่ง "ชายนิรนามชุดดำ" วางเพลิง Ventimiglia แล้วโยนความผิดให้ AZ ผ่านสื่อ + N5 (PPTT/Bersat) — JORINO แพร่ Narrative ทั่ว Social Media</div>
+        <div class="wg-react">AZ Counter-Counter: เผยแพร่ ISR ดาวเทียม + COMCAM หักล้างทันที — StratComm แถลงโต้ UNSC พร้อม Counter-Evidence PPTT/Bersat</div>
+        <div class="wg-result">⚠ ผลลัพธ์: ขึ้นอยู่กับความเร็ว — AZ ต้องโต้ก่อน Narrative แพร่ถึง UNSC Members มิฉะนั้นเสียความชอบธรรมระหว่างประเทศ</div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">Wargaming IO — Action-Reaction-Counteraction</span><span>สธ.๘๖ | ๒๔ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 6: COA COMPARISON -->
+<div class="slide" id="s6">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — COA Comparison</div><div class="sh-tag">IO Factor ในการเลือก COA</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 03</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">COA Comparison — IO Factor</div>
+    <table>
+      <tr>
+        <th style="width:24%;">IO Criterion</th>
+        <th style="width:12%;text-align:center;">น้ำหนัก</th>
+        <th style="width:22%;text-align:center;">COA 1<br><span style="color:#40c0c0;">Amphibious Assault</span></th>
+        <th style="width:22%;text-align:center;">COA 2<br><span style="color:#d4a820;">Coercive IO</span></th>
+        <th style="width:20%;">ข้อสรุป</th>
+      </tr>
+      <tr>
+        <td class="hl">EMCON Feasibility</td>
+        <td style="text-align:center;">15%</td>
+        <td style="text-align:center;"><span class="badge bh-g">สูง (4/5)</span></td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง (3/5)</span></td>
+        <td>COA 1 ดีกว่า</td>
+      </tr>
+      <tr>
+        <td class="hl">MILDEC Effectiveness</td>
+        <td style="text-align:center;">20%</td>
+        <td style="text-align:center;"><span class="badge bh-g">สูง (4/5)</span></td>
+        <td style="text-align:center;"><span class="badge bh-b">ต่ำ (2/5)</span></td>
+        <td>COA 1 ดีกว่ามาก</td>
+      </tr>
+      <tr>
+        <td class="hl">PSYOP Impact</td>
+        <td style="text-align:center;">20%</td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง (3/5)</span></td>
+        <td style="text-align:center;"><span class="badge bh-g">สูง (5/5)</span></td>
+        <td>COA 2 ดีกว่า</td>
+      </tr>
+      <tr>
+        <td class="hl">C2 Survivability</td>
+        <td style="text-align:center;">20%</td>
+        <td style="text-align:center;"><span class="badge bh-g">สูง (4/5)</span></td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง (3/5)</span></td>
+        <td>COA 1 ดีกว่า</td>
+      </tr>
+      <tr>
+        <td class="hl">Information Advantage</td>
+        <td style="text-align:center;">15%</td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง (3/5)</span></td>
+        <td style="text-align:center;"><span class="badge bh-g">สูง (4/5)</span></td>
+        <td>COA 2 ดีกว่า</td>
+      </tr>
+      <tr>
+        <td class="hl">IO Risk Level</td>
+        <td style="text-align:center;">10%</td>
+        <td style="text-align:center;"><span class="badge bh-g">ต่ำ (4/5)</span></td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง (3/5)</span></td>
+        <td>COA 1 ดีกว่า</td>
+      </tr>
+      <tr style="background:rgba(212,168,32,0.1);">
+        <td class="hl" style="color:#d4a820;">คะแนน IO รวม</td>
+        <td style="text-align:center;color:#d4a820;font-weight:700;">100%</td>
+        <td style="text-align:center;font-size:14px;font-weight:700;color:#40c0c0;">3.65 / 5</td>
+        <td style="text-align:center;font-size:14px;font-weight:700;color:#d4a820;">3.50 / 5</td>
+        <td style="color:#d4a820;font-weight:600;">COA 1 ชนะ IO</td>
+      </tr>
+    </table>
+    <div class="box green" style="margin-top:10px;">
+      <div class="bh">ข้อเสนอแนะ N7: COA 1 (ด้วย IO สนับสนุนเต็มรูปแบบ)</div>
+      <div class="bp">จากมุมมอง IO, COA 1 ได้เปรียบด้าน EMCON, MILDEC และ C2 Protection — สำคัญอย่างยิ่งในสภาพแวดล้อมที่ WL มี EW สูง อย่างไรก็ตาม ต้องเพิ่ม PSYOP/CMO ให้เข้มข้นขึ้นเพื่อชดเชยจุดอ่อน</div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">COA Comparison — IO Factor Analysis</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 7: INFORMATION ADVANTAGE -->
+<div class="slide" id="s7">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — Information Advantage</div><div class="sh-tag">การประเมิน Information Advantage</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 03</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">Information Advantage Assessment</div>
+    <div class="g3">
+      <div class="box">
+        <div class="bh">Information Superiority</div>
+        <div class="bp">AZ ต้องการบรรลุ <strong>Information Superiority</strong> — สถานะที่ AZ สามารถรวบรวม, ประมวล, แจกจ่ายข้อมูลได้เหนือกว่า WL ขณะที่ขัดขวาง WL ทำสิ่งเดียวกัน<br><br>
+        ปัจจุบัน: AZ อยู่ใน <strong>Information Parity</strong> — ต้องยกระดับ</div>
+      </div>
+      <div class="box blue">
+        <div class="bh">Cognitive Superiority</div>
+        <div class="bp">เป้าหมาย: ทำให้ <strong>ผบ. WL ตัดสินใจผิดพลาด</strong> ด้วย MILDEC + Disinformation ขณะที่ ผบ. AZ มีข้อมูลถูกต้องครบถ้วน<br><br>
+        วัดผลจาก: WL ตอบสนองต่อ MILDEC AZ อย่างไร</div>
+      </div>
+      <div class="box green">
+        <div class="bh">Decision Cycle Advantage</div>
+        <div class="bp">OODA Loop AZ ต้องเร็วกว่า WL<br><br>
+        <strong>Observe:</strong> N2 HUMINT/SIGINT เร็วขึ้น<br>
+        <strong>Orient:</strong> IPOE IO อัปเดตทุก 12 ชม.<br>
+        <strong>Decide:</strong> Decision Matrix พร้อมใช้<br>
+        <strong>Act:</strong> IO Pre-authorized สำหรับ TTP หลัก</div>
+      </div>
+    </div>
+    <div class="box orange" style="margin-top:8px;">
+      <div class="bh">สภาวะสารสนเทศที่ต้องบรรลุ (Desired IO End States)</div>
+      <div class="bp" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <strong>End State 1:</strong> WL DF Network ไม่สามารถระบุตำแหน่งจริงของ Task Force AZ ได้<br><br>
+          <strong>End State 2:</strong> Narrative AZ ครอง Cognitive Space ในหมู่ประชาชน TALOS และสังคมนานาชาติ
+        </div>
+        <div>
+          <strong>End State 3:</strong> ระบบ C2 AZ ทำงานได้ต่อเนื่องตลอด D-Day โดยไม่มีการหยุดชะงักจาก Cyber Attack<br><br>
+          <strong>End State 4:</strong> พันธมิตร TALOS Alliance ยังคงเป็นเอกภาพและให้การสนับสนุน AZ
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">Information Advantage Assessment</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 8: IO RISK MATRIX -->
+<div class="slide" id="s8">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO Risk</div><div class="sh-tag">IO Risk Matrix</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 03</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">IO Risk Matrix — ความเสี่ยงด้านสารสนเทศ</div>
+    <table style="margin-bottom:12px;">
+      <tr>
+        <th style="width:5%;text-align:center;">#</th>
+        <th style="width:25%;">ความเสี่ยง</th>
+        <th style="width:12%;text-align:center;">โอกาส</th>
+        <th style="width:12%;text-align:center;">ผลกระทบ</th>
+        <th style="width:10%;text-align:center;">ระดับ</th>
+        <th style="width:36%;">มาตรการลดความเสี่ยง</th>
+      </tr>
+      <tr>
+        <td style="text-align:center;color:#d4a820;">1</td>
+        <td class="hl">WL Cyber Strike ต่อ C2 ก่อน H-Hour</td>
+        <td style="text-align:center;"><span class="badge bh-r">สูง</span></td>
+        <td style="text-align:center;"><span class="badge bh-r">สูงมาก</span></td>
+        <td class="risk-cell rc-vhigh">วิกฤต</td>
+        <td>เสริม DEFNET + Backup C2 Offline ทันที</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;color:#d4a820;">2</td>
+        <td class="hl">DF WL ระบุตำแหน่งจริง TF AZ</td>
+        <td style="text-align:center;"><span class="badge bh-r">สูง</span></td>
+        <td style="text-align:center;"><span class="badge bh-r">สูงมาก</span></td>
+        <td class="risk-cell rc-vhigh">วิกฤต</td>
+        <td>EMCON Level III + MILDEC EM Decoy ก่อน D-3</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;color:#d4a820;">3</td>
+        <td class="hl">MILDEC ถูก WL ตรวจจับ</td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง</span></td>
+        <td style="text-align:center;"><span class="badge bh-r">สูง</span></td>
+        <td class="risk-cell rc-high">สูง</td>
+        <td>วาง False Pattern ล่วงหน้า 7 วัน ให้สอดคล้องกับ History</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;color:#d4a820;">4</td>
+        <td class="hl">WL PSYOP ทำลาย Morale ทหาร AZ</td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง</span></td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง</span></td>
+        <td class="risk-cell rc-med">กลาง</td>
+        <td>Counter-PSYOP + Commander's Message เชิงรุก</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;color:#d4a820;">5</td>
+        <td class="hl">พันธมิตร TALOS ขาดความเชื่อมั่น AZ</td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง</span></td>
+        <td style="text-align:center;"><span class="badge bh-r">สูง</span></td>
+        <td class="risk-cell rc-high">สูง</td>
+        <td>Regular StratComm Briefing กับ Allied Commanders</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;color:#d4a820;">6</td>
+        <td class="hl">EMCON ขัดขวางการประสานงาน AZ</td>
+        <td style="text-align:center;"><span class="badge bh-g">ต่ำ</span></td>
+        <td style="text-align:center;"><span class="badge bh-y">กลาง</span></td>
+        <td class="risk-cell rc-low">ต่ำ</td>
+        <td>SOI สำรอง + Landline + Messenger Network</td>
+      </tr>
+    </table>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">IO Risk Matrix — COA Analysis</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 9: SUMMARY -->
+<div class="slide" id="s9">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — สรุป COA IO</div><div class="sh-tag">Summary & Next Steps</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 03</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div class="content">
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:14px;">สรุป IO ใน COA Analysis และขั้นตอนต่อไป</div>
+    <div class="g2">
+      <div>
+        <div class="box">
+          <div class="bh">สรุปผลการวิเคราะห์ IO COA</div>
+          <div class="bp">
+            <strong>COA 1 (Amphibious):</strong> ได้เปรียบด้าน IO สูงกว่า เหมาะกับสภาพแวดล้อมที่ WL มี EW สูง MILDEC และ EMCON ทำงานได้ดีกว่า<br><br>
+            <strong>COA 2 (Coercive):</strong> PSYOP และ StratComm แข็งแกร่งกว่า แต่มีความเสี่ยงสูงด้านเวลาและความไม่แน่นอนของผลลัพธ์<br><br>
+            <strong>ข้อเสนอแนะ N7:</strong> เลือก COA 1 พร้อมเสริม PSYOP/CMO ให้เข้มข้นในระดับ COA 2
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">ประเด็นสำคัญที่ ผบ. ต้องตัดสินใจ</div>
+          <div class="bp">
+            1. เลือก COA ใด → N7 จะปรับ IO Plan<br>
+            2. อนุมัติ MILDEC EM Decoy หรือไม่<br>
+            3. ระดับ EMCON ที่ยอมรับได้ (Trade-off กับ Speed)<br>
+            4. Pre-authorize IO TTP ระดับใดก่อน D-Day
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box green">
+          <div class="bh">ขั้นตอนต่อไปสำหรับ N7 IO</div>
+          <div class="bp">
+            <strong>หลัง ผบ. เลือก COA:</strong><br>
+            → จัดทำ IO Annex (ภาคผนวก IO) ฉบับสมบูรณ์<br>
+            → จัดทำ IO Execution Matrix<br>
+            → ประสานงาน N2 ตอบ PIR ที่ค้างอยู่<br>
+            → ซ้อมรบ IO (IO TT&amp;X) กับ N6<br>
+            → เตรียม CONOPS Brief (25 มิ.ย.)
+          </div>
+        </div>
+        <div class="box blue">
+          <div class="bh">Timeline สำคัญ</div>
+          <div class="bp">
+            <strong>25 มิ.ย.:</strong> CONOPS Brief — IO Annex<br>
+            <strong>D-7:</strong> เริ่ม MILDEC Pattern<br>
+            <strong>D-3:</strong> EMCON Level III<br>
+            <strong>D-2:</strong> เสริม DEFNET สูงสุด<br>
+            <strong>D-Day:</strong> IO ปฏิบัติการเต็มรูปแบบ
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">COA IO Analysis — Summary</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 10: Q&A -->
+<div class="slide" id="s10">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO</div><div class="sh-tag">Q&A</div></div></div>
+    <div class="sh-right"><div class="sh-label">BRIEFING 03</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+    <div style="opacity:0.3;margin-bottom:20px;"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:80px;width:auto;"></div>
+    <div style="font-size:32px;font-weight:800;color:#e8f0ff;margin-bottom:12px;">ขอบคุณครับ</div>
+    <div style="font-size:18px;color:#d4a820;margin-bottom:8px;">พร้อมรับคำถามและการวิพากษ์</div>
+    <div style="width:160px;height:2px;background:linear-gradient(90deg,transparent,#d4a820,transparent);margin:16px auto;"></div>
+    <div style="font-size:13px;color:#4a6a8a;line-height:1.8;">N7 การปฏิบัติการสารสนเทศ | กลุ่มที่ ๒<br>IO in COA Analysis | สธ.๘๖ | ๒๔–๒๕ มิ.ย. ๒๕๖๙</div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">COA IO Analysis — Complete</span><span>สธ.๘๖ | ๒๕ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+</div>
+<div id="nav">
+  <button onclick="prev()">◀</button>
+  <span id="ctr">1/10</span>
+  <button onclick="next()">▶</button>
+  <a id="home-btn" href="index.html">⌂</a>
+</div>
+<script>
+let cur=0;
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+function go(n){slides[cur].classList.remove('active');cur=Math.max(0,Math.min(n,total-1));slides[cur].classList.add('active');document.getElementById('ctr').textContent=(cur+1)+'/'+total;}
+function next(){go(cur+1);}
+function prev(){go(cur-1);}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
+  if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+  if(e.key==='h'||e.key==='H'){window.location.href='index.html';}
+});
+go(0);
+</script>
+</body>
+</html>

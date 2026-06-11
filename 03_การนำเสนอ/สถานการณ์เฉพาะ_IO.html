@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>สถานการณ์เฉพาะ IO — N7 | สธ.๘๖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,system-ui,sans-serif;background:#050d1a;color:#e8f0ff;height:100vh;overflow:hidden;}
+#pres{width:100vw;height:100vh;position:relative;}
+.slide{display:none;width:100%;height:100%;padding:32px 56px 20px;flex-direction:column;position:absolute;top:0;left:0;
+  background:linear-gradient(135deg,#050d1a 0%,#0a1628 60%,#0d2045 100%);}
+.slide.active{display:flex;}
+
+/* HEADER */
+.sh{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #d4a820;padding-bottom:10px;margin-bottom:18px;flex-shrink:0;}
+.sh-left{display:flex;align-items:center;gap:12px;}
+.sh-anchor{display:inline-flex;align-items:center;opacity:0.8;vertical-align:middle;}
+.sh-unit{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:10px;color:#d4a820;letter-spacing:1.5px;font-weight:700;}
+.sh-right{text-align:right;}
+.sh-label{font-size:9px;color:#4a6a8a;letter-spacing:1px;}
+.sh-tag{font-size:11px;color:#7090b0;font-weight:600;}
+
+/* CONTENT */
+.content{flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden;}
+
+/* BOX */
+.box{background:rgba(26,58,106,0.25);border:1px solid #1a3a6a;border-left:4px solid #d4a820;border-radius:4px;padding:12px 14px;margin-bottom:8px;}
+.box.blue{border-left-color:#2a7fd4;}
+.box.cyan{border-left-color:#2d8a8a;}
+.box.purple{border-left-color:#c084fc;}
+.box.red{border-left-color:#e05050;}
+.box.green{border-left-color:#2d8a5a;}
+.box.orange{border-left-color:#e07820;}
+.bh{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.8px;margin-bottom:5px;color:#d4a820;}
+.box.blue .bh{color:#60a0f0;} .box.cyan .bh{color:#40c0c0;} .box.purple .bh{color:#c084fc;}
+.box.red .bh{color:#ff8080;} .box.green .bh{color:#60d090;} .box.orange .bh{color:#f09840;}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:11px;}
+th{background:#0a1e40;color:#d4a820;padding:6px 10px;text-align:left;font-weight:700;border:1px solid #1a3a6a;letter-spacing:0.5px;}
+td{padding:6px 10px;border:1px solid #1a3a6a;color:#b0c8e0;vertical-align:top;line-height:1.5;}
+tr:nth-child(even) td{background:rgba(26,58,106,0.15);}
+td.hl{color:#e8f0ff;font-weight:600;}
+
+/* BADGES */
+.badge{display:inline-block;padding:1px 7px;border-radius:2px;font-size:10px;font-weight:700;}
+.bh-r{background:rgba(138,45,45,0.3);color:#ff8080;border:1px solid #8a2d2d;}
+.bh-y{background:rgba(180,120,0,0.3);color:#f0c840;border:1px solid #b47800;}
+.bh-g{background:rgba(45,138,90,0.3);color:#60d090;border:1px solid #2d8a5a;}
+.bh-b{background:rgba(30,95,168,0.3);color:#60a0f0;border:1px solid #1e5fa8;}
+.bh-p{background:rgba(124,58,237,0.3);color:#c084fc;border:1px solid #7c3aed;}
+
+/* COVER */
+.cover-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;}
+.cover-bg{position:absolute;opacity:0.04;user-select:none;}
+.cover-label{font-size:11px;color:#d4a820;letter-spacing:3px;font-weight:700;margin-bottom:16px;}
+.cover-h1{font-size:38px;font-weight:900;color:#e8f0ff;line-height:1.2;margin-bottom:8px;}
+.cover-h2{font-size:16px;color:#d4a820;margin-bottom:20px;}
+.cover-line{width:180px;height:2px;background:linear-gradient(90deg,transparent,#d4a820,transparent);margin:0 auto 20px;}
+.cover-meta{font-size:12px;color:#4a6a8a;line-height:1.8;}
+.cover-tags{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+.ctag{padding:4px 12px;border:1px solid;border-radius:3px;font-size:11px;font-weight:600;}
+.ctag-g{border-color:#d4a820;color:#d4a820;background:rgba(212,168,32,0.1);}
+.ctag-b{border-color:#1e5fa8;color:#60a0f0;background:rgba(30,95,168,0.1);}
+.ctag-r{border-color:#8a2d2d;color:#ff8080;background:rgba(138,45,45,0.1);}
+.ctag-p{border-color:#7c3aed;color:#c084fc;background:rgba(124,58,237,0.1);}
+
+/* LAYOUT */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.four-col{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;}
+
+/* LIST */
+ul.ml{list-style:none;padding:0;}
+ul.ml li{font-size:11.5px;color:#7090b0;padding:2px 0 2px 12px;border-left:2px solid #1a3a6a;margin-bottom:3px;line-height:1.5;}
+ul.ml li strong{color:#a0c0e0;}
+
+/* DIMENSION BOXES */
+.dim{border-radius:6px;padding:12px 14px;border:1px solid;margin-bottom:0;}
+.dim-p{background:rgba(45,138,138,0.1);border-color:#2d8a8a;}
+.dim-p .dim-h{color:#40c0c0;}
+.dim-i{background:rgba(212,168,32,0.08);border-color:#8a6010;}
+.dim-i .dim-h{color:#d4a820;}
+.dim-c{background:rgba(192,132,252,0.08);border-color:#7c3aed;}
+.dim-c .dim-h{color:#c084fc;}
+.dim-h{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:12px;font-weight:700;margin-bottom:6px;}
+.dim-body{font-size:11px;color:#6080a0;line-height:1.6;}
+.dim-body strong{color:#8090a8;}
+
+/* CAPABILITY METER */
+.cap-bar{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.cap-label{font-size:11px;color:#7090b0;min-width:80px;}
+.cap-track{flex:1;height:6px;background:#0a1e40;border-radius:3px;overflow:hidden;}
+.cap-fill{height:100%;border-radius:3px;}
+.cap-fill.h{background:linear-gradient(90deg,#e05050,#ff8080);}
+.cap-fill.m{background:linear-gradient(90deg,#b47800,#f0c840);}
+.cap-fill.l{background:linear-gradient(90deg,#2d8a5a,#60d090);}
+.cap-val{font-size:10px;font-weight:700;min-width:36px;text-align:right;}
+
+/* COG FRAMEWORK */
+.cog-box{background:rgba(10,22,40,0.7);border:1px solid #1a3a6a;border-radius:5px;padding:10px 12px;margin-bottom:6px;}
+.cog-label{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:9px;color:#4a6a8a;letter-spacing:1px;margin-bottom:3px;}
+.cog-val{font-size:12px;color:#b0c8e0;line-height:1.5;}
+
+/* PIR */
+.pir-item{background:rgba(10,22,40,0.8);border:1px solid #1a3a6a;border-radius:4px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:flex-start;gap:10px;}
+.pir-num{background:#0d2045;border:1px solid #1a3a6a;color:#d4a820;font-size:11px;font-weight:700;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:3px;flex-shrink:0;}
+.pir-title{font-size:12px;font-weight:600;color:#e8f0ff;margin-bottom:2px;}
+.pir-desc{font-size:10.5px;color:#5070a0;line-height:1.4;}
+
+/* VULNERABILITY ITEM */
+.vuln{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #0a1e40;}
+.vuln:last-child{border-bottom:none;}
+.vuln-lvl{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:9px;font-weight:700;padding:2px 5px;border-radius:2px;flex-shrink:0;margin-top:2px;}
+.vuln-lvl.h{background:rgba(138,45,45,0.4);color:#ff8080;}
+.vuln-lvl.m{background:rgba(180,120,0,0.4);color:#f0c840;}
+.vuln-body{font-size:11.5px;color:#8090a8;line-height:1.4;}
+.vuln-body strong{color:#c0d0e0;}
+
+/* FOOTER */
+.sf{border-top:1px solid #1a3a6a;padding-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#2a4a6a;flex-shrink:0;margin-top:8px;}
+.sf-center{color:#4a6a8a;}
+
+/* NAV */
+#nav{position:fixed;bottom:18px;right:28px;display:flex;align-items:center;gap:10px;background:rgba(10,22,40,0.92);border:1px solid #1a3a6a;padding:6px 14px;border-radius:30px;z-index:200;}
+#nav button{background:none;border:1px solid #1a3a6a;color:#6080a0;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:11px;}
+#nav button:hover{background:#1a3a6a;color:#e8f0ff;}
+#ctr{color:#5070a0;font-size:11px;min-width:44px;text-align:center;}
+#home-btn{color:#4a6a8a;font-size:11px;text-decoration:none;padding:0 6px;border-left:1px solid #1a3a6a;}
+</style>
+</head>
+<body>
+<div id="pres">
+
+<!-- SLIDE 1: COVER -->
+<div class="slide active" id="s1">
+  <div class="sh">
+    <div class="sh-left">
+      <span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span>
+      <div><div class="sh-unit">N7 — INFORMATION OPERATIONS</div><div class="sh-tag">กลุ่มที่ ๒ | สธ.๘๖</div></div>
+    </div>
+    <div class="sh-right"><div class="sh-label">IPOE — IO DOMAIN</div><div class="sh-tag">๑๐ มิ.ย. ๒๕๖๙</div></div>
+  </div>
+  <div class="cover-wrap">
+    <div class="cover-bg"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:200px;width:auto;"></div>
+    <div class="cover-label">กลุ่มที่ ๒ — N7 INFORMATION OPERATIONS</div>
+    <div class="cover-h1">สถานการณ์เฉพาะ<br>ด้านการปฏิบัติการสารสนเทศ</div>
+    <div class="cover-h2">IO-Specific Situation — IPOE Domain Assessment</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">
+      สัมมนาการวางแผนทางทหารแบบปราณีต | หลักสูตร สธ.๘๖<br>
+      กองทัพเรือ | ๑๐ มิถุนายน ๒๕๖๙
+    </div>
+    <div class="cover-tags">
+      <span class="ctag ctag-r">ฝึกเท่านั้น</span>
+      <span class="ctag ctag-g">กลุ่มที่ ๒</span>
+      <span class="ctag ctag-b">N7 — IO</span>
+      <span class="ctag ctag-p">IPOE Step 1–4</span>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่มที่ ๒ N7 IO</span><span class="sf-center">สัมมนาวางแผนทางทหารแบบปราณีต | สธ.๘๖</span><span>๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 2: INFORMATION ENVIRONMENT -->
+<div class="slide" id="s2">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์เฉพาะ IO | ๑/๘</div><div class="sh-tag">สภาพแวดล้อมสารสนเทศ</div></div></div>
+    <div class="sh-right"><div class="sh-label">INFORMATION ENVIRONMENT (IE)</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="three-col" style="margin-bottom:10px;">
+      <div class="dim dim-p">
+        <div class="dim-h">มิติกายภาพ (Physical)</div>
+        <div class="dim-body">
+          <strong>โครงสร้าง ICT:</strong> Fiber optic backbone + 4G/LTE ครอบคลุม ๘๕% — สายเคเบิลฝังในอุโมงค์ใต้ดินกลางเกาะ (ป้องกันการโจมตีทางอากาศ)<br>
+          <strong>สถานีวิทยุ:</strong> FM ๕ สถานี — WL ควบคุม ๔ สถานี<br>
+          <strong>ISP:</strong> ๒ รายหลัก — WL เข้าควบคุม DNS Server + Encryption ทั่วระบบ<br>
+          <strong>EW Suite:</strong> กองพลน้อยสงครามอิเล็กทรอนิกส์ (กองทัพสนับสนุนทางยุทธศาสตร์) ติดตั้งรอบเกาะ ครอบคลุม VHF/UHF/GPS<br>
+          <strong>SIGINT:</strong> สถานี SIGINT WL — Hill 680 (เนินเขาเหนือ) + ศูนย์บัญชาการใต้ดิน Sosnovka
+        </div>
+      </div>
+      <div class="dim dim-i">
+        <div class="dim-h">มิติสารสนเทศ (Informational)</div>
+        <div class="dim-body">
+          <strong>Social Media (TALOS):</strong> Facebook 15,000 / TikTok 8,900 / X 4,200<br>
+          <strong>WL IO ล่วงหน้า:</strong> ดำเนินการ ๙๐ วันก่อนยึดครอง<br>
+          <strong>#TalosOurHeritage:</strong> ๘.๗M impressions, ๓๔๐ operators<br>
+          <strong>บัญชีปลอม:</strong> ๑๒,๐๐๐+ Sock Puppet accounts<br>
+          <strong>Disinformation:</strong> ๑๒๗ ชิ้นใน ๔๘ ชม.แรกหลังยึดครอง
+        </div>
+      </div>
+      <div class="dim dim-c">
+        <div class="dim-h">มิติความคิด (Cognitive)</div>
+        <div class="dim-body">
+          <strong>ประชากร TALOS:</strong> สนับสนุน AZ ๖๐% / WL ๒๐% / Neutral ๒๐%<br>
+          <strong>ชุมชนนานาชาติ:</strong> เห็นด้วย AZ ๓๕% / WL ๑๘% / ไม่ทราบ ๔๗%<br>
+          <strong>WL Media (Global):</strong> ผู้ติดตาม ๒.๑M ทั่วโลก<br>
+          <strong>AZ Narrative Gap:</strong> ยังไม่มี Counter-Narrative ที่ชัดเจนในระดับนานาชาติ<br>
+          <strong>Key Message WL:</strong> "AZ คือผู้รุกราน" — เข้าถึงผู้ชมนานาชาติได้แล้ว
+        </div>
+      </div>
+    </div>
+    <div class="box" style="margin-bottom:0;">
+      <div class="bh">Key Information Nodes &amp; Networks — เกาะตาลอส</div>
+      <table>
+        <tr><th>Node</th><th>ประเภท</th><th>ผู้ควบคุม</th><th>นัยสำคัญ IO</th></tr>
+        <tr><td class="hl">สถานีโทรคมนาคมกลาง</td><td>Physical</td><td><span class="badge bh-r">WL</span></td><td>ควบคุม ISP + โทรทัศน์ + วิทยุทั้งเกาะ</td></tr>
+        <tr><td class="hl">EW Hub (Hill 680)</td><td>EW/SIGINT</td><td><span class="badge bh-r">WL</span></td><td>GPS Jam รัศมี ๘๐ กม. / Comms Intercept</td></tr>
+        <tr><td class="hl">Facebook Community Groups</td><td>Social Media</td><td><span class="badge bh-y">แข่งขัน</span></td><td>ชุมชน ๑๕,๐๐๐ คน — สนาม PSYOP หลัก</td></tr>
+        <tr><td class="hl">วิทยุชุมชน FM ๑ สถานี</td><td>Legacy Media</td><td><span class="badge bh-g">AZ-friendly</span></td><td>เข้าถึงพลเรือน — ช่องทาง PSYOP ฝ่ายเรา</td></tr>
+        <tr><td class="hl">ผู้นำชุมชน / KIs</td><td>Human Network</td><td><span class="badge bh-y">Contested</span></td><td>ผู้ทรงอิทธิพลทางความคิด — เป้า Influence Ops</td></tr>
+        <tr><td class="hl">อุโมงค์ Fiber ใต้ดิน TALOS</td><td>PHYSEC/Infra</td><td><span class="badge bh-r">WL</span></td><td>สายเคเบิลหลักฝังใต้ดิน — ทนทานต่อการโจมตีทางอากาศ ยากตัดขาดจากภายนอก</td></tr>
+        <tr><td class="hl">ศูนย์บัญชาการใต้ดิน Sosnovka</td><td>C2/OPSEC</td><td><span class="badge bh-r">WL</span></td><td>ทางเข้ามิดชิด — ISR ทางอากาศ/ดาวเทียม ไม่สามารถประเมินกำลังพลหรือยุทโธปกรณ์ภายในได้</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์เฉพาะ IO — สภาพแวดล้อมสารสนเทศ</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 3: WL IO CAPABILITIES -->
+<div class="slide" id="s3">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์เฉพาะ IO | ๒/๘</div><div class="sh-tag">IO ของ WL — ขีดความสามารถ</div></div></div>
+    <div class="sh-right"><div class="sh-label">WL IO CAPABILITIES</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="two-col">
+      <div>
+        <div class="box red">
+          <div class="bh">PSYOP / StratComm <span class="badge bh-r" style="margin-left:6px;">ระดับ สูง</span></div>
+          <ul class="ml">
+            <li><strong>ยุทธศาสตร์ "อุดมการณ์นำการปฏิบัติ":</strong> ปลุกชาตินิยมสูงถึงขั้น Chauvinism — ประชาชนพร้อมเสียสละ</li>
+            <li><strong>IO Brigade (กองทัพสนับสนุนทางยุทธศาสตร์):</strong> กำลังพล ๒,๔๐๐ นาย — ปฏิบัติการตลอด ๒๔ ชม.</li>
+            <li><strong>Accusation Narrative:</strong> กล่าวหา AZ ลับๆ สนับสนุนกลุ่มก่อการร้าย <span style="color:#ff8080;font-weight:700;">PPTT และ Bersat</span> บน TALOS — สร้างความชอบธรรมให้การจัดกำลัง WL</li>
+            <li><strong>Social Media Cell + JORINO:</strong> ๓๔๐ operators + ๑๒,๐๐๐ บัญชีปลอม + AI Content ๘๐๐+ ชิ้น/วัน — ใช้ Influencer "<span style="color:#ff8080;">JORINO</span>" เป็นหัวหอก N5 แพร่ Narrative PPTT/Bersat</li>
+            <li><strong>Madrasa Campaign:</strong> โรงเรียนตาดีกา ๑๐๐,๐๐๐ แห่ง ล้างสมองเยาวชน TALOS ๒๐๐,๐๐๐ คน — สร้าง Long-term Cognitive Shift ต่อต้าน AZ</li>
+            <li><strong>Global Reach + SC/PA:</strong> สื่อ WL-controlled ๒.๑M + UN Speech ใน UNSC + DSPD เจรจาพันธมิตรกดดัน AZ ทางการทูต</li>
+          </ul>
+          <div style="margin-top:8px;">
+            <div class="cap-bar"><span class="cap-label">Social Media</span><div class="cap-track"><div class="cap-fill h" style="width:90%;"></div></div><span class="cap-val" style="color:#ff8080;">สูงมาก</span></div>
+            <div class="cap-bar"><span class="cap-label">Global Reach</span><div class="cap-track"><div class="cap-fill h" style="width:80%;"></div></div><span class="cap-val" style="color:#ff8080;">สูง</span></div>
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">Cyber Operations <span class="badge bh-r" style="margin-left:6px;">ระดับ สูง</span></div>
+          <ul class="ml">
+            <li><strong>WL Cyber Command:</strong> ขีดความสามารถเทียบเท่า APT-level (Nation State)</li>
+            <li><strong>เจาะ AZ DEFNET (๒๕๖๕):</strong> DDoS ผ่าน VPN เจาะระบบ DEFNET AZ — ความลับแผนปฏิบัติการเสี่ยงรั่วไหล</li>
+            <li><strong>Malware Persistent:</strong> ฝังใน C2 ของ AZ — จะ Activate ที่ H-Hour เพื่อทำให้ AZ สูญเสียการสั่งการ</li>
+            <li><strong>MDA + IFF Spoofing:</strong> เจาะ Maritime Domain Awareness ๒ ครั้ง + ปลอมสัญญาณ IFF สร้างความสับสน</li>
+            <li><strong>IFF Spoofing:</strong> ปลอมสัญญาณ IFF เพื่อสร้างความสับสน</li>
+          </ul>
+          <div style="margin-top:8px;">
+            <div class="cap-bar"><span class="cap-label">Intrusion</span><div class="cap-track"><div class="cap-fill h" style="width:85%;"></div></div><span class="cap-val" style="color:#ff8080;">สูงมาก</span></div>
+            <div class="cap-bar"><span class="cap-label">Persistence</span><div class="cap-track"><div class="cap-fill h" style="width:75%;"></div></div><span class="cap-val" style="color:#ff8080;">สูง</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box red">
+          <div class="bh">Electronic Warfare (EW) <span class="badge bh-y" style="margin-left:6px;">ระดับ ปานกลาง-สูง</span></div>
+          <ul class="ml">
+            <li><strong>โครงสร้าง:</strong> กองพลน้อยสงครามอิเล็กทรอนิกส์ + กองพลน้อยสนับสนุนปฏิบัติการข่าวสาร (ขึ้นตรง กองทัพสนับสนุนทางยุทธศาสตร์)</li>
+            <li><strong>GPS Jamming:</strong> รัศมีครอบคลุม ๘๐ กม. จาก Hill 680 — กระทบ Navigation AZ</li>
+            <li><strong>Comms Jamming:</strong> VHF/UHF ทั่ว AO — บังคับ AZ ใช้ EMCON Level สูง</li>
+            <li><strong>SIGINT + OPSEC:</strong> ศูนย์บัญชาการใต้ดิน Sosnovka — ทางเข้ามิดชิด ISR เจาะไม่ได้</li>
+            <li><strong>Rocket Force (กองทัพจรวด):</strong> SSM Kinetic / EMP — ภัยคุกคามต่อ SATCOM Node และ Hard Infrastructure AZ (A2/AD)</li>
+          </ul>
+          <div style="margin-top:8px;">
+            <div class="cap-bar"><span class="cap-label">Jamming</span><div class="cap-track"><div class="cap-fill h" style="width:78%;"></div></div><span class="cap-val" style="color:#ff8080;">สูง</span></div>
+            <div class="cap-bar"><span class="cap-label">SIGINT</span><div class="cap-track"><div class="cap-fill h" style="width:85%;"></div></div><span class="cap-val" style="color:#ff8080;">สูงมาก</span></div>
+          </div>
+        </div>
+        <div class="box red">
+          <div class="bh">MILDEC / Deception + SC/PA <span class="badge bh-y" style="margin-left:6px;">ระดับ ปานกลาง-สูง</span></div>
+          <ul class="ml">
+            <li><strong>Ventimiglia False Flag:</strong> ส่ง "ชายนิรนามชุดดำ" วางเพลิง/ก่อความไม่สงบ แล้วโยนความผิดให้ AZ — Pretext ทำสงคราม</li>
+            <li><strong>False EM Signatures:</strong> แผ่คลื่นแม่เหล็กไฟฟ้าปลอมทิศเหนือ — หลอก DF AZ ให้จัดกำลังผิดทิศ</li>
+            <li><strong>IFF Deception + Decoy Emitters:</strong> ดึง ISR AZ ออกจากเป้าจริง สร้างความสับสนยุทธการ</li>
+            <li><strong>SC/PA — DSPD:</strong> ผู้แทน WL ใน UNSC ใช้ N5 เป็น Pretext ทางการทูต — DSPD เจรจาพันธมิตร WL ให้กดดัน AZ</li>
+          </ul>
+          <div style="margin-top:8px;">
+            <div class="cap-bar"><span class="cap-label">Deception</span><div class="cap-track"><div class="cap-fill h" style="width:72%;"></div></div><span class="cap-val" style="color:#ff8080;">สูง</span></div>
+            <div class="cap-bar"><span class="cap-label">Diplomatic IO</span><div class="cap-track"><div class="cap-fill h" style="width:68%;"></div></div><span class="cap-val" style="color:#ff8080;">สูง</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์เฉพาะ IO — WL IO Capabilities</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 3B: WL HISTORICAL-POLITICAL IO FOUNDATION -->
+<div class="slide" id="s3b">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์เฉพาะ IO | ๓/๘</div><div class="sh-tag">ฐานประวัติศาสตร์–การเมือง IO ของ WL</div></div></div>
+    <div class="sh-right"><div class="sh-label">WL HISTORICAL-POLITICAL IO EXPLOITATION</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content" style="justify-content:flex-start;gap:0;">
+    <div style="font-size:10px;color:#4a6a8a;padding:5px 10px;background:rgba(26,58,106,0.15);border-left:3px solid #d4a820;border-radius:2px;margin-bottom:9px;flex-shrink:0;">
+      IO ของ WL ไม่ใช่แค่การโฆษณาชวนเชื่อ — มีรากฐานจากบาดแผลประวัติศาสตร์ ๕ ยุค ที่ถูกสังเคราะห์เป็น <strong style="color:#d4a820;">Narrative ปลุกชาตินิยม</strong> อย่างเป็นระบบ
+    </div>
+    <!-- TIMELINE ROW -->
+    <div style="display:flex;gap:5px;margin-bottom:8px;flex-shrink:0;">
+      <div style="flex:1;background:rgba(26,58,106,0.2);border:1px solid #1a3a6a;border-top:3px solid #d4a820;border-radius:3px;padding:7px 8px;">
+        <div style="font-size:8px;color:#6080a0;margin-bottom:2px;">ยุค Tributary System</div>
+        <div style="font-size:10px;font-weight:700;color:#d0e0ff;margin-bottom:3px;">ถูกกดขี่โดยมหาอำนาจ</div>
+        <div style="font-size:9px;color:#7090b0;line-height:1.3;">WL เป็นอาณาจักรเล็กใต้ Tributary — ปัญหา Ethnic Identity คือชนวนหลัก</div>
+        <div style="font-size:8.5px;color:#e04040;margin-top:4px;font-weight:600;">⚑ "เคยถูกกดขี่ — จะไม่ยอมอีก"</div>
+      </div>
+      <div style="flex:1;background:rgba(26,58,106,0.2);border:1px solid #1a3a6a;border-top:3px solid #d4a820;border-radius:3px;padding:7px 8px;">
+        <div style="font-size:8px;color:#6080a0;margin-bottom:2px;">ราชวงศ์ Euraka</div>
+        <div style="font-size:10px;font-weight:700;color:#d0e0ff;margin-bottom:3px;">ต้านการกลืนชาติ</div>
+        <div style="font-size:9px;color:#7090b0;line-height:1.3;">WL &amp; AZ ร่วมต้าน Euraka — เมื่อชนะ WL เข้มแข็งขึ้น สร้างแบบแผน "ชนะมหาอำนาจ"</div>
+        <div style="font-size:8.5px;color:#e04040;margin-top:4px;font-weight:600;">⚑ "เราเคยรบชนะมหาอำนาจ"</div>
+      </div>
+      <div style="flex:1;background:rgba(26,58,106,0.2);border:1px solid #1a3a6a;border-top:3px solid #d4a820;border-radius:3px;padding:7px 8px;">
+        <div style="font-size:8px;color:#6080a0;margin-bottom:2px;">มหาอำนาจ AGENTIA</div>
+        <div style="font-size:10px;font-weight:700;color:#d0e0ff;margin-bottom:3px;">ต้านจักรวรรดินิยม "รัฐชาติ"</div>
+        <div style="font-size:9px;color:#7090b0;line-height:1.3;">AGENTIA ขยายอุดมการณ์ครอบงำ — WL รวมใจต้าน Template นี้ใช้ Framing AZ ได้ถึงปัจจุบัน</div>
+        <div style="font-size:8.5px;color:#e04040;margin-top:4px;font-weight:600;">⚑ "AZ/EDR คือ AGENTIA ยุคใหม่"</div>
+      </div>
+      <div style="flex:1;background:rgba(26,58,106,0.2);border:1px solid #1a3a6a;border-top:3px solid #d4a820;border-radius:3px;padding:7px 8px;">
+        <div style="font-size:8px;color:#6080a0;margin-bottom:2px;">Socialism + EDR Pressure</div>
+        <div style="font-size:10px;font-weight:700;color:#d0e0ff;margin-bottom:3px;">ปฏิวัติเพื่อความเสมอภาค</div>
+        <div style="font-size:9px;color:#7090b0;line-height:1.3;">EDR กดดัน + สังคมนิยม Verdatia แพร่ขยาย — "ความเสมอภาค" กลายเป็นอุดมการณ์ชาติ</div>
+        <div style="font-size:8.5px;color:#e04040;margin-top:4px;font-weight:600;">⚑ "EDR/AZ ร่วมกันล้มระบอบเรา"</div>
+      </div>
+      <div style="flex:1;background:rgba(26,58,106,0.2);border:1px solid #1a3a6a;border-top:3px solid #d4a820;border-radius:3px;padding:7px 8px;">
+        <div style="font-size:8px;color:#6080a0;margin-bottom:2px;">สาธารณรัฐปัจจุบัน</div>
+        <div style="font-size:10px;font-weight:700;color:#d0e0ff;margin-bottom:3px;">TALOS — ดินแดนแห่งชาติ</div>
+        <div style="font-size:9px;color:#7090b0;line-height:1.3;">อ้างสิทธิ์ TALOS ตามแนวชายแดน ข.๗๗ + ราชวงศ์ + Woadlandian บน TALOS (ร้อยละ ๔)</div>
+        <div style="font-size:8.5px;color:#e04040;margin-top:4px;font-weight:600;">⚑ "AZ ยึดดินแดนเรา — ต้องกู้คืน"</div>
+      </div>
+    </div>
+    <!-- BOTTOM: 3 AXES + THEMES -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 2fr;gap:7px;flex:1;overflow:hidden;">
+      <div style="background:rgba(140,30,30,0.15);border:1px solid #6a1a1a;border-left:4px solid #e04040;border-radius:3px;padding:8px 10px;">
+        <div style="font-size:10px;font-weight:700;color:#ff9090;margin-bottom:5px;">🔥 อัตลักษณ์ &amp; ชาตินิยม</div>
+        <div style="font-size:9.5px;color:#c08080;line-height:1.45;">
+          <div style="padding:2px 0;border-bottom:1px solid rgba(100,30,30,0.4);"><strong style="color:#ffb0b0;">Chauvinism ฝังลึก:</strong> ร้อยละ ๔๕ Woadlandian — ถูกปลุกได้ง่ายมาก</div>
+          <div style="padding:2px 0;border-bottom:1px solid rgba(100,30,30,0.4);"><strong style="color:#ffb0b0;">ภาษา Woadian = จิตวิญญาณชาติ:</strong> ใช้กระตุ้นสำนึกเอกลักษณ์</div>
+          <div style="padding:2px 0;border-bottom:1px solid rgba(100,30,30,0.4);"><strong style="color:#ffb0b0;">อิสลาม ร้อยละ ๔๐:</strong> ศาสนา + Madrasa เป็นเครือข่าย IO</div>
+          <div style="padding:2px 0;"><strong style="color:#ffb0b0;">Woadlandian บน TALOS:</strong> "พี่น้องที่ถูกทอดทิ้ง" — Emotional Trigger</div>
+        </div>
+      </div>
+      <div style="background:rgba(140,80,20,0.15);border:1px solid #6a4010;border-left:4px solid #d07020;border-radius:3px;padding:8px 10px;">
+        <div style="font-size:10px;font-weight:700;color:#f0a050;margin-bottom:5px;">⚔ บาดแผล &amp; ศัตรูร่วม</div>
+        <div style="font-size:9.5px;color:#c09060;line-height:1.45;">
+          <div style="padding:2px 0;border-bottom:1px solid rgba(100,60,10,0.4);"><strong style="color:#f0c080;">"AZ = AGENTIA ยุคใหม่":</strong> ประวัติต้านจักรวรรดินิยม Frame AZ เป็นผู้รุกราน</div>
+          <div style="padding:2px 0;border-bottom:1px solid rgba(100,60,10,0.4);"><strong style="color:#f0c080;">UNSC Res.2847 = การแทรกแซง:</strong> มหาอำนาจครอบงำกฎหมายระหว่างประเทศ</div>
+          <div style="padding:2px 0;border-bottom:1px solid rgba(100,60,10,0.4);"><strong style="color:#f0c080;">N5 (PPTT/Bersat):</strong> AZ หนุน Separatist — สร้าง Righteous Anger</div>
+          <div style="padding:2px 0;"><strong style="color:#f0c080;">EDR-Tylia โอบล้อม:</strong> ภัยคุกคามรอบด้าน สร้าง Siege Mentality</div>
+        </div>
+      </div>
+      <div style="background:rgba(100,80,10,0.15);border:1px solid #5a4a00;border-left:4px solid #c8a010;border-radius:3px;padding:8px 10px;">
+        <div style="font-size:10px;font-weight:700;color:#e8c840;margin-bottom:5px;">🏆 ความภูมิใจ &amp; ชัยชนะ</div>
+        <div style="font-size:9.5px;color:#b0a060;line-height:1.45;">
+          <div style="padding:2px 0;border-bottom:1px solid rgba(80,60,0,0.4);"><strong style="color:#e8d080;">กองทัพอันดับ ๓ โลก:</strong> Defence News ยืนยัน — "เราแข็งแกร่ง พร้อมรบ"</div>
+          <div style="padding:2px 0;border-bottom:1px solid rgba(80,60,0,0.4);"><strong style="color:#e8d080;">ฝึกซ้อมใหญ่ มิ.ย.–ก.ค.๖๘:</strong> การแสดงพลัง เพิ่ม Willingness to Fight</div>
+          <div style="padding:2px 0;border-bottom:1px solid rgba(80,60,0,0.4);"><strong style="color:#e8d080;">ดำน้ำ 039 + LPD ใหม่:</strong> "เราพร้อมปกป้องชาติ" — เสริม Military Pride</div>
+          <div style="padding:2px 0;"><strong style="color:#e8d080;">บรรพบุรุษชนะ Euraka:</strong> "ชนะแล้วครั้งหนึ่ง — ชนะได้อีก"</div>
+        </div>
+      </div>
+      <div>
+        <table style="font-size:9.5px;width:100%;height:100%;border-collapse:collapse;">
+          <tr>
+            <th style="background:#0a1e40;color:#d4a820;padding:5px 7px;text-align:left;border:1px solid #1a3a6a;font-size:9px;">Narrative IO หลัก</th>
+            <th style="background:#0a1e40;color:#d4a820;padding:5px 7px;border:1px solid #1a3a6a;font-size:9px;">ฐานประวัติศาสตร์</th>
+            <th style="background:#0a1e40;color:#d4a820;padding:5px 7px;border:1px solid #1a3a6a;font-size:9px;">กลุ่มเป้าหมาย</th>
+            <th style="background:#0a1e40;color:#d4a820;padding:5px 7px;text-align:center;border:1px solid #1a3a6a;font-size:9px;">ระดับ</th>
+          </tr>
+          <tr>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#e0eaff;font-weight:600;">"กู้คืน TALOS — ดินแดนบรรพบุรุษ"</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">ชายแดน ข.๗๗ + ราชวงศ์ + Woadlandian บน TALOS</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">ทหาร WL + พลเรือนทั้งประเทศ</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;text-align:center;"><span class="badge bh-r">สูงมาก</span></td>
+          </tr>
+          <tr style="background:rgba(26,58,106,0.15);">
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#e0eaff;font-weight:600;">"AZ รุกราน — ต้านมหาอำนาจเหมือนบรรพบุรุษ"</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">มรดกต้าน AGENTIA + Euraka</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">ทหาร WL + เยาวชนชาตินิยม</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;text-align:center;"><span class="badge bh-r">สูงมาก</span></td>
+          </tr>
+          <tr>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#e0eaff;font-weight:600;">"ปกป้องพี่น้องมุสลิม TALOS จาก AZ"</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">อิสลาม ร้อยละ ๔๐ + Madrasa ๑๐๐,๐๐๐ แห่ง</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">ชุมชนศาสนา + TALOS Youth</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;text-align:center;"><span class="badge bh-r">สูงมาก</span></td>
+          </tr>
+          <tr style="background:rgba(26,58,106,0.15);">
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#e0eaff;font-weight:600;">"UNSC = เครื่องมือมหาอำนาจกดขี่ WL"</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">มรดกต้าน AGENTIA — สถาบันระหว่างประเทศเป็นเครื่องมือ</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">ชนชั้นนำ + นักการเมือง WL</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;text-align:center;"><span class="badge bh-y">สูง</span></td>
+          </tr>
+          <tr>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#e0eaff;font-weight:600;">"AZ หนุน PPTT/Bersat แบ่งแยก TALOS" (N5)</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">กลุ่ม Separatist ที่ WL อ้างว่า AZ สนับสนุน</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">ชาว Woadlandian ทั้งประเทศ + UNSC</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;text-align:center;"><span class="badge bh-r">สูงมาก</span></td>
+          </tr>
+          <tr style="background:rgba(26,58,106,0.15);">
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#e0eaff;font-weight:600;">"กองทัพอันดับ ๓ — เราชนะได้"</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">Defence News + การพัฒนากองทัพหลัง ๒๐๑๒</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;color:#8aabcc;">ทหาร + ประชาชน WL</td>
+            <td style="padding:4px 7px;border:1px solid #1a3a6a;text-align:center;"><span class="badge bh-y">สูง</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์เฉพาะ IO — WL Historical-Political IO Foundation</span><span>สธ.๘๖ | ๑๒ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 4: WL NARRATIVES & AUDIENCES -->
+<div class="slide" id="s4">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์เฉพาะ IO | ๔/๘</div><div class="sh-tag">IO ของ WL — Narrative &amp; กลุ่มเป้าหมาย</div></div></div>
+    <div class="sh-right"><div class="sh-label">WL IO NARRATIVES &amp; TARGET AUDIENCES</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="two-col">
+      <div>
+        <div class="box red">
+          <div class="bh">WL Master Narrative Framework (๔ Narratives หลัก)</div>
+          <table style="margin-top:4px;">
+            <tr><th>Narrative</th><th>ข้อความหลัก</th><th>ผล</th></tr>
+            <tr>
+              <td class="hl">N1 — Legitimacy</td>
+              <td>"ตาลอสเป็นดินแดนโดยชอบธรรมของ WL ตามประวัติศาสตร์"</td>
+              <td><span class="badge bh-r">ได้ผล ๔๗%</span></td>
+            </tr>
+            <tr>
+              <td class="hl">N2 — Criminalization</td>
+              <td>"AZ คือผู้รุกราน ขัดต่อกฎหมายระหว่างประเทศ"</td>
+              <td><span class="badge bh-r">ได้ผล ๓๘%</span></td>
+            </tr>
+            <tr>
+              <td class="hl">N3 — Consent</td>
+              <td>"ประชาชนตาลอสเลือก WL — การยึดครองคือการคุ้มครอง"</td>
+              <td><span class="badge bh-y">ได้ผลบางส่วน</span></td>
+            </tr>
+            <tr>
+              <td class="hl">N4 — Resource</td>
+              <td>"VERDATA จะเป็นของประชาชน ไม่ใช่ถูก AZ ปล้น"</td>
+              <td><span class="badge bh-y">ได้ผลในกลุ่ม Neutral</span></td>
+            </tr>
+            <tr>
+              <td class="hl">N5 — Criminalization 2.0</td>
+              <td>"AZ ลับๆ สนับสนุนกลุ่มก่อการร้าย <strong>PPTT และ Bersat</strong> บน TALOS — WL ต้องปกป้องประชาชน"</td>
+              <td><span class="badge bh-r">เพิ่งเริ่ม — ผล Pending</span></td>
+            </tr>
+          </table>
+        </div>
+        <div class="box orange">
+          <div class="bh">ช่องทางเผยแพร่ WL (Channels)</div>
+          <ul class="ml">
+            <li><strong>Social Media:</strong> Facebook / TikTok / YouTube — ผ่านบัญชีปลอม ๑๒,๐๐๐+ บัญชี</li>
+            <li><strong>WL State Media:</strong> เผยแพร่ ๗ ภาษา — ครอบคลุม UNSC Members</li>
+            <li><strong>Radio TALOS (FM ๔ สถานี):</strong> ประกาศเป็นภาษาท้องถิ่น ๒๔ ชม.</li>
+            <li><strong>Loudspeaker:</strong> ในชุมชนพลเรือน — ควบคุมพฤติกรรม</li>
+            <li><strong>UN Speeches:</strong> ผ่านผู้แทน WL ใน UNSC</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="box red">
+          <div class="bh">กลุ่มเป้าหมาย (Target Audiences) — WL</div>
+          <table style="margin-top:4px;">
+            <tr><th>กลุ่ม</th><th>ช่องทาง</th><th>วัตถุประสงค์</th></tr>
+            <tr>
+              <td class="hl">T1: พลเรือน TALOS</td>
+              <td>Radio + Loudspeaker + SM</td>
+              <td>สร้างความยินยอมต่อการยึดครอง</td>
+            </tr>
+            <tr>
+              <td class="hl">T2: ชุมชนนานาชาติ (UNSC)</td>
+              <td>State Media + Diplomatic</td>
+              <td>ลดความชอบธรรม AZ ในสายตาโลก</td>
+            </tr>
+            <tr>
+              <td class="hl">T3: ประชาชน WL (Domestic)</td>
+              <td>Domestic Propaganda</td>
+              <td>รักษา Public Support ในประเทศ</td>
+            </tr>
+            <tr>
+              <td class="hl">T4: กำลัง AZ + พันธมิตร</td>
+              <td>Cyber + Leaflet + Broadcast</td>
+              <td>สร้างความลังเล / บั่นทอนขวัญ</td>
+            </tr>
+          </table>
+        </div>
+        <div class="box">
+          <div class="bh">ผลสำเร็จ IO ของ WL (Effects Achieved)</div>
+          <ul class="ml">
+            <li><span class="badge bh-r">Critical</span> ๔๗% ชุมชนนานาชาติ "ไม่แน่ใจ" ความชอบธรรม AZ — ก่อน D-Day</li>
+            <li><span class="badge bh-r">High</span> กำลัง AZ รั่วไหลข้อมูล Social Media ๓ ครั้ง — WL ใช้ประโยชน์</li>
+            <li><span class="badge bh-r">High</span> สื่อ TALOS ๔ ใน ๕ สถานีอยู่ใต้การควบคุม WL</li>
+            <li><span class="badge bh-y">Medium</span> Narrative N3 ยังไม่ได้ผลเต็มที่ — พลเรือน TALOS ส่วนใหญ่ยังสนับสนุน AZ</li>
+            <li><span class="badge bh-g">Opportunity</span> Narrative N4 (Resource) มีช่องโหว่ — AZ สามารถ Counter ได้ด้วยหลักฐาน VERDATA</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์เฉพาะ IO — WL Narratives &amp; Target Audiences</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 5: AZ IO CAPABILITIES & GAPS -->
+<div class="slide" id="s5">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์เฉพาะ IO | ๕/๘</div><div class="sh-tag">IO ของ AZ — ขีดความสามารถและช่องว่าง</div></div></div>
+    <div class="sh-right"><div class="sh-label">AZ IO CAPABILITIES &amp; GAPS</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="two-col">
+      <div>
+        <div class="box green">
+          <div class="bh">ขีดความสามารถ IO ของ AZ</div>
+          <div style="margin-bottom:6px;">
+            <div class="cap-bar"><span class="cap-label" style="min-width:100px;">PSYOP</span><div class="cap-track"><div class="cap-fill m" style="width:55%;"></div></div><span class="cap-val" style="color:#f0c840;">ปานกลาง</span></div>
+            <div class="cap-bar"><span class="cap-label" style="min-width:100px;">Cyber Defense</span><div class="cap-track"><div class="cap-fill m" style="width:50%;"></div></div><span class="cap-val" style="color:#f0c840;">ปานกลาง</span></div>
+            <div class="cap-bar"><span class="cap-label" style="min-width:100px;">EMCON</span><div class="cap-track"><div class="cap-fill m" style="width:60%;"></div></div><span class="cap-val" style="color:#f0c840;">ปานกลาง</span></div>
+            <div class="cap-bar"><span class="cap-label" style="min-width:100px;">StratComm / PAO</span><div class="cap-track"><div class="cap-fill m" style="width:45%;"></div></div><span class="cap-val" style="color:#f0c840;">อ่อนแอ</span></div>
+            <div class="cap-bar"><span class="cap-label" style="min-width:100px;">EW (ESM/ECM)</span><div class="cap-track"><div class="cap-fill m" style="width:55%;"></div></div><span class="cap-val" style="color:#f0c840;">ปานกลาง</span></div>
+          </div>
+        </div>
+        <div class="box green">
+          <div class="bh">รายละเอียด IO ของ AZ</div>
+          <ul class="ml">
+            <li><strong>PSYOP (๑๘๐ นาย):</strong> มีทีม Leaflet + Tactical Radio + Loudspeaker แต่ขาด Social Media Analytics platform</li>
+            <li><strong>DEFNET (SOC 24/7):</strong> ปฏิบัติการตลอด ๒๔ ชม. แต่ <span style="color:#ff8080;">⚠ ปี ๒๕๖๕ — WL เจาะผ่าน VPN DDoS</span> — Patch ค้างอยู่ / DCO-IDM ยังไม่เสร็จ</li>
+            <li><strong>EMCON Level II→III:</strong> บังคับใช้แต่ยังมีปัญหา Signal Discipline (กำลัง AZ ใช้ Mobile Phone) — DF WL ที่ Marseille/Toulon ดักสัญญาณได้</li>
+            <li><strong>EW:</strong> ESM ครอบคลุม AO — ECM จำกัดเฉพาะเรือ ๒ ลำ</li>
+            <li><strong>ชาติพันธมิตร:</strong> ชาติ C มี IO Specialists — แต่ติดขัด National Caveats</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="box red">
+          <div class="bh">ช่องว่างและจุดอ่อน IO ของ AZ (IO Gaps)</div>
+          <ul class="ml">
+            <li><span class="badge bh-r">Critical</span> <strong>DEFNET ถูกเจาะ (๒๕๖๕):</strong> VPN DDoS โดย SSF WL — DCO-IDM ยังไม่เสร็จ ความลับแผนปฏิบัติการรั่วไหลได้</li>
+            <li><span class="badge bh-r">Critical</span> <strong>ขาด Counter-N5:</strong> ยังไม่มีการโต้ข้อกล่าวหา PPTT/Bersat — WL กำลังแพร่ Narrative ผ่าน JORINO สู่เวที UNSC</li>
+            <li><span class="badge bh-r">Critical</span> <strong>ขาด Information Superiority</strong> ใน AO — WL ครองอยู่แล้ว ๔๕ วัน</li>
+            <li><span class="badge bh-r">High</span> <strong>กำลัง AZ OPSEC:</strong> Social Media Leaks ๓ ครั้ง + DF WL ที่ Marseille/Toulon ดักสัญญาณกองเรือ</li>
+            <li><span class="badge bh-r">High</span> <strong>ระบบ C2:</strong> ยังมี Malware WL ฝังอยู่ + Backup C2 รองรับได้เพียง ๗๒ ชม.</li>
+            <li><span class="badge bh-y">High</span> <strong>MILDEC ของ WL:</strong> "ชายนิรนามชุดดำ" ใน Ventimiglia — AZ ถูกกล่าวหาแต่ขาดหลักฐาน ISR พร้อมเผยแพร่</li>
+            <li><span class="badge bh-y">Medium</span> <strong>StratComm ไม่ Sync:</strong> PAO และ N7 IO ส่งข้อความไม่สอดคล้องกัน</li>
+            <li><span class="badge bh-y">Medium</span> <strong>ขาด Social Media Tools:</strong> ไม่มี Platform วิเคราะห์ WL IO Campaign / JORINO Network อย่างเป็นระบบ</li>
+          </ul>
+        </div>
+        <div class="box blue">
+          <div class="bh">โอกาส IO ของ AZ (IO Opportunities)</div>
+          <ul class="ml">
+            <li><span class="badge bh-g">High</span> <strong>ประชากร TALOS ๖๐%</strong> ยังสนับสนุน AZ — เป็น Asset ด้าน PSYOP</li>
+            <li><span class="badge bh-g">High</span> <strong>UNSC Resolution 2847</strong> ให้ความชอบธรรม AZ ในระดับสากล</li>
+            <li><span class="badge bh-g">Medium</span> <strong>หลักฐาน WL CV</strong> — การละเมิดสิทธิ์มนุษยชนที่สามารถยืนยันได้</li>
+            <li><span class="badge bh-g">Medium</span> <strong>วิทยุ FM ที่ยังเป็น AZ-friendly</strong> ๑ สถานี — ช่องทาง PSYOP</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์เฉพาะ IO — AZ IO Capabilities &amp; Gaps</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 6: IO VULNERABILITY ANALYSIS -->
+<div class="slide" id="s6">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์เฉพาะ IO | ๖/๘</div><div class="sh-tag">การวิเคราะห์ช่องโหว่ด้าน IO</div></div></div>
+    <div class="sh-right"><div class="sh-label">IO VULNERABILITY ANALYSIS</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="two-col">
+      <div>
+        <div class="box red">
+          <div class="bh">ช่องโหว่ IO ของ WL (WL Critical Vulnerabilities)</div>
+          <div style="margin-top:6px;">
+            <div class="vuln">
+              <span class="vuln-lvl h">สูง</span>
+              <div class="vuln-body"><strong>CV-1 สิทธิ์มนุษยชน:</strong> หลักฐานการละเมิดสิทธิ์พลเรือน TALOS โดยกำลัง WL — ยังถูกปกปิด แต่สามารถยืนยันได้ผ่าน Human Network</div>
+            </div>
+            <div class="vuln">
+              <span class="vuln-lvl h">สูง</span>
+              <div class="vuln-body"><strong>CV-2 ข้อมูลภายในขัดแย้ง:</strong> เอกสารภายใน WL ที่ขัดกับ Narrative สาธารณะ — มีแหล่งข้อมูลที่น่าเชื่อถือ (ยังไม่ยืนยัน)</div>
+            </div>
+            <div class="vuln">
+              <span class="vuln-lvl h">สูง</span>
+              <div class="vuln-body"><strong>CV-3 แรงกดดันภายใน WL:</strong> Opposition ในประเทศ WL กดดันรัฐบาล หาก Conflict ยืดเยื้อ — Window เปิดแคบ</div>
+            </div>
+            <div class="vuln">
+              <span class="vuln-lvl m">กลาง</span>
+              <div class="vuln-body"><strong>CV-4 Narrative N3 ล้มเหลว:</strong> WL อ้างว่าประชาชน TALOS "เลือก" WL แต่ ๖๐% ยังสนับสนุน AZ — ช่องโหว่ที่พิสูจน์ได้</div>
+            </div>
+            <div class="vuln">
+              <span class="vuln-lvl m">กลาง</span>
+              <div class="vuln-body"><strong>CV-5 Comms C2:</strong> การสื่อสาร WL Command พึ่งพา Spectrum ที่ AZ รู้รูปแบบ — อ่อนแอต่อ ECM เมื่อถึง D-Day</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box orange">
+          <div class="bh">ช่องโหว่ IO ของ AZ (AZ Vulnerabilities — Self-Assessment)</div>
+          <div style="margin-top:6px;">
+            <div class="vuln">
+              <span class="vuln-lvl h">วิกฤต</span>
+              <div class="vuln-body"><strong>AV-0 DEFNET ถูกเจาะ (๒๕๖๕):</strong> SSF WL เจาะระบบ AZ ผ่าน VPN DDoS — DCO-IDM ยังไม่เสร็จ ความลับแผนปฏิบัติการเสี่ยงรั่วก่อนกองเรือเคลื่อน</div>
+            </div>
+            <div class="vuln">
+              <span class="vuln-lvl h">วิกฤต</span>
+              <div class="vuln-body"><strong>AV-1 ขาด Information Superiority:</strong> WL ครองสื่อและ Narrative ใน AO มา ๔๕ วัน — N5 (PPTT/Bersat) แพร่ผ่าน JORINO Network ยังไม่มี Counter-Evidence พร้อมเผยแพร่</div>
+            </div>
+            <div class="vuln">
+              <span class="vuln-lvl h">สูง</span>
+              <div class="vuln-body"><strong>AV-2 OPSEC / Social Media + DF:</strong> กำลัง AZ โพสต์ Social Media ๓ ครั้ง + DF WL ที่ Marseille/Toulon ดักสัญญาณกองเรือ AZ ใน อ่าว Venezia ได้</div>
+            </div>
+            <div class="vuln">
+              <span class="vuln-lvl h">สูง</span>
+              <div class="vuln-body"><strong>AV-3 C2 Malware + H-Hour CNO:</strong> Malware WL ฝังในระบบ C2 — หาก AZ ไม่ดำเนิน DCO-IDM ทัน WL จะ Activate โจมตี C2 ที่ H-Hour ทำ AZ ขาดการสั่งการ</div>
+            </div>
+            <div class="vuln">
+              <span class="vuln-lvl h">สูง</span>
+              <div class="vuln-body"><strong>AV-4 MILDEC ของ WL (Ventimiglia):</strong> ชายนิรนามชุดดำลอบวางเพลิงแล้วโยนความผิดให้ AZ — AZ ขาด ISR/COMCAM พร้อมโต้ทันที</div>
+            </div>
+            <div class="vuln">
+              <span class="vuln-lvl m">กลาง</span>
+              <div class="vuln-body"><strong>AV-5 StratComm ไม่ Sync:</strong> PAO และ N7 ส่งข้อความไม่สอดคล้อง — สร้างความสับสนในชุมชนนานาชาติ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์เฉพาะ IO — IO Vulnerability Analysis</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 7: COG & PIR -->
+<div class="slide" id="s7">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">สถานการณ์เฉพาะ IO | ๗/๘</div><div class="sh-tag">COG ด้าน IO และ PIR</div></div></div>
+    <div class="sh-right"><div class="sh-label">IO COG ANALYSIS + PIR</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content">
+    <div class="two-col" style="margin-bottom:10px;">
+      <div>
+        <div class="box red" style="margin-bottom:6px;">
+          <div class="bh">COG ด้าน IO ของ WL</div>
+          <div class="cog-box">
+            <div class="cog-label">CENTER OF GRAVITY (COG)</div>
+            <div class="cog-val" style="color:#ff8080;font-weight:600;">ความชอบธรรมและการยอมรับของนานาชาติ (International Legitimacy)</div>
+          </div>
+          <div class="cog-box">
+            <div class="cog-label">CRITICAL CAPABILITY (CC)</div>
+            <div class="cog-val">ครองอำนาจ Narrative ระดับ Global — บรรยายการยึดครอง TALOS เป็น "การคุ้มครอง" มิใช่ "การรุกราน"</div>
+          </div>
+          <div class="cog-box">
+            <div class="cog-label">CRITICAL REQUIREMENT (CR)</div>
+            <div class="cog-val">การสนับสนุนจากสื่อนานาชาติ + การงดเว้นวีโต้ใน UNSC + Domestic Stability ภายใน WL</div>
+          </div>
+          <div class="cog-box">
+            <div class="cog-label">CRITICAL VULNERABILITY (CV)</div>
+            <div class="cog-val" style="color:#ff8080;">หลักฐานละเมิดสิทธิ์มนุษยชน + N5 (PPTT/Bersat) ใช้ข้อกล่าวหาเท็จ (พิสูจน์หักล้างได้) + Narrative ขัดกับความเป็นจริงในสายตาพลเรือน TALOS ๖๐%</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box green" style="margin-bottom:6px;">
+          <div class="bh">COG ด้าน IO ของ AZ</div>
+          <div class="cog-box">
+            <div class="cog-label">CENTER OF GRAVITY (COG)</div>
+            <div class="cog-val" style="color:#60d090;font-weight:600;">การสนับสนุนจากนานาชาติและขวัญกำลังใจของพลเรือน TALOS</div>
+          </div>
+          <div class="cog-box">
+            <div class="cog-label">CRITICAL CAPABILITY (CC)</div>
+            <div class="cog-val">Counter-Narrative ที่น่าเชื่อถือ + การพิสูจน์ความชอบธรรมตาม UNSC 2847 + การปกป้องพลเรือน</div>
+          </div>
+          <div class="cog-box">
+            <div class="cog-label">CRITICAL REQUIREMENT (CR)</div>
+            <div class="cog-val">Media Platform ที่เข้าถึงผู้ชมนานาชาติ + OPSEC ที่เข้มแข็ง + IO Synchronization กับ Amphibious Phase</div>
+          </div>
+          <div class="cog-box">
+            <div class="cog-label">CRITICAL VULNERABILITY (CV)</div>
+            <div class="cog-val" style="color:#ff8080;">DEFNET breach (๒๕๖๕) / DCO-IDM ค้าง + C2 Malware Active ที่ H-Hour + ขาด Counter-N5 (PPTT/Bersat) + OPSEC Leaks / DF Marseille-Toulon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box blue" style="margin-bottom:0;padding-bottom:8px;">
+      <div class="bh">ความต้องการข่าวสารสำคัญด้าน IO — <span style="color:#d4a820;">กรอบ ๖ หมวด</span> (IO PIR Framework)</div>
+      <table style="font-size:10px;margin-top:6px;">
+        <tr>
+          <th style="width:4%;text-align:center;">#</th>
+          <th style="width:16%;">หมวด</th>
+          <th style="width:40%;">คำถาม PIR (เฉพาะปฏิบัติการ RESTORE TALOS)</th>
+          <th style="width:22%;">IO ที่สนับสนุน</th>
+          <th style="width:9%;text-align:center;">เส้นตาย</th>
+          <th style="width:9%;text-align:center;">แหล่ง</th>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:700;color:#d4a820;">1</td>
+          <td class="hl">👤 ผู้นำ &amp; ตัดสินใจ</td>
+          <td>ผู้บัญชาการ WL Garrison TALOS มี Pattern การตัดสินใจแบบใด? ใช้ที่ปรึกษาสายใด? Sosnovka OODA Loop ช้าแค่ไหน?</td>
+          <td><span class="badge bh-b">MILDEC</span> — ออกแบบ False Signal ให้ตรง Cognitive Bias ผู้บัญชาการ WL</td>
+          <td style="text-align:center;font-size:9px;color:#a080f0;">ก่อน D-7</td>
+          <td style="text-align:center;font-size:9px;color:#5070a0;">HUMINT OSINT</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:700;color:#d4a820;">2</td>
+          <td class="hl">🧠 จิตวิทยา &amp; PSYOP</td>
+          <td>ทัศนคติพลเรือน TALOS &amp; Garrison WL เปลี่ยนแปลงอย่างไร? JORINO + Madrasa Campaign เปลี่ยน Sentiment ได้แค่ไหน? N5 กระทบ UNSC Member ใด?</td>
+          <td><span class="badge bh-p">PSYOP</span> <span class="badge bh-b">StratComm</span> — Adjust Message + Counter-N5 ก่อนแพร่ UNSC</td>
+          <td style="text-align:center;font-size:9px;color:#ff8080;">ต่อเนื่อง</td>
+          <td style="text-align:center;font-size:9px;color:#5070a0;">OSINT HUMINT</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:700;color:#d4a820;">3</td>
+          <td class="hl">📡 C2 &amp; สื่อสาร</td>
+          <td>WL จะใช้ EW Jamming ในช่วง H-Hour Window ใด? DF Network Marseille/Toulon ครอบคลุม Sector ใดของ TF-51? Sosnovka ใช้ช่องทาง Backup Comms ใด?</td>
+          <td><span class="badge bh-y">EMCON</span> <span class="badge bh-r">EW/EA</span> — กำหนด Safe Comms Window + ตัด C2 WL</td>
+          <td style="text-align:center;font-size:9px;color:#ff8080;">ก่อน D-3</td>
+          <td style="text-align:center;font-size:9px;color:#5070a0;">SIGINT ELINT</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:700;color:#d4a820;">4</td>
+          <td class="hl">💻 ไซเบอร์ &amp; CNO</td>
+          <td>Malware ที่ WL ฝังใน AZ DEFNET (๒๕๖๕) จะ Activate เงื่อนไขใด? WL SSF กำหนด AZ System ใดเป็น CNE/CNA Priority ที่ H-Hour?</td>
+          <td><span class="badge bh-g">DCO-IDM</span> <span class="badge bh-g">DEFNET</span> — อุดช่องโหว่ก่อน WL เปิดใช้</td>
+          <td style="text-align:center;font-size:9px;color:#ff8080;">ก่อน D-5</td>
+          <td style="text-align:center;font-size:9px;color:#5070a0;">TECHINT CNE</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:700;color:#d4a820;">5</td>
+          <td class="hl">🏗️ โครงสร้างพื้นฐาน</td>
+          <td>ศูนย์ Sosnovka มีทางเข้า-ออกกี่จุด? อุโมงค์ Fiber ใต้ดิน TALOS เชื่อม Microwave/SAT Node ที่พิกัดใด?</td>
+          <td><span class="badge bh-r">PHYATK</span> — ระบุ HVI ตัด Comms WL ระหว่าง TALOS–แผ่นดินใหญ่</td>
+          <td style="text-align:center;font-size:9px;color:#a080f0;">ก่อน D-7</td>
+          <td style="text-align:center;font-size:9px;color:#5070a0;">IMINT HUMINT</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:700;color:#d4a820;">6</td>
+          <td class="hl">🔐 OPSEC &amp; CI</td>
+          <td>กระทรวงความปลอดภัยแห่งรัฐ WL กำลังรวบรวม EEFI ใดของ AZ? มีสายลับ WL ในพันธมิตร? มีหลักฐาน WL รู้แผน Crimson Shield?</td>
+          <td><span class="badge bh-g">Counter-CI</span> <span class="badge bh-g">OPSEC</span> — ปกป้องความลับ AZ จาก WL MSS</td>
+          <td style="text-align:center;font-size:9px;color:#ff8080;">ก่อน D-5</td>
+          <td style="text-align:center;font-size:9px;color:#5070a0;">HUMINT CI</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์เฉพาะ IO — COG Analysis &amp; PIR</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+<!-- SLIDE 8: Q&A -->
+<div class="slide" id="s8">
+  <div class="sh">
+    <div class="sh-left"><span class="sh-anchor"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:22px;width:auto;vertical-align:middle;"></span><div><div class="sh-unit">N7 — IO</div><div class="sh-tag">Q&amp;A</div></div></div>
+    <div class="sh-right"><div class="sh-label">END OF BRIEF</div><div class="sh-tag">สธ.๘๖</div></div>
+  </div>
+  <div class="content" style="align-items:center;text-align:center;">
+    <div style="opacity:0.3;margin-bottom:20px;"><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:80px;width:auto;"></div>
+    <div style="font-size:36px;font-weight:900;color:#e8f0ff;margin-bottom:8px;">ถาม — ตอบ</div>
+    <div style="font-size:16px;color:#d4a820;margin-bottom:24px;">Questions &amp; Answers | สถานการณ์เฉพาะด้าน IO</div>
+    <div style="width:120px;height:2px;background:linear-gradient(90deg,transparent,#d4a820,transparent);margin:0 auto 24px;"></div>
+    <div style="font-size:13px;color:#4a6a8a;line-height:2;max-width:560px;">
+      กลุ่มที่ ๒ — N7 การปฏิบัติการสารสนเทศ<br>
+      สัมมนาการวางแผนทางทหารแบบปราณีต | สธ.๘๖<br>
+      ขอบคุณครับ / ค่ะ
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
+      <a href="สถานการณ์ทั่วไป.html" style="padding:8px 18px;border:1px solid #2d8a5a;color:#60d090;background:rgba(45,138,90,0.08);border-radius:4px;text-decoration:none;font-size:12px;">← สถานการณ์ทั่วไป</a>
+      <a href="01_IPOE_IO.html" style="padding:8px 18px;border:1px solid #d4a820;color:#d4a820;background:rgba(212,168,32,0.08);border-radius:4px;text-decoration:none;font-size:12px;">→ IPOE IO Analysis</a>
+      <a href="02_IO_Matrix.html" style="padding:8px 18px;border:1px solid #1a3a6a;color:#60a0f0;background:rgba(30,95,168,0.08);border-radius:4px;text-decoration:none;font-size:12px;">→ IO Matrix</a>
+      <a href="index.html" style="padding:8px 18px;border:1px solid #1a3a6a;color:#7090b0;background:rgba(26,58,106,0.08);border-radius:4px;text-decoration:none;font-size:12px;">⌂ Dashboard</a>
+    </div>
+  </div>
+  <div class="sf"><span><img src="../Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">N7 IO | กลุ่มที่ ๒</span><span class="sf-center">สถานการณ์เฉพาะ IO — Complete</span><span>สธ.๘๖ | ๑๐ มิ.ย. ๒๕๖๙</span></div>
+</div>
+
+</div><!-- end #pres -->
+
+<div id="nav">
+  <button onclick="prev()" title="Previous (←)">◀</button>
+  <span id="ctr">1/8</span>
+  <button onclick="next()" title="Next (→ or Space)">▶</button>
+  <a id="home-btn" href="index.html" title="Dashboard">⌂</a>
+</div>
+
+<script>
+let cur=0;
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+function go(n){
+  slides[cur].classList.remove('active');
+  cur=Math.max(0,Math.min(n,total-1));
+  slides[cur].classList.add('active');
+  document.getElementById('ctr').textContent=(cur+1)+'/'+total;
+}
+function next(){go(cur+1);}
+function prev(){go(cur-1);}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
+  if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+  if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+  if(e.key==='h'||e.key==='H'){window.location.href='index.html';}
+});
+go(0);
+</script>
+</body>
+</html>
