@@ -57,6 +57,21 @@ body {
 .tag-purple { background:rgba(192,132,252,0.2); color:#c084fc; border-color:#7c3aed; }
 .tag-red { background:rgba(138,45,45,0.3); color:#ff8080; border-color:#8a2d2d; }
 
+/* Quick-access shortcuts */
+.quicklinks { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+.ql-btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:9px 16px; border-radius:6px;
+  font-size:13px; font-weight:700; text-decoration:none;
+  border:1px solid; transition:all 0.18s;
+}
+.ql-btn:hover { transform:translateY(-2px); }
+.ql-gold { background:rgba(212,168,32,0.18); color:#f0c840; border-color:#8a6010; }
+.ql-gold:hover { background:rgba(212,168,32,0.3); box-shadow:0 6px 18px rgba(212,168,32,0.25); }
+.ql-blue { background:rgba(30,95,168,0.18); color:#60a0f0; border-color:#1e5fa8; }
+.ql-blue:hover { background:rgba(30,95,168,0.3); box-shadow:0 6px 18px rgba(30,95,168,0.25); }
+.ql-btn .ql-ico { font-size:15px; }
+
 .section { padding:40px; }
 .section-title {
   font-family:'Chakra Petch','Sarabun',sans-serif;
@@ -185,6 +200,10 @@ body {
       <span class="tag tag-blue">IO Matrix</span>
       <span class="tag tag-purple">COA IO Support</span>
       <span class="tag tag-red">CONOPS IO</span>
+    </div>
+    <div class="quicklinks">
+      <a class="ql-btn ql-gold" href="campaigns/index.html"><span class="ql-ico">🎯</span> เปิดคลังแคมเปญ IO (Portfolio)</a>
+      <a class="ql-btn ql-blue" href="campaigns/posters.html"><span class="ql-ico">🖼</span> โปสเตอร์ PSYOP + วิดีโอปลุกระดม</a>
     </div>
   </div>
 </div>
@@ -367,7 +386,7 @@ body {
           <div class="topic-item">TALOS TRUTH — ศูนย์ตรวจสอบข้อเท็จจริง (โต้ #TalosOurHeritage)</div>
           <div class="topic-item">Social Media Campaign — feed จำลอง + content calendar + metrics</div>
           <div class="topic-item">TALOS History Quiz — เกมทดสอบ (inoculation)</div>
-          <div class="topic-item">PSYOP Poster Gallery — โปสเตอร์ A4 พิมพ์ได้ ๖ แบบ</div>
+          <div class="topic-item">PSYOP Poster Gallery — โปสเตอร์ A4 พิมพ์ได้ ๑๒ แบบ + วิดีโอปลุกระดม ๓ คลิป</div>
         </div>
       </div>
       <div class="card-footer">
