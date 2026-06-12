@@ -384,30 +384,28 @@ body {
 .dpio-phead{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;letter-spacing:.5px;}
 .dpio-panel.def .dpio-phead{color:#60a0f0;}
 .dpio-panel.off .dpio-phead{color:#f0c840;}
-.dpio-2col{position:relative;display:grid;grid-template-columns:minmax(160px,1fr) minmax(180px,1.05fr);gap:46px;}
+.dpio-2col{position:relative;display:grid;grid-template-columns:minmax(150px,0.9fr) minmax(168px,1fr);gap:108px;}
+@media(max-width:560px){.dpio-2col{gap:70px;}}
 .dpio-svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible;}
 .dpio-dpcol,.dpio-iocol{position:relative;z-index:1;}
-.dpio-iocol{display:flex;flex-direction:column;justify-content:center;gap:9px;}
+.dpio-iocol{display:flex;flex-direction:column;justify-content:center;gap:11px;}
 .dpio-gh{font-size:10px;font-weight:700;color:#d4a820;letter-spacing:.4px;margin:12px 0 7px;padding-left:8px;border-left:2px solid #8a6010;}
 .dpio-dpcol .dpio-gh:first-child{margin-top:0;}
 .dpio-node{display:flex;align-items:center;gap:8px;background:rgba(10,22,40,0.85);border:1px solid #1a3a6a;border-radius:6px;padding:6px 9px;margin-bottom:6px;transition:all .15s;cursor:default;}
-.dpio-node .dpio-dpn{flex-shrink:0;font-family:'Chakra Petch',sans-serif;font-size:10px;font-weight:700;color:#60a0f0;background:rgba(30,95,168,0.18);border:1px solid #1e5fa8;border-radius:4px;padding:2px 5px;min-width:40px;text-align:center;}
+.dpio-node .dpio-dpn{flex-shrink:0;font-family:'Chakra Petch',sans-serif;font-size:10px;font-weight:700;color:#9ab8dc;background:rgba(40,60,90,0.5);border:1px solid #2a4a6a;border-radius:4px;padding:2px 5px;min-width:40px;text-align:center;}
 .dpio-node .dpio-dpt{font-size:11px;color:#bcd0ec;line-height:1.35;}
 .dpio-node.dpio-star .dpio-dpn{color:#f0c840;background:rgba(212,168,32,0.2);border-color:#8a6010;}
-.dpio-node.dpio-dim{opacity:.34;}
-.dpio-node.hot{border-color:#2a7fd4;background:rgba(30,95,168,0.22);box-shadow:0 2px 12px rgba(30,95,168,.3);}
-.dpio-panel.off .dpio-node.hot{border-color:#d4a820;background:rgba(212,168,32,0.16);box-shadow:0 2px 12px rgba(212,168,32,.28);}
-.dpio-box{background:rgba(10,22,40,0.92);border:1px solid #234a6a;border-radius:7px;padding:9px 11px;transition:all .15s;cursor:default;}
-.dpio-panel.def .dpio-box{border-left:3px solid #2a7fd4;}
-.dpio-panel.off .dpio-box{border-left:3px solid #d4a820;}
-.dpio-bt{font-size:12px;font-weight:700;color:#e8f0ff;margin-bottom:3px;}
-.dpio-bd{font-size:10.5px;color:#7090b0;line-height:1.5;}
-.dpio-box.hot{border-color:#60a0f0;box-shadow:0 2px 14px rgba(30,95,168,.35);transform:translateX(3px);}
-.dpio-panel.off .dpio-box.hot{border-color:#f0c840;box-shadow:0 2px 14px rgba(212,168,32,.3);}
-.dpio-link{fill:none;stroke:#2a7fd4;stroke-width:1.5;opacity:.20;transition:opacity .15s,stroke-width .15s;}
-.dpio-panel.off .dpio-link{stroke:#d4a820;}
+.dpio-node.dpio-dim{opacity:.3;}
+.dpio-node.hot{border-color:#fff;background:rgba(255,255,255,0.08);box-shadow:0 0 0 1px rgba(255,255,255,.4),0 2px 12px rgba(0,0,0,.45);}
+.dpio-box{--bc:#4dabf7;background:rgba(10,22,40,0.92);border:1px solid #234a6a;border-left:4px solid var(--bc);border-radius:7px;padding:8px 11px;transition:all .15s;cursor:default;}
+.dpio-bt{font-size:12px;font-weight:700;color:var(--bc);margin-bottom:2px;}
+.dpio-bd{font-size:10.5px;color:#90a8c4;line-height:1.45;}
+.dpio-bex{font-size:9.5px;color:#5f7fa0;line-height:1.45;margin-top:3px;font-style:italic;}
+.dpio-box.hot{border-color:var(--bc);background:rgba(255,255,255,0.04);box-shadow:0 0 0 1.5px var(--bc),0 4px 18px rgba(0,0,0,.5);transform:translateX(3px);}
+.dpio-link{fill:none;stroke:#4dabf7;stroke-width:1.8;opacity:.72;stroke-linejoin:round;stroke-linecap:round;transition:opacity .15s,stroke-width .15s;}
 .dpio-2col.dpio-focusing .dpio-link{opacity:.06;}
-.dpio-link.on{opacity:.95;stroke-width:2.6;}
+.dpio-link.on{opacity:1;stroke-width:3.4;}
+.dpio-node.dot::after{content:"";}
 .dpio-hint{font-size:11px;color:#5a7a9a;margin-top:16px;line-height:1.7;font-style:italic;border-top:1px dashed #1a3a6a;padding-top:12px;}
 .dpio-hint b{color:#d4a820;font-style:normal;}
 </style>
@@ -416,8 +414,8 @@ body {
   <div class="section-title">การเชื่อมโยงกิจ IO กับ DECISIVE POINTS (STEP 4) — DP ↔ IO LINKAGE</div>
   <p class="dpio-intro">นำ Decisive Points (DP ๑–๑๔) จากขั้นที่ ๔ «จัดทำสภาวะที่ต้องการทางการรบ» มาเชื่อมโยงไปยังกล่องกิจ IO ทางด้านขวา แยกเป็น ๒ ผัง — กิจที่กระทำเพื่อ <b>ป้องกันฝ่ายเรา (Defensive)</b> และกิจที่กระทำ <b>ต่อ WL (Offensive)</b> &nbsp;·&nbsp; ชี้ที่ DP หรือกล่อง IO เพื่อเน้นเส้นเชื่อมโยง</p>
   <div class="dpio-legend">
-    <span><i style="border-color:#2a7fd4;"></i> เส้นผังป้องกันฝ่ายเรา</span>
-    <span><i style="border-color:#d4a820;"></i> เส้นผังต่อ WL</span>
+    <span>🔌 เส้นแบบ <b style="color:#bcd0ec;">wiring (ตั้งฉาก)</b> — เส้นสีเดียวกัน = วิ่งเข้ากล่อง IO กล่องเดียวกัน</span>
+    <span>🎨 แต่ละกล่อง IO มี <b style="color:#bcd0ec;">สีเฉพาะ</b> (ดูจากขอบซ้าย + ชื่อกล่อง)</span>
     <span style="color:#f0c840;">★ DP13 = Decisive Point ด้าน IO (ความพยายามหลัก)</span>
     <span style="opacity:.55;">DP ที่จาง = ไม่มีกิจหลักในผังด้านนั้น</span>
   </div>
@@ -443,22 +441,22 @@ body {
    {g:'กลุ่ม ๔ · ส่งกำลังบำรุง + ความชอบธรรม',d:[['dp10','DP10','หัวหาดเหนือ TALOS สถาปนา-ควบคุม'],['dp11','DP11','กรม ร. ยกพลขึ้นเกาะสำเร็จ'],['dp12','DP12','ส่งกำลังบำรุงกำลังรบบนเกาะต่อเนื่อง'],['dp13','DP13','ผลกระทบพลเรือนจำกัด + นานาชาติยอมรับ'],['dp14','DP14','สภาวะเกื้อกูลการเจรจาต่อรอง']]}
   ];
   const DEF=[
-   ['d1','OPSEC / EMCON','ปกปิดการแผ่คลื่น C2 · ตารางขบวน/SLOC · ปฏิเสธการรับรู้ของ WL'],
-   ['d2','Cyber Defense (CND)','ป้องกัน DEFNET จากการบุกรุก/DDoS · เฝ้าตรวจ-สกัดการแทรกซึม'],
-   ['d3','EP / Counter-UAS','ป้องกันการรบกวน (EP) · ต้าน UAS ข้าศึก · Chaff/Decoy'],
-   ['d4','Counter-PSYOP / Counter-Disinfo','ตอบโต้ข่าวลือ-อิทธิพล WL ต่อชุมชนปีก/ส่วนหลัง'],
-   ['d5','PA / StratComm','ชี้แจงข้อเท็จจริงเร็ว · ROE/ความได้สัดส่วน · บริหารการบานปลาย'],
-   ['d6','CMO / KLE','เข้าถึงชุมชนท้องถิ่น/Verdatia กลาง · อพยพพลเรือนจาก Corridor'],
-   ['d7','MILDEC (ป้องกัน)','ลวงภาพสถานการณ์ · ปกปิดเจตนา/กำลังจริงของฝ่ายเรา']
+   ['d1','OPSEC / EMCON','ปกปิดการแผ่คลื่น C2 · ตารางขบวน/SLOC · ปฏิเสธการรับรู้ของ WL','ตัวอย่าง: กำหนด EMCON ช่วงรวมพล · ปกปิดวัน-เวลายกพล · งดสัญญาณก่อน H-hour','#4dabf7'],
+   ['d2','Cyber Defense (CND)','ป้องกัน DEFNET จากการบุกรุก/DDoS · เฝ้าตรวจ-สกัดการแทรกซึม','ตัวอย่าง: แยกเครือข่าย DEFNET · IDS/IPS เฝ้าตรวจ · ซ้อมรับมือ DDoS','#63e6be'],
+   ['d3','EP / Counter-UAS','ป้องกันการรบกวน (EP) · ต้าน UAS ข้าศึก · Chaff/Decoy','ตัวอย่าง: Frequency hopping · GPS anti-jam · ดักจับ-รบกวน UAS · ทิ้ง Chaff','#ffd43b'],
+   ['d4','Counter-PSYOP / Counter-Disinfo','ตอบโต้ข่าวลือ-อิทธิพล WL ต่อชุมชนปีก/ส่วนหลัง','ตัวอย่าง: ทีม Rapid Rebuttal · สื่อท้องถิ่นชี้แจง · inoculation ก่อนข่าวลือแพร่','#ff8787'],
+   ['d5','PA / StratComm','ชี้แจงข้อเท็จจริงเร็ว · ROE/ความได้สัดส่วน · บริหารการบานปลาย','ตัวอย่าง: แถลงข่าวพร้อมหลักฐาน · Combat Camera · สาร ROE/ความได้สัดส่วน','#b197fc'],
+   ['d6','CMO / KLE','เข้าถึงชุมชนท้องถิ่น/Verdatia กลาง · อพยพพลเรือนจาก Corridor','ตัวอย่าง: เปิดทางมนุษยธรรม · พบผู้นำชุมชน/Verdatia · ประกาศอพยพ Corridor','#f783ac'],
+   ['d7','MILDEC (ป้องกัน)','ลวงภาพสถานการณ์ · ปกปิดเจตนา/กำลังจริงของฝ่ายเรา','ตัวอย่าง: หน่วยลวง/หุ่นจำลอง · การจราจรวิทยุลวง · ปกปิดทิศทางหลัก','#ffa94d']
   ];
   const OFF=[
-   ['o1','PSYOP / MISO','ต่อกองรักษาการณ์/พลประจำ WL — ชวนยอมจำนน · ชี้ความไร้ผล'],
-   ['o2','EW – EA','รบกวน comms/nav/เรดาร์ · Spoof datalink & GPS ของ UAS'],
-   ['o3','Cyber (CNA/CNE)','ต่อระบบส่งกำลัง / EW / C2 ของ WL'],
-   ['o4','SIGINT / ES (Targeting)','ระบุพิกัดฐานยิง/ตัวแผ่คลื่น → ป้อนอำนาจการยิง'],
-   ['o5','MILDEC (ต่อข้าศึก)','ลวงจุด/เวลายกพล · Feint / Demonstration'],
-   ['o6','Counter-JORINO / Attribution','เปิดโปงเครือข่ายบิดเบือน (กว่า ๔ ล้านบัญชี/Bot) · ระบุที่มา'],
-   ['o7','Influence → Negotiation','ส่งสัญญาณความแน่วแน่ + ทางลง (off-ramp) ต่อผู้ตัดสินใจ/ผู้ไกล่เกลี่ย']
+   ['o1','PSYOP / MISO','ต่อกองรักษาการณ์/พลประจำ WL — ชวนยอมจำนน · ชี้ความไร้ผล','ตัวอย่าง: ใบปลิว/วิทยุชวนยอมจำนน · สารถึงพลส่งกำลัง · Safe-conduct pass','#4dabf7'],
+   ['o2','EW – EA','รบกวน comms/nav/เรดาร์ · Spoof datalink & GPS ของ UAS','ตัวอย่าง: รบกวนข่ายสื่อสาร/เรดาร์ WL · spoof GPS ต่อ UAS · ตัด datalink','#63e6be'],
+   ['o3','Cyber (CNA/CNE)','ต่อระบบส่งกำลัง / EW / C2 ของ WL','ตัวอย่าง: แทรกซึมระบบส่งกำลัง · ทำลายฐานข้อมูลเป้าหมาย · ขัดขวาง C2','#ffd43b'],
+   ['o4','SIGINT / ES (Targeting)','ระบุพิกัดฐานยิง/ตัวแผ่คลื่น → ป้อนอำนาจการยิง','ตัวอย่าง: ดักรับ-หาทิศตัวแผ่คลื่น · ระบุพิกัดฐานยิงจรวด → ส่งอำนาจการยิง','#ff8787'],
+   ['o5','MILDEC (ต่อข้าศึก)','ลวงจุด/เวลายกพล · Feint / Demonstration','ตัวอย่าง: Feint ยกพลจุดลวง · Demonstration ดึงกำลัง · ข่าวกรองลวง','#b197fc'],
+   ['o6','Counter-JORINO / Attribution','เปิดโปงเครือข่ายบิดเบือน (กว่า ๔ ล้านบัญชี/Bot) · ระบุที่มา','ตัวอย่าง: เปิดโปง Bot network · ระบุที่มาปฏิบัติการบิดเบือน · takedown บัญชีปลอม','#f783ac'],
+   ['o7','Influence → Negotiation','ส่งสัญญาณความแน่วแน่ + ทางลง (off-ramp) ต่อผู้ตัดสินใจ/ผู้ไกล่เกลี่ย','ตัวอย่าง: ส่งสัญญาณผ่านสื่อ/คนกลาง · เสนอ off-ramp · back-channel การทูต','#ffa94d']
   ];
   const DEF_LINKS=[['dp1',['d1','d7']],['dp2',['d2','d1']],['dp3',['d4','d7']],['dp4',['d4','d1']],['dp6',['d3']],['dp7',['d3','d1']],['dp8',['d6']],['dp10',['d1']],['dp11',['d1']],['dp12',['d5','d1']],['dp13',['d5','d6']],['dp14',['d5']]];
   const OFF_LINKS=[['dp1',['o4']],['dp2',['o3','o2']],['dp3',['o1']],['dp4',['o2']],['dp5',['o2','o3','o1','o5']],['dp6',['o2','o4','o1']],['dp7',['o2']],['dp8',['o5','o1']],['dp9',['o2','o3','o5']],['dp10',['o1','o5']],['dp11',['o1','o5']],['dp13',['o6']],['dp14',['o7']]];
@@ -479,28 +477,41 @@ body {
     });
     boxes.forEach(b=>{
       const box=document.createElement('div'); box.className='dpio-box'; box.setAttribute('data-box',b[0]);
-      box.innerHTML='<div class="dpio-bt">'+b[1]+'</div><div class="dpio-bd">'+b[2]+'</div>';
+      box.style.setProperty('--bc',b[4]);
+      box.innerHTML='<div class="dpio-bt">'+b[1]+'</div><div class="dpio-bd">'+b[2]+'</div><div class="dpio-bex">'+b[3]+'</div>';
       iocol.appendChild(box);
     });
   }
-  function drawPanel(panel,links){
+  function drawPanel(panel,links,boxes){
     const two=panel.querySelector('.dpio-2col'), svg=panel.querySelector('.dpio-svg');
+    const dpcol=panel.querySelector('.dpio-dpcol'), iocol=panel.querySelector('.dpio-iocol');
     const W=two.clientWidth, H=two.clientHeight;
     svg.setAttribute('viewBox','0 0 '+W+' '+H);
     while(svg.firstChild) svg.removeChild(svg.firstChild);
     const base=two.getBoundingClientRect();
+    // routing channel = gap between DP column (left rail) and IO column (right rail)
+    const dpR=dpcol.getBoundingClientRect().right-base.left;
+    const ioL=iocol.getBoundingClientRect().left-base.left;
+    const pad=10, N=boxes.length;
+    const usable=Math.max(20,(ioL-dpR)-2*pad);
+    // each IO box gets its own vertical bus lane + colour
+    const laneOf={}, colorOf={};
+    boxes.forEach((b,i)=>{ laneOf[b[0]]=dpR+pad+(i+0.5)*(usable/N); colorOf[b[0]]=b[4]; });
     links.forEach(l=>{
       const a=two.querySelector('[data-node="'+l[0]+'"]'); if(!a) return;
       const ar=a.getBoundingClientRect();
+      const y0=ar.top-base.top+ar.height/2;
       l[1].forEach(t=>{
         const b=two.querySelector('[data-box="'+t+'"]'); if(!b) return;
         const br=b.getBoundingClientRect();
-        const x1=ar.right-base.left, y1=ar.top-base.top+ar.height/2;
-        const x2=br.left-base.left, y2=br.top-base.top+br.height/2;
-        const dx=Math.max(36,(x2-x1)*0.5);
+        const yN=br.top-base.top+br.height/2;
+        const lx=laneOf[t];
+        // orthogonal wiring: rail → bus lane → box (H,V,H)
+        const d='M'+dpR.toFixed(1)+','+y0.toFixed(1)+' H'+lx.toFixed(1)+' V'+yN.toFixed(1)+' H'+ioL.toFixed(1);
         const p=document.createElementNS(NS,'path');
-        p.setAttribute('d','M'+x1+','+y1+' C'+(x1+dx)+','+y1+' '+(x2-dx)+','+y2+' '+x2+','+y2);
+        p.setAttribute('d',d);
         p.setAttribute('class','dpio-link');
+        p.setAttribute('stroke',colorOf[t]);
         p.setAttribute('data-dp',l[0]); p.setAttribute('data-tgt',t);
         svg.appendChild(p);
       });
@@ -523,7 +534,7 @@ body {
     if(!def||!off) return;
     renderPanel(def,DEF,DEF_LINKS); renderPanel(off,OFF,OFF_LINKS);
     wire(def); wire(off);
-    function redraw(){drawPanel(def,DEF_LINKS);drawPanel(off,OFF_LINKS);}
+    function redraw(){drawPanel(def,DEF_LINKS,DEF);drawPanel(off,OFF_LINKS,OFF);}
     redraw();
     window.addEventListener('resize',redraw);
     if(document.fonts&&document.fonts.ready){document.fonts.ready.then(redraw);}
