@@ -204,6 +204,7 @@ body {
     <div class="quicklinks">
       <a class="ql-btn ql-gold" href="campaigns/index.html"><span class="ql-ico">🎯</span> เปิดคลังแคมเปญ IO (Portfolio)</a>
       <a class="ql-btn ql-blue" href="campaigns/posters.html"><span class="ql-ico">🖼</span> โปสเตอร์ PSYOP + วิดีโอปลุกระดม</a>
+      <a class="ql-btn ql-blue" href="#dp-io-linkage"><span class="ql-ico">🔗</span> ผังเชื่อมโยง DP ↔ IO</a>
     </div>
   </div>
 </div>
@@ -369,6 +370,168 @@ body {
 
   </div>
 </div>
+
+<style>
+#dp-io-linkage .dpio-intro{font-size:12.5px;color:#7090b0;line-height:1.75;margin-bottom:10px;}
+#dp-io-linkage .dpio-intro b{color:#bcd0ec;}
+.dpio-legend{display:flex;gap:20px;flex-wrap:wrap;font-size:11px;color:#6080a0;margin-bottom:20px;align-items:center;}
+.dpio-legend i{display:inline-block;width:24px;height:0;border-top:2px solid;margin-right:6px;vertical-align:middle;}
+.dpio-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+@media(max-width:1180px){.dpio-grid{grid-template-columns:1fr;}}
+.dpio-panel{background:rgba(13,32,69,0.5);border:1px solid #1a3a6a;border-radius:10px;padding:16px 16px 20px;}
+.dpio-panel.def{border-top:3px solid #2a7fd4;}
+.dpio-panel.off{border-top:3px solid #d4a820;}
+.dpio-phead{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;letter-spacing:.5px;}
+.dpio-panel.def .dpio-phead{color:#60a0f0;}
+.dpio-panel.off .dpio-phead{color:#f0c840;}
+.dpio-2col{position:relative;display:grid;grid-template-columns:minmax(160px,1fr) minmax(180px,1.05fr);gap:46px;}
+.dpio-svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible;}
+.dpio-dpcol,.dpio-iocol{position:relative;z-index:1;}
+.dpio-iocol{display:flex;flex-direction:column;justify-content:center;gap:9px;}
+.dpio-gh{font-size:10px;font-weight:700;color:#d4a820;letter-spacing:.4px;margin:12px 0 7px;padding-left:8px;border-left:2px solid #8a6010;}
+.dpio-dpcol .dpio-gh:first-child{margin-top:0;}
+.dpio-node{display:flex;align-items:center;gap:8px;background:rgba(10,22,40,0.85);border:1px solid #1a3a6a;border-radius:6px;padding:6px 9px;margin-bottom:6px;transition:all .15s;cursor:default;}
+.dpio-node .dpio-dpn{flex-shrink:0;font-family:'Chakra Petch',sans-serif;font-size:10px;font-weight:700;color:#60a0f0;background:rgba(30,95,168,0.18);border:1px solid #1e5fa8;border-radius:4px;padding:2px 5px;min-width:40px;text-align:center;}
+.dpio-node .dpio-dpt{font-size:11px;color:#bcd0ec;line-height:1.35;}
+.dpio-node.dpio-star .dpio-dpn{color:#f0c840;background:rgba(212,168,32,0.2);border-color:#8a6010;}
+.dpio-node.dpio-dim{opacity:.34;}
+.dpio-node.hot{border-color:#2a7fd4;background:rgba(30,95,168,0.22);box-shadow:0 2px 12px rgba(30,95,168,.3);}
+.dpio-panel.off .dpio-node.hot{border-color:#d4a820;background:rgba(212,168,32,0.16);box-shadow:0 2px 12px rgba(212,168,32,.28);}
+.dpio-box{background:rgba(10,22,40,0.92);border:1px solid #234a6a;border-radius:7px;padding:9px 11px;transition:all .15s;cursor:default;}
+.dpio-panel.def .dpio-box{border-left:3px solid #2a7fd4;}
+.dpio-panel.off .dpio-box{border-left:3px solid #d4a820;}
+.dpio-bt{font-size:12px;font-weight:700;color:#e8f0ff;margin-bottom:3px;}
+.dpio-bd{font-size:10.5px;color:#7090b0;line-height:1.5;}
+.dpio-box.hot{border-color:#60a0f0;box-shadow:0 2px 14px rgba(30,95,168,.35);transform:translateX(3px);}
+.dpio-panel.off .dpio-box.hot{border-color:#f0c840;box-shadow:0 2px 14px rgba(212,168,32,.3);}
+.dpio-link{fill:none;stroke:#2a7fd4;stroke-width:1.5;opacity:.20;transition:opacity .15s,stroke-width .15s;}
+.dpio-panel.off .dpio-link{stroke:#d4a820;}
+.dpio-2col.dpio-focusing .dpio-link{opacity:.06;}
+.dpio-link.on{opacity:.95;stroke-width:2.6;}
+.dpio-hint{font-size:11px;color:#5a7a9a;margin-top:16px;line-height:1.7;font-style:italic;border-top:1px dashed #1a3a6a;padding-top:12px;}
+.dpio-hint b{color:#d4a820;font-style:normal;}
+</style>
+
+<div class="section" id="dp-io-linkage" style="padding-top:0">
+  <div class="section-title">การเชื่อมโยงกิจ IO กับ DECISIVE POINTS (STEP 4) — DP ↔ IO LINKAGE</div>
+  <p class="dpio-intro">นำ Decisive Points (DP ๑–๑๔) จากขั้นที่ ๔ «จัดทำสภาวะที่ต้องการทางการรบ» มาเชื่อมโยงไปยังกล่องกิจ IO ทางด้านขวา แยกเป็น ๒ ผัง — กิจที่กระทำเพื่อ <b>ป้องกันฝ่ายเรา (Defensive)</b> และกิจที่กระทำ <b>ต่อ WL (Offensive)</b> &nbsp;·&nbsp; ชี้ที่ DP หรือกล่อง IO เพื่อเน้นเส้นเชื่อมโยง</p>
+  <div class="dpio-legend">
+    <span><i style="border-color:#2a7fd4;"></i> เส้นผังป้องกันฝ่ายเรา</span>
+    <span><i style="border-color:#d4a820;"></i> เส้นผังต่อ WL</span>
+    <span style="color:#f0c840;">★ DP13 = Decisive Point ด้าน IO (ความพยายามหลัก)</span>
+    <span style="opacity:.55;">DP ที่จาง = ไม่มีกิจหลักในผังด้านนั้น</span>
+  </div>
+  <div class="dpio-grid">
+    <div class="dpio-panel def">
+      <div class="dpio-phead">🛡 กิจ IO — ด้านป้องกันฝ่ายเรา (Defensive / Protect)</div>
+      <div class="dpio-2col"><svg class="dpio-svg"></svg><div class="dpio-dpcol"></div><div class="dpio-iocol"></div></div>
+    </div>
+    <div class="dpio-panel off">
+      <div class="dpio-phead">⚔ กิจ IO — ด้านกระทำต่อ WL (Offensive)</div>
+      <div class="dpio-2col"><svg class="dpio-svg"></svg><div class="dpio-dpcol"></div><div class="dpio-iocol"></div></div>
+    </div>
+  </div>
+  <p class="dpio-hint"><b>★ DP13</b> (ผลกระทบพลเรือนจำกัด + นานาชาติยอมรับ) คือ Decisive Point ด้าน IO — กิจ PA/StratComm, Counter-JORINO และ CMO/KLE รวมศูนย์ที่นี่ ส่วน DP อื่นเป็นกิจสนับสนุน &nbsp;·&nbsp; <b>หมายเหตุ:</b> ช่องทาง PA (ข้อเท็จจริงต่อสาธารณะ) ต้องแยกจาก PSYOP/MILDEC (ต่อข้าศึก) เพื่อรักษาความน่าเชื่อถือ — ตัวเลข «นานาชาติยอมรับ» เป็นค่าสมมุติเชิงสถานการณ์ ใช้เป็นเป้าวัด (MOE) มิใช่ข้อเท็จจริงอ้างอิง</p>
+</div>
+
+<script>
+(function(){
+  const GROUPS=[
+   {g:'กลุ่ม ๑ · การข่าว / เตรียมสภาพแวดล้อม',d:[['dp1','DP1','ภาพสถานการณ์ในพื้นที่ปฏิบัติการต่อเนื่อง'],['dp2','DP2','DEFNET (C2) คงสภาพ ปลอดภัยจากไซเบอร์/EW']]},
+   {g:'กลุ่ม ๒ · ป้องกัน / ควบคุมทะเล',d:[['dp3','DP3','ปีกกำลังบก Ventimiglia ระวังป้องกัน'],['dp4','DP4','SLOC ส่วนหลังฝ่ายเราปลอดภัย'],['dp5','DP5','สกัด SLOC/ALOC ข้าศึกเหนือ TALOS'],['dp6','DP6','ทำลายจรวด/UAS ข้าศึกบน TALOS']]},
+   {g:'กลุ่ม ๓ · ยุทธสะเทินน้ำสะเทินบก',d:[['dp7','DP7','หมวดเรือยกพลป้องกันภัยทางอากาศ'],['dp8','DP8','เส้นทางเคลื่อนกำลัง (Corridor) ปลอดภัย'],['dp9','DP9','SEA CONTROL & Air Superiority']]},
+   {g:'กลุ่ม ๔ · ส่งกำลังบำรุง + ความชอบธรรม',d:[['dp10','DP10','หัวหาดเหนือ TALOS สถาปนา-ควบคุม'],['dp11','DP11','กรม ร. ยกพลขึ้นเกาะสำเร็จ'],['dp12','DP12','ส่งกำลังบำรุงกำลังรบบนเกาะต่อเนื่อง'],['dp13','DP13','ผลกระทบพลเรือนจำกัด + นานาชาติยอมรับ'],['dp14','DP14','สภาวะเกื้อกูลการเจรจาต่อรอง']]}
+  ];
+  const DEF=[
+   ['d1','OPSEC / EMCON','ปกปิดการแผ่คลื่น C2 · ตารางขบวน/SLOC · ปฏิเสธการรับรู้ของ WL'],
+   ['d2','Cyber Defense (CND)','ป้องกัน DEFNET จากการบุกรุก/DDoS · เฝ้าตรวจ-สกัดการแทรกซึม'],
+   ['d3','EP / Counter-UAS','ป้องกันการรบกวน (EP) · ต้าน UAS ข้าศึก · Chaff/Decoy'],
+   ['d4','Counter-PSYOP / Counter-Disinfo','ตอบโต้ข่าวลือ-อิทธิพล WL ต่อชุมชนปีก/ส่วนหลัง'],
+   ['d5','PA / StratComm','ชี้แจงข้อเท็จจริงเร็ว · ROE/ความได้สัดส่วน · บริหารการบานปลาย'],
+   ['d6','CMO / KLE','เข้าถึงชุมชนท้องถิ่น/Verdatia กลาง · อพยพพลเรือนจาก Corridor'],
+   ['d7','MILDEC (ป้องกัน)','ลวงภาพสถานการณ์ · ปกปิดเจตนา/กำลังจริงของฝ่ายเรา']
+  ];
+  const OFF=[
+   ['o1','PSYOP / MISO','ต่อกองรักษาการณ์/พลประจำ WL — ชวนยอมจำนน · ชี้ความไร้ผล'],
+   ['o2','EW – EA','รบกวน comms/nav/เรดาร์ · Spoof datalink & GPS ของ UAS'],
+   ['o3','Cyber (CNA/CNE)','ต่อระบบส่งกำลัง / EW / C2 ของ WL'],
+   ['o4','SIGINT / ES (Targeting)','ระบุพิกัดฐานยิง/ตัวแผ่คลื่น → ป้อนอำนาจการยิง'],
+   ['o5','MILDEC (ต่อข้าศึก)','ลวงจุด/เวลายกพล · Feint / Demonstration'],
+   ['o6','Counter-JORINO / Attribution','เปิดโปงเครือข่ายบิดเบือน (กว่า ๔ ล้านบัญชี/Bot) · ระบุที่มา'],
+   ['o7','Influence → Negotiation','ส่งสัญญาณความแน่วแน่ + ทางลง (off-ramp) ต่อผู้ตัดสินใจ/ผู้ไกล่เกลี่ย']
+  ];
+  const DEF_LINKS=[['dp1',['d1','d7']],['dp2',['d2','d1']],['dp3',['d4','d7']],['dp4',['d4','d1']],['dp6',['d3']],['dp7',['d3','d1']],['dp8',['d6']],['dp10',['d1']],['dp11',['d1']],['dp12',['d5','d1']],['dp13',['d5','d6']],['dp14',['d5']]];
+  const OFF_LINKS=[['dp1',['o4']],['dp2',['o3','o2']],['dp3',['o1']],['dp4',['o2']],['dp5',['o2','o3','o1','o5']],['dp6',['o2','o4','o1']],['dp7',['o2']],['dp8',['o5','o1']],['dp9',['o2','o3','o5']],['dp10',['o1','o5']],['dp11',['o1','o5']],['dp13',['o6']],['dp14',['o7']]];
+  const NS='http://www.w3.org/2000/svg';
+
+  function renderPanel(panel,boxes,links){
+    const dpcol=panel.querySelector('.dpio-dpcol'), iocol=panel.querySelector('.dpio-iocol');
+    const linked=new Set(); links.forEach(l=>linked.add(l[0]));
+    GROUPS.forEach(grp=>{
+      const gh=document.createElement('div'); gh.className='dpio-gh'; gh.textContent=grp.g; dpcol.appendChild(gh);
+      grp.d.forEach(dp=>{
+        const n=document.createElement('div');
+        n.className='dpio-node'+(dp[0]==='dp13'?' dpio-star':'')+(linked.has(dp[0])?'':' dpio-dim');
+        n.setAttribute('data-node',dp[0]);
+        n.innerHTML='<span class="dpio-dpn">'+dp[1]+'</span><span class="dpio-dpt">'+dp[2]+'</span>';
+        dpcol.appendChild(n);
+      });
+    });
+    boxes.forEach(b=>{
+      const box=document.createElement('div'); box.className='dpio-box'; box.setAttribute('data-box',b[0]);
+      box.innerHTML='<div class="dpio-bt">'+b[1]+'</div><div class="dpio-bd">'+b[2]+'</div>';
+      iocol.appendChild(box);
+    });
+  }
+  function drawPanel(panel,links){
+    const two=panel.querySelector('.dpio-2col'), svg=panel.querySelector('.dpio-svg');
+    const W=two.clientWidth, H=two.clientHeight;
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    const base=two.getBoundingClientRect();
+    links.forEach(l=>{
+      const a=two.querySelector('[data-node="'+l[0]+'"]'); if(!a) return;
+      const ar=a.getBoundingClientRect();
+      l[1].forEach(t=>{
+        const b=two.querySelector('[data-box="'+t+'"]'); if(!b) return;
+        const br=b.getBoundingClientRect();
+        const x1=ar.right-base.left, y1=ar.top-base.top+ar.height/2;
+        const x2=br.left-base.left, y2=br.top-base.top+br.height/2;
+        const dx=Math.max(36,(x2-x1)*0.5);
+        const p=document.createElementNS(NS,'path');
+        p.setAttribute('d','M'+x1+','+y1+' C'+(x1+dx)+','+y1+' '+(x2-dx)+','+y2+' '+x2+','+y2);
+        p.setAttribute('class','dpio-link');
+        p.setAttribute('data-dp',l[0]); p.setAttribute('data-tgt',t);
+        svg.appendChild(p);
+      });
+    });
+  }
+  function wire(panel){
+    const two=panel.querySelector('.dpio-2col');
+    function clear(){two.classList.remove('dpio-focusing');two.querySelectorAll('.on').forEach(e=>e.classList.remove('on'));two.querySelectorAll('.hot').forEach(e=>e.classList.remove('hot'));}
+    two.querySelectorAll('[data-node]').forEach(n=>{
+      n.addEventListener('mouseenter',function(){clear();two.classList.add('dpio-focusing');const id=n.getAttribute('data-node');n.classList.add('hot');two.querySelectorAll('.dpio-link[data-dp="'+id+'"]').forEach(p=>{p.classList.add('on');const bx=two.querySelector('[data-box="'+p.getAttribute('data-tgt')+'"]');if(bx)bx.classList.add('hot');});});
+      n.addEventListener('mouseleave',clear);
+    });
+    two.querySelectorAll('[data-box]').forEach(b=>{
+      b.addEventListener('mouseenter',function(){clear();two.classList.add('dpio-focusing');const id=b.getAttribute('data-box');b.classList.add('hot');two.querySelectorAll('.dpio-link[data-tgt="'+id+'"]').forEach(p=>{p.classList.add('on');const nd=two.querySelector('[data-node="'+p.getAttribute('data-dp')+'"]');if(nd)nd.classList.add('hot');});});
+      b.addEventListener('mouseleave',clear);
+    });
+  }
+  function init(){
+    const def=document.querySelector('.dpio-panel.def'), off=document.querySelector('.dpio-panel.off');
+    if(!def||!off) return;
+    renderPanel(def,DEF,DEF_LINKS); renderPanel(off,OFF,OFF_LINKS);
+    wire(def); wire(off);
+    function redraw(){drawPanel(def,DEF_LINKS);drawPanel(off,OFF_LINKS);}
+    redraw();
+    window.addEventListener('resize',redraw);
+    if(document.fonts&&document.fonts.ready){document.fonts.ready.then(redraw);}
+    setTimeout(redraw,400); setTimeout(redraw,1200);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
 
 <div class="section" style="padding-top:0">
   <div class="section-title">ผลผลิต IO — IO CAMPAIGN PORTFOLIO (Target Audience: ชาวเกาะ TALOS)</div>
