@@ -6,52 +6,61 @@
 <title>PSYOP Poster Gallery — สื่อรณรงค์เกาะ TALOS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#040810;
-    --panel:rgba(13,32,69,0.55);
-    --line:#1a3a6a;
-    --txt:#e8f0ff;
-    --dim:#7a96b8;
-    --gold:#e8b830;
-    --az:#1e5fa8; --az-soft:#60a0f0;
-    --wl:#8a2d2d; --wl-soft:#ff8080;
-    --tr:#2d8a5a; --tr-soft:#60d090;
+    /* ---- warm community palette (matches truth-campaign.html) ---- */
+    --bg:#fbf7ee;
+    --paper:#ffffff;
+    --panel:#ffffff;
+    --line:#ece2d2;
+    --txt:#2c2a32;
+    --dim:#7a7464;
+    --sea:#12808c; --sea-deep:#0c5a63;
+    --gold:#ef9f24;                    /* sun accent for chrome */
+    --az:#12808c; --az-soft:#0c5a63;   /* page chrome primary = teal */
+    --wl:#df5848; --wl-soft:#b23f31;
+    --tr:#1f9d6b; --tr-soft:#5fd39a;   /* bright green stays legible on dark posters */
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{
     background:var(--bg); color:var(--txt);
+    background-image:
+      radial-gradient(1200px 520px at 8% -8%, rgba(18,128,140,0.10), transparent 60%),
+      radial-gradient(1000px 460px at 100% -6%, rgba(239,159,36,0.12), transparent 62%);
+    background-attachment:fixed;
     font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,sans-serif;
-    line-height:1.6; min-height:100vh;
+    font-size:16px;
+    line-height:1.65; min-height:100vh;
   }
-  h1,h2,h3,.head{font-family:'Chakra Petch','Sarabun',sans-serif;}
+  h1,h2,h3,.head{font-family:'Mitr','Sarabun',sans-serif; font-weight:600;}
   a{color:inherit}
 
   /* ===== Top bar ===== */
   .topbar{
     display:flex; align-items:center; gap:14px;
-    padding:10px 22px;
-    background:linear-gradient(90deg,#0d2045,#1a3a6a);
-    border-bottom:2px solid var(--gold);
+    padding:11px 22px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 2px 14px rgba(44,42,50,0.06);
     position:sticky; top:0; z-index:50;
   }
   .topbar img{height:28px}
   .topbar .brand{flex:1; min-width:0}
-  .topbar .brand b{font-family:'Chakra Petch',sans-serif; letter-spacing:.5px; color:#fff; font-size:15px}
-  .topbar .brand span{display:block; font-size:11.5px; color:var(--az-soft)}
+  .topbar .brand b{font-family:'Mitr',sans-serif; letter-spacing:.3px; color:var(--sea-deep); font-size:15.5px}
+  .topbar .brand span{display:block; font-size:12px; color:var(--dim)}
   .backlink{
-    color:var(--gold); text-decoration:none; font-size:13px;
-    border:1px solid var(--gold); border-radius:6px; padding:6px 13px;
+    color:#fff; text-decoration:none; font-size:13.5px; font-weight:600;
+    background:var(--sea); border:1px solid var(--sea-deep); border-radius:40px; padding:7px 15px;
     white-space:nowrap; transition:.2s;
   }
-  .backlink:hover{background:var(--gold); color:#0d2045}
+  .backlink:hover{background:var(--sea-deep)}
 
   /* ===== Disclaimer ===== */
   .disclaimer{
-    background:rgba(138,45,45,0.18); border-bottom:1px solid var(--wl);
-    color:var(--wl-soft); text-align:center; font-size:12.5px;
-    padding:6px 16px; letter-spacing:.2px;
+    background:#fff5e6; border-bottom:1px solid #f0dcb4;
+    color:#9a6a12; text-align:center; font-size:13px; font-weight:500;
+    padding:7px 16px; letter-spacing:.2px;
   }
 
   /* ===== Layout ===== */
@@ -82,10 +91,10 @@
   .hero h1 span{color:var(--gold)}
   .hero .tagline{
     margin-top:14px; font-size:clamp(15px,3vw,21px); color:#dfeaff;
-    font-weight:600; font-family:'Chakra Petch','Sarabun',sans-serif;
+    font-weight:600; font-family:'Mitr','Sarabun',sans-serif;
     text-shadow:0 2px 16px rgba(0,0,0,0.9);
   }
-  .hero p{margin-top:14px; color:#cdd9ec; font-size:14.5px; max-width:680px; margin-left:auto; margin-right:auto; text-shadow:0 1px 10px rgba(0,0,0,0.9)}
+  .hero p{margin-top:14px; color:#f2efe6; font-size:16px; line-height:1.65; max-width:700px; margin-left:auto; margin-right:auto; text-shadow:0 1px 10px rgba(0,0,0,0.9)}
   .hero p b{color:#fff}
 
   /* ===== Gallery grid ===== */
@@ -131,7 +140,7 @@
   .p-kicker{
     align-self:flex-start;
     display:flex; align-items:center; gap:2cqw;
-    font-family:'Chakra Petch',sans-serif; font-weight:600;
+    font-family:'Mitr',sans-serif; font-weight:600;
     font-size:2.9cqw; letter-spacing:1.2px; text-transform:uppercase;
     color:#fff;
     background:rgba(0,0,0,0.34); backdrop-filter:blur(3px);
@@ -141,7 +150,7 @@
   .p-kicker .dot{width:2.4cqw; height:2.4cqw; border-radius:50%; background:var(--accent); flex:0 0 auto}
   .p-lower{margin-top:auto}
   .p-hd{
-    font-family:'Chakra Petch',sans-serif; font-weight:700;
+    font-family:'Mitr',sans-serif; font-weight:700;
     line-height:1.04; letter-spacing:.5px;
     font-size:10cqw;
     text-shadow:0 3px 22px rgba(0,0,0,0.92), 0 1px 3px rgba(0,0,0,0.9);
@@ -149,7 +158,7 @@
   .p-hd .accent{color:var(--accent)}
   .p-stats{display:flex; align-items:flex-end; gap:5cqw; margin-bottom:3cqw}
   .p-stats .num{
-    font-family:'Chakra Petch',sans-serif; font-weight:700;
+    font-family:'Mitr',sans-serif; font-weight:700;
     font-size:9cqw; line-height:0.95; color:var(--accent);
     text-shadow:0 3px 18px rgba(0,0,0,0.9);
   }
@@ -157,21 +166,21 @@
   .p-stats .lbl{font-size:2.7cqw; color:#cfe2ff; margin-top:0.6cqw; letter-spacing:.3px}
   .p-stats .sep{width:1px; align-self:stretch; background:rgba(255,255,255,0.3)}
   .p-body{
-    font-size:3.55cqw; line-height:1.5; margin-top:2.4cqw; color:#eef4ff;
-    max-width:96%;
+    font-size:3.85cqw; font-weight:500; line-height:1.55; margin-top:2.4cqw; color:#f4f7ff;
+    max-width:97%;
     text-shadow:0 1px 9px rgba(0,0,0,0.95);
   }
   .p-body b{color:var(--accent); font-weight:700}
   .p-foot{
     display:flex; gap:4cqw; margin-top:3.4cqw;
     padding-top:2.6cqw; border-top:1px solid rgba(255,255,255,0.22);
-    font-family:'Chakra Petch',sans-serif; font-weight:600;
+    font-family:'Mitr',sans-serif; font-weight:600;
     font-size:3.2cqw; letter-spacing:.5px;
   }
   .p-foot span{color:var(--accent)}
 
   /* safety leaflet specifics (poster 6) */
-  .safe-list{list-style:none; font-size:3.1cqw; line-height:1.5; margin-top:2.4cqw}
+  .safe-list{list-style:none; font-size:3.35cqw; font-weight:500; line-height:1.55; margin-top:2.4cqw}
   .safe-list li{display:flex; gap:2.2cqw; align-items:flex-start; margin-bottom:1.8cqw; text-shadow:0 1px 8px rgba(0,0,0,0.95)}
   .safe-list .ck{color:var(--tr-soft); font-weight:700; flex:0 0 auto}
   .safe-list b{color:var(--tr-soft)}
@@ -185,24 +194,26 @@
 
   /* ===== caption + print btn ===== */
   .caption{
-    margin-top:14px; background:var(--panel); border:1px solid var(--line);
-    border-left:3px solid var(--gold); border-radius:0 8px 8px 0;
-    padding:11px 14px; font-size:12.5px; color:var(--dim);
+    margin-top:14px; background:var(--paper); border:1px solid var(--line);
+    border-left:4px solid var(--gold); border-radius:0 10px 10px 0;
+    padding:12px 15px; font-size:13.5px; line-height:1.6; color:var(--txt);
+    box-shadow:0 4px 14px rgba(44,42,50,0.05);
   }
-  .caption b{color:var(--gold); font-weight:600}
-  .caption .seg{display:block; margin-top:4px; color:var(--az-soft)}
+  .caption b{color:var(--sea-deep); font-weight:600}
+  .caption .seg{display:block; margin-top:5px; color:var(--dim)}
   .print-btn{
     margin-top:10px; align-self:flex-start;
-    background:var(--az); color:#fff; border:1px solid var(--az-soft);
-    font-family:'Sarabun',sans-serif; font-weight:600; font-size:13px;
-    padding:8px 16px; border-radius:7px; cursor:pointer;
+    background:var(--sea); color:#fff; border:1px solid var(--sea-deep);
+    font-family:'Mitr','Sarabun',sans-serif; font-weight:500; font-size:14px;
+    padding:9px 18px; border-radius:40px; cursor:pointer;
+    box-shadow:0 4px 12px rgba(18,128,140,0.25);
     transition:transform .15s, filter .15s;
   }
-  .print-btn:hover{transform:translateY(-2px); filter:brightness(1.15)}
+  .print-btn:hover{transform:translateY(-2px); filter:brightness(1.08)}
 
   /* ===== Footer ===== */
   footer{
-    margin-top:50px; text-align:center; color:var(--dim); font-size:12.5px;
+    margin-top:50px; text-align:center; color:var(--dim); font-size:13px;
     border-top:1px solid var(--line); padding:22px 16px;
   }
 
