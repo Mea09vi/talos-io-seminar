@@ -1,4 +1,4 @@
-# กลุ่มที่ ๒ — N7 IO | Operation RESTORE TALOS
+# กลุ่มรวม — N7 IO | Operation RESTORE TALOS
 
 งานนำเสนอประกอบการสัมมนาการวางแผนทางทหารแบบประณีต (สธ.ทร. รุ่น ๘๖)
 ฝ่ายข่าวสารปฏิบัติการ (N7 — Information Operations) สถานการณ์ฝึกสมมุติ **Operation RESTORE TALOS**
