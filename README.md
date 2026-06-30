@@ -1,25 +1,21 @@
-# กลุ่มรวม — N7 IO | Operation RESTORE TALOS
+# กลุ่ม N7 IO | Operation Western Safeguard
 
-งานนำเสนอประกอบการสัมมนาการวางแผนทางทหารแบบประณีต (สธ.ทร. รุ่น ๘๖)
-ฝ่ายข่าวสารปฏิบัติการ (N7 — Information Operations) สถานการณ์ฝึกสมมุติ **Operation RESTORE TALOS**
+ชุดเว็บนี้จัดรูปแบบตาม repo `talos-io-seminar` โดยนำงาน N7/IO ที่จัดทำไว้ใน workspace มาใส่เป็น HTML presentation แบบ standalone และปรับข้อมูลตามโฟลเดอร์ Western save guard เป็นกรอบ 3 เฟส / การใช้กำลัง 3 ระลอก
 
-> เนื้อหาทั้งหมดอ้างอิงสถานการณ์ฝึกสมมุติ (fictional training scenario) — ประเทศ ALIZARIA (AZ),
-> WOADLAND (WL) และเกาะ TALOS ไม่มีอยู่จริง
+## เปิดใช้งาน
 
-## เปิดดูงานนำเสนอ
+เปิด `index.html` หรือ `03_การนำเสนอ/index.html` ในเบราว์เซอร์
 
-เปิดผ่าน GitHub Pages: **[หน้ารวมงานนำเสนอ](./index.html)** (redirect ไปยังหน้าหลัก)
+## ไฟล์หลัก
 
-| # | หัวข้อ | ไฟล์ |
-|---|--------|------|
-| 1 | IPOE สำหรับ IO | `03_การนำเสนอ/01_IPOE_IO.html` |
-| 2 | IO Matrix | `03_การนำเสนอ/02_IO_Matrix.html` |
-| 3 | COA สำหรับ IO | `03_การนำเสนอ/03_COA_IO.html` |
-| 4 | CONOPS | `03_การนำเสนอ/04_CONOPS.html` |
-| 5 | หลักนิยมการวางแผน IO | `03_การนำเสนอ/05_IO_Planning_Doctrine.html` |
-| 6 | JP 3-04 ผนวก C — การบูรณาการข้อมูลข่าวสาร | `03_การนำเสนอ/06_JP304_AppendixC.html` |
-| 7 | เส้นเวลาประวัติศาสตร์เกาะ TALOS (แผนที่ + แอนิเมชัน) | `03_การนำเสนอ/07_TALOS_History_Timeline.html` |
-| — | สถานการณ์ทั่วไป / สถานการณ์เฉพาะ IO | `03_การนำเสนอ/สถานการณ์ทั่วไป.html`, `สถานการณ์เฉพาะ_IO.html` |
+- `03_การนำเสนอ/01_N7_Order_Brief.html`
+- `03_การนำเสนอ/02_IO_Matrix_AZ86.html`
+- `03_การนำเสนอ/03_Annex_F_Overview.html`
+- `assets/docs/` ไฟล์ PPTX/DOCX ต้นทางสำคัญ
+- `assets/img/` โลโก้และภาพประกอบ
 
-ทุกหน้าเป็น HTML แบบ standalone — เปิดในเบราว์เซอร์ได้โดยตรง ใช้คีย์บอร์ด ←/→ เลื่อนสไลด์
-(หน้า Timeline ใช้ Space เล่น/หยุดอัตโนมัติ)
+## การควบคุมสไลด์
+
+- ลูกศรซ้าย/ขวา หรือ Space เพื่อเลื่อน
+- `H` กลับหน้ารวม
+- `F` fullscreen

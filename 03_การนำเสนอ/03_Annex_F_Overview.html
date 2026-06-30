@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Annex F Overview — AZ86</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800;900&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#050d1a;--bg2:#0a1628;--panel:#0a1e40;--line:#1a3a6a;--gold:#d4a820;--text:#e8f0ff;--muted:#7090b0;--dim:#4a6a8a;--blue:#60a0f0;--cyan:#40c0c0;--green:#60d090;--red:#ff8080;--purple:#c084fc}
+body{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+a{color:inherit}
+.deck-body{height:100vh;overflow:hidden}
+#pres{width:100vw;height:100vh;position:relative}
+.slide{display:none;width:100%;height:100%;padding:32px 56px 20px;flex-direction:column;position:absolute;inset:0;background:linear-gradient(135deg,#050d1a 0%,#0a1628 58%,#0d2045 100%)}
+.slide.active{display:flex}
+.sh{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);padding-bottom:10px;margin-bottom:18px;flex-shrink:0}
+.sh-left{display:flex;align-items:center;gap:12px}.seal{height:24px;width:auto}.sh-unit{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:10px;color:var(--gold);letter-spacing:1.4px;font-weight:700}.sh-title{font-size:24px;font-weight:800;line-height:1.2}.sh-right{text-align:right}.sh-label{font-size:9px;color:var(--dim);letter-spacing:1px}.sh-tag{font-size:11px;color:var(--muted);font-weight:600}
+.content{flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden}.cover-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}.cover-bg{position:absolute;opacity:.04;user-select:none}.cover-label{font-size:11px;color:var(--gold);letter-spacing:3px;font-weight:700;margin-bottom:16px}.cover-h1{font-size:38px;font-weight:900;line-height:1.25;margin-bottom:8px}.cover-h2{font-size:18px;color:var(--gold);margin-bottom:20px}.cover-line{width:180px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 20px}.cover-meta{font-size:12px;color:var(--dim);line-height:1.8}
+.box{background:rgba(26,58,106,.25);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:4px;padding:14px 16px;margin-bottom:10px}.box.blue{border-left-color:#2a7fd4}.box.cyan{border-left-color:#2d8a8a}.box.green{border-left-color:#2d8a5a}.box.red{border-left-color:#e05050}.box.purple{border-left-color:#7c3aed}.bh{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:11px;font-weight:700;letter-spacing:.8px;margin-bottom:6px;color:var(--gold)}.box.blue .bh{color:var(--blue)}.box.cyan .bh{color:var(--cyan)}.box.green .bh{color:var(--green)}.box.red .bh{color:var(--red)}.box.purple .bh{color:var(--purple)}.bp{font-size:12px;color:var(--muted);line-height:1.65}.bp strong{color:#a0c0e0}.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+table{width:100%;border-collapse:collapse;font-size:10.5px}th{background:#0a1e40;color:var(--gold);padding:7px 9px;text-align:left;font-weight:700;border:1px solid var(--line)}td{padding:7px 9px;border:1px solid var(--line);color:#b0c8e0;vertical-align:top}tr:nth-child(even) td{background:rgba(26,58,106,.15)}.badge{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:700;border:1px solid var(--line);color:#cfe4ff;background:rgba(30,95,168,.25)}
+.phase{background:rgba(10,22,40,.82);border:1px solid var(--line);border-radius:4px;padding:12px}.phase h4{font-size:13px;color:var(--gold);margin-bottom:6px}.phase p{font-size:11px;color:var(--muted);line-height:1.55}.kpi{display:flex;align-items:center;gap:10px;background:rgba(10,22,40,.8);border:1px solid var(--line);border-radius:4px;padding:10px}.kpi b{font-size:24px;color:var(--gold)}.kpi span{font-size:11px;color:var(--muted);line-height:1.4}
+.imgbox{display:flex;align-items:center;justify-content:center;background:rgba(10,22,40,.72);border:1px solid var(--line);border-radius:4px;overflow:hidden;min-height:250px}.imgbox img{max-width:100%;max-height:56vh;object-fit:contain}.sf{border-top:1px solid var(--line);padding-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#2a4a6a;flex-shrink:0;margin-top:8px}.sf-center{color:var(--dim)}
+#nav{position:fixed;bottom:18px;right:28px;display:flex;align-items:center;gap:10px;background:rgba(10,22,40,.92);border:1px solid var(--line);padding:6px 14px;border-radius:30px;z-index:200}#nav button{background:none;border:1px solid var(--line);color:#6080a0;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:11px}#nav button:hover{background:var(--line);color:var(--text)}#ctr{color:#5070a0;font-size:11px;min-width:44px;text-align:center}#home-btn{color:#4a6a8a;font-size:11px;text-decoration:none;padding:0 6px;border-left:1px solid var(--line)}
+.hub{min-height:100vh;background:radial-gradient(circle at 50% 0%,rgba(212,168,32,.12),transparent 34%),linear-gradient(135deg,#050d1a,#0a1628 55%,#0d2045);padding:28px 42px 36px}.hub-header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);padding-bottom:18px;margin-bottom:26px}.brand{display:flex;align-items:center;gap:14px}.brand img{height:42px}.eyebrow{font:700 11px 'Chakra Petch','Sarabun';letter-spacing:2px;color:var(--gold);margin-bottom:5px}.hub h1{font-size:32px;line-height:1.2}.lede{color:var(--muted);font-size:14px;margin-top:8px;max-width:850px;line-height:1.7}.hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{display:flex;flex-direction:column;min-height:210px;background:rgba(10,22,40,.76);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:6px;padding:18px;text-decoration:none}.card:hover{background:rgba(26,58,106,.42)}.card small{color:var(--gold);font-weight:700;letter-spacing:1px}.card h2{font-size:20px;margin:10px 0 8px}.card p{color:var(--muted);font-size:13px;line-height:1.65}.card .meta{margin-top:auto;display:flex;justify-content:space-between;color:#5070a0;font-size:11px;padding-top:16px}.wide{grid-column:span 2}.source-list{margin-top:20px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:12px;line-height:1.7}
+@media(max-width:900px){.slide{padding:22px 18px 16px}.g2,.g3,.g4,.hub-grid{grid-template-columns:1fr}.wide{grid-column:auto}.cover-h1{font-size:30px}.sh-title{font-size:18px}.hub{padding:22px 18px}.hub-header{align-items:flex-start;gap:14px;flex-direction:column}.bp{font-size:11px}#nav{right:14px;bottom:12px}}
+</style>
+</head>
+<body class="deck-body">
+<div id="pres">
+<section class="slide active">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — ANNEX F</div><div class="sh-title">ภาพรวมผนวก ฉ</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="cover-wrap">
+    <div class="cover-label">ANNEX F — INFORMATION OPERATIONS</div>
+    <div class="cover-h1">ผนวก ฉ<br>ภาพรวมคำสั่ง</div>
+    <div class="cover-h2">Operation Western Safeguard</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">สรุปสาระจาก Western save guard เพื่อใช้เปิดประกอบการซักถามหลัง brief</div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Annex F Cover</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — GENERAL</div><div class="sh-title">กล่าวทั่วไป</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <div class="box"><div class="bh">มุ่งประสงค์</div><div class="bp">บูรณาการ IO ควบคู่กับการใช้กำลังของ ทร.AZ และกำลังร่วม ให้รุกยึดคืน Talos ใต้ ป้องกันพื้นที่ Ventimiglia คุ้มครอง SLOC และสถาปนาความมั่นคงบนความชอบธรรมของฝ่ายเรา</div></div>
+    <div class="box blue"><div class="bh">วิธีการ</div><div class="bp">ใช้กิจการพลเรือน, PSYOP, MILDEC, OPSEC, EW, CNO, PA, Combat Camera, Counter-Disinformation, OSINT/Social Listening และ KLE/CMO โดยมี SCC เป็นศูนย์กำหนดสารหลัก</div></div>
+    <div class="box green"><div class="bh">สภาวะสุดท้าย</div><div class="bp">การขนส่งทางทะเลเข้า-ออกประเทศดำเนินได้ต่อเนื่อง AZ ควบคุมพื้นที่พิพาท Ventimiglia และ Talos ได้อย่างเบ็ดเสร็จ พร้อมความชอบธรรมและการสนับสนุนจากองค์กรระหว่างประเทศ</div></div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Purpose / Method / End State</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — CAPABILITY</div><div class="sh-title">ขีดความสามารถและข้อจำกัด</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <div class="g2">
+      <div class="box red"><div class="bh">WL Capabilities</div><div class="bp">IO, Cyber, EMSO/GPS Jamming-Spoofing, Proxy, Bot/Influencer, Maritime Militia และการกล่าวหา AZ เพื่อชิงการรับรู้</div></div>
+      <div class="box"><div class="bh">AZ Capabilities</div><div class="bp">SCC, CMCC, N2/N7, N6/Cyber, PA Cell, Combat Camera, CMO/KLE Teams, ISR, OSINT/Social Listening และ ศปก.เหล่าทัพ</div></div>
+      <div class="box blue"><div class="bh">ช่องทางสำคัญ</div><div class="bp">แถลงการณ์รัฐบาล/กองทัพ, SCC/CMCC, PA Cell, สื่อมวลชน, Social Media, ผู้นำชุมชน และช่องทางระหว่างประเทศ</div></div>
+      <div class="box green"><div class="bh">ข้อพร้อม</div><div class="bp">PA, Fact-check, KLE, CMO, Combat Camera และ OPSEC ทำได้ทันที ส่วน MILDEC/EMSO/Cyber effect ต้องขออนุมัติ</div></div>
+    </div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Capabilities / Constraints</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — EXECUTION</div><div class="sh-title">การปฏิบัติตาม Phase</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <table>
+      <tr><th>Phase</th><th>แนวทางปฏิบัติ IO/OIE</th><th>หน่วย/กลไกหลัก</th></tr>
+      <tr><td>Phase 1 ตอบโต้ / รุกยึดคืน Talos ใต้</td><td>ตั้ง IE baseline, One Voice, Evidence Package เรื่อง Novorepnoye, POW, พลเรือน และการรุกยึดคืนอย่างจำเป็น</td><td>SCC, N2/N7, N6, PA, OSINT Cell, Combat Camera</td></tr>
+      <tr><td>Phase 2 ป้องกันประเทศ / Ventimiglia</td><td>ตอบโต้ข่าวปิดล้อมและใช้กำลังเกินสัดส่วน คุ้มครอง Main SLOC และสนับสนุนการต่อต้าน/ผลักดัน WL เหนือ Ventimiglia</td><td>SCC, PA, Combat Camera, CMCC, CMO/KLE</td></tr>
+      <tr><td>Phase 3 สถาปนาความมั่นคง</td><td>หากจำเป็น สนับสนุนการรุกยึดพื้นที่สำคัญ Talos เหนือเพื่ออำนาจต่อรอง และสื่อสารการสถาปนาความมั่นคงระยะต่อเนื่อง</td><td>ศปก.ทร., SCC, PA, CMCC, MFA</td></tr>
+    </table>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Execution by Phase</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — GUIDANCE</div><div class="sh-title">คำแนะนำและข้อมูลต้องยืนยัน</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <div class="g2">
+      <div class="box"><div class="bh">คำแนะนำสำคัญ</div><div class="bp">ทุกกิจ IO ต้องเป็นไปตามกฎหมาย ประเพณีสงคราม ROE อนุสัญญาเจนีวา และข้อตกลงที่ AZ ยอมรับปฏิบัติ</div></div>
+      <div class="box blue"><div class="bh">การเผยแพร่ข่าวสาร</div><div class="bp">ข้อมูลที่จะเผยแพร่ต้องผ่านการตรวจสอบทางยุทธการ ข่าวกรอง กฎหมาย และ OPSEC</div></div>
+      <div class="box green"><div class="bh">การประสาน</div><div class="bp">กิจการพลเรือน PSYOP PA และ IO ต้องประสานใกล้ชิดเพื่อให้เกิดความสอดคล้อง</div></div>
+      <div class="box red"><div class="bh">ข้อมูลต้องยืนยัน</div><div class="bp">วันเวลาออกคำสั่ง เลขที่คำสั่ง โครงข่ายสื่อสาร Authority Matrix และชื่อหน่วยปกครองใน TALOS/Ventimiglia</div></div>
+    </div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Guidance / Confirmation Items</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section>
+</div>
+<div id="nav"><button onclick="prev()" title="Previous">◀</button><span id="ctr">1/5</span><button onclick="next()" title="Next">▶</button><a id="home-btn" href="index.html" title="Dashboard">⌂</a></div>
+<script>
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+const total=slides.length;
+function go(n){
+  slides[cur].classList.remove('active');
+  cur=Math.max(0,Math.min(n,total-1));
+  slides[cur].classList.add('active');
+  document.getElementById('ctr').textContent=(cur+1)+'/'+total;
+}
+function next(){go(cur+1)}
+function prev(){go(cur-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next()}
+  if(e.key==='ArrowLeft'){e.preventDefault();prev()}
+  if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}
+  if(e.key==='h'||e.key==='H'){window.location.href='index.html'}
+});
+go(0);
+</script>
+</body>
+</html>
