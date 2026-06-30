@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>N7 Order Brief — Operation Western Safeguard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800;900&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#050d1a;--bg2:#0a1628;--panel:#0a1e40;--line:#1a3a6a;--gold:#d4a820;--text:#e8f0ff;--muted:#7090b0;--dim:#4a6a8a;--blue:#60a0f0;--cyan:#40c0c0;--green:#60d090;--red:#ff8080;--purple:#c084fc}
+body{font-family:'Sarabun','Leelawadee UI','Noto Sans Thai',Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+a{color:inherit}
+.deck-body{height:100vh;overflow:hidden}
+#pres{width:100vw;height:100vh;position:relative}
+.slide{display:none;width:100%;height:100%;padding:32px 56px 20px;flex-direction:column;position:absolute;inset:0;background:linear-gradient(135deg,#050d1a 0%,#0a1628 58%,#0d2045 100%)}
+.slide.active{display:flex}
+.sh{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);padding-bottom:10px;margin-bottom:18px;flex-shrink:0}
+.sh-left{display:flex;align-items:center;gap:12px}.seal{height:24px;width:auto}.sh-unit{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:10px;color:var(--gold);letter-spacing:1.4px;font-weight:700}.sh-title{font-size:24px;font-weight:800;line-height:1.2}.sh-right{text-align:right}.sh-label{font-size:9px;color:var(--dim);letter-spacing:1px}.sh-tag{font-size:11px;color:var(--muted);font-weight:600}
+.content{flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden}.cover-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}.cover-bg{position:absolute;opacity:.04;user-select:none}.cover-label{font-size:11px;color:var(--gold);letter-spacing:3px;font-weight:700;margin-bottom:16px}.cover-h1{font-size:38px;font-weight:900;line-height:1.25;margin-bottom:8px}.cover-h2{font-size:18px;color:var(--gold);margin-bottom:20px}.cover-line{width:180px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 20px}.cover-meta{font-size:12px;color:var(--dim);line-height:1.8}
+.box{background:rgba(26,58,106,.25);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:4px;padding:14px 16px;margin-bottom:10px}.box.blue{border-left-color:#2a7fd4}.box.cyan{border-left-color:#2d8a8a}.box.green{border-left-color:#2d8a5a}.box.red{border-left-color:#e05050}.box.purple{border-left-color:#7c3aed}.bh{font-family:'Chakra Petch','Sarabun',sans-serif;font-size:11px;font-weight:700;letter-spacing:.8px;margin-bottom:6px;color:var(--gold)}.box.blue .bh{color:var(--blue)}.box.cyan .bh{color:var(--cyan)}.box.green .bh{color:var(--green)}.box.red .bh{color:var(--red)}.box.purple .bh{color:var(--purple)}.bp{font-size:12px;color:var(--muted);line-height:1.65}.bp strong{color:#a0c0e0}.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+table{width:100%;border-collapse:collapse;font-size:10.5px}th{background:#0a1e40;color:var(--gold);padding:7px 9px;text-align:left;font-weight:700;border:1px solid var(--line)}td{padding:7px 9px;border:1px solid var(--line);color:#b0c8e0;vertical-align:top}tr:nth-child(even) td{background:rgba(26,58,106,.15)}.badge{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:700;border:1px solid var(--line);color:#cfe4ff;background:rgba(30,95,168,.25)}
+.phase{background:rgba(10,22,40,.82);border:1px solid var(--line);border-radius:4px;padding:12px}.phase h4{font-size:13px;color:var(--gold);margin-bottom:6px}.phase p{font-size:11px;color:var(--muted);line-height:1.55}.kpi{display:flex;align-items:center;gap:10px;background:rgba(10,22,40,.8);border:1px solid var(--line);border-radius:4px;padding:10px}.kpi b{font-size:24px;color:var(--gold)}.kpi span{font-size:11px;color:var(--muted);line-height:1.4}
+.imgbox{display:flex;align-items:center;justify-content:center;background:rgba(10,22,40,.72);border:1px solid var(--line);border-radius:4px;overflow:hidden;min-height:250px}.imgbox img{max-width:100%;max-height:56vh;object-fit:contain}.sf{border-top:1px solid var(--line);padding-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#2a4a6a;flex-shrink:0;margin-top:8px}.sf-center{color:var(--dim)}
+#nav{position:fixed;bottom:18px;right:28px;display:flex;align-items:center;gap:10px;background:rgba(10,22,40,.92);border:1px solid var(--line);padding:6px 14px;border-radius:30px;z-index:200}#nav button{background:none;border:1px solid var(--line);color:#6080a0;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:11px}#nav button:hover{background:var(--line);color:var(--text)}#ctr{color:#5070a0;font-size:11px;min-width:44px;text-align:center}#home-btn{color:#4a6a8a;font-size:11px;text-decoration:none;padding:0 6px;border-left:1px solid var(--line)}
+.hub{min-height:100vh;background:radial-gradient(circle at 50% 0%,rgba(212,168,32,.12),transparent 34%),linear-gradient(135deg,#050d1a,#0a1628 55%,#0d2045);padding:28px 42px 36px}.hub-header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);padding-bottom:18px;margin-bottom:26px}.brand{display:flex;align-items:center;gap:14px}.brand img{height:42px}.eyebrow{font:700 11px 'Chakra Petch','Sarabun';letter-spacing:2px;color:var(--gold);margin-bottom:5px}.hub h1{font-size:32px;line-height:1.2}.lede{color:var(--muted);font-size:14px;margin-top:8px;max-width:850px;line-height:1.7}.hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{display:flex;flex-direction:column;min-height:210px;background:rgba(10,22,40,.76);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:6px;padding:18px;text-decoration:none}.card:hover{background:rgba(26,58,106,.42)}.card small{color:var(--gold);font-weight:700;letter-spacing:1px}.card h2{font-size:20px;margin:10px 0 8px}.card p{color:var(--muted);font-size:13px;line-height:1.65}.card .meta{margin-top:auto;display:flex;justify-content:space-between;color:#5070a0;font-size:11px;padding-top:16px}.wide{grid-column:span 2}.source-list{margin-top:20px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:12px;line-height:1.7}
+@media(max-width:900px){.slide{padding:22px 18px 16px}.g2,.g3,.g4,.hub-grid{grid-template-columns:1fr}.wide{grid-column:auto}.cover-h1{font-size:30px}.sh-title{font-size:18px}.hub{padding:22px 18px}.hub-header{align-items:flex-start;gap:14px;flex-direction:column}.bp{font-size:11px}#nav{right:14px;bottom:12px}}
+</style>
+</head>
+<body class="deck-body">
+<div id="pres">
+<section class="slide active">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — INFORMATION OPERATIONS</div><div class="sh-title">IO Order Brief</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="cover-wrap">
+    <div class="cover-bg"><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:210px"></div>
+    <div class="cover-label">ANNEX F — INFORMATION OPERATIONS ORDER BRIEF</div>
+    <div class="cover-h1">ผนวก ฉ<br>การปฏิบัติการข่าวสาร</div>
+    <div class="cover-h2">Operation Western Safeguard | AZ86</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">ปรับข้อมูลตามโฟลเดอร์ Western save guard<br>ยึดกรอบ 3 เฟส และการใช้กำลัง 3 ระลอกของ Operation Western Safeguard</div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Annex F Opening</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — IO ORDER</div><div class="sh-title">เจตนารมณ์และลำดับการแถลง</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <div class="g2">
+      <div class="box"><div class="bh">เจตนารมณ์หลัก</div><div class="bp">N7 ไม่ใช่งานประชาสัมพันธ์ท้ายแผน แต่เป็นงานควบคุมผลใน <strong>Information Environment</strong> ตั้งแต่ต้นจนจบการปฏิบัติ</div></div>
+      <div class="box blue"><div class="bh">ลำดับการแถลง</div><div class="bp">1) สถานการณ์ Western Safeguard<br>2) ภารกิจและ End State<br>3) 3 เฟส / 3 ระลอกการใช้กำลัง<br>4) IO Support และอนุผนวกหลัก<br>5) Risk Control และข้อประสาน</div></div>
+    </div>
+    <div class="g4">
+      <div class="kpi"><b>4</b><span>LOE หลักด้าน IO</span></div><div class="kpi"><b>3</b><span>Phase: ตอบโต้ / ป้องกันประเทศ / สถาปนาความมั่นคง</span></div><div class="kpi"><b>3</b><span>ระลอกการใช้กำลัง</span></div><div class="kpi"><b>6</b><span>DP หลักของ Western Safeguard</span></div>
+    </div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Intent &amp; Agenda</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — SITUATION</div><div class="sh-title">สถานการณ์และภัยคุกคามด้านข่าวสาร</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <div class="g2">
+      <div class="box red"><div class="bh">พื้นที่ข่าวสาร</div><div class="bp">Western Safeguard ครอบคลุม Talos ใต้, Ventimiglia, Main SLOC, Novorepnoye, Georgopol, Sosnovka และพื้นที่ข่าวสารนานาชาติที่ WL ใช้โจมตีความชอบธรรมของ AZ</div></div>
+      <div class="box purple"><div class="bh">ภัยคุกคาม WL</div><div class="bp">IO, Cyber, EMSO, Proxy, Bot/Influencer, Maritime Militia และการกล่าวหา AZ เพื่อชิงการรับรู้และลดความชอบธรรม</div></div>
+      <div class="box"><div class="bh">COG ด้าน IO ของ WL</div><div class="bp">เจตจำนงและความชอบธรรมในการแทรกแซง TALOS หากถูกเปิดโปงความเชื่อมโยง WL-Proxy-Bot-Maritime Militia จะเสียความชอบธรรม</div></div>
+      <div class="box green"><div class="bh">แนวตอบโต้ของ AZ</div><div class="bp">สื่อสารว่า AZ รุกยึดคืนเพื่อฟื้นฟูอธิปไตย คุ้มครอง SLOC และใช้กำลังจำเป็น/ได้สัดส่วน โดยใช้ Fact Sheet, Legal Brief, Evidence Package, Combat Camera และ One Voice</div></div>
+    </div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Situation / IE Threat</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — MISSION</div><div class="sh-title">ภารกิจและสภาวะสุดท้ายที่ต้องการ</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <div class="box"><div class="bh">ภารกิจ N7</div><div class="bp">ดำเนิน IO/OIE เชิงรุกและเชิงรับตลอด 3 เฟสของ Western Safeguard เพื่อสนับสนุนการรุกยึดคืน Talos ใต้ การป้องกันพื้นที่ Ventimiglia การคุ้มครอง Main SLOC และการสถาปนาความมั่นคง โดยรักษาความชอบธรรมของ AZ ภายใต้ ROE, OPSEC และกฎหมายระหว่างประเทศ</div></div>
+    <div class="g2">
+      <div class="box blue"><div class="bh">End State ด้านศัตรู</div><div class="bp">WL ถูกลดความชอบธรรม ไม่สามารถใช้ Narrative เรื่องการปิดล้อม/พลเรือน/SLOC/POW เพื่อสกัดเสรีภาพในการปฏิบัติของ AZ</div></div>
+      <div class="box green"><div class="bh">End State ด้านฝ่ายเรา</div><div class="bp">การขนส่งทางทะเลดำเนินได้ต่อเนื่อง AZ ควบคุมพื้นที่พิพาท Ventimiglia และ Talos ทั้งทางบก/ทะเลได้อย่างเบ็ดเสร็จ พร้อมความชอบธรรมและการสนับสนุนจากองค์กรระหว่างประเทศ</div></div>
+    </div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Mission &amp; Western Safeguard End State</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — THREE WAVES</div><div class="sh-title">การใช้กำลัง 3 ระลอก</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <div class="g3">
+      <div class="phase"><h4>ระลอกแรก<br>Seizing TALOS</h4><p>รุกยึดคืนเกาะ Talos ลดทอนขีดความสามารถ WL ในพื้นที่สังหาร เมื่อพร้อมปฏิบัติยุทธ์สะเทินน้ำสะเทินบกยึดคืนพื้นที่เหนือเกาะ Talos</p></div>
+      <div class="phase"><h4>ระลอกสอง<br>Protecting Ventimiglia</h4><p>ต่อต้านและผลักดันกำลังฝ่ายข้าศึกเหนือพื้นที่ Ventimiglia เมื่อจังหวะเวลาเหมาะสม รุกเอาชนะฝ่ายข้าศึกเหนือพื้นที่ Ventimiglia</p></div>
+      <div class="phase"><h4>ระลอกสาม<br>Negotiation Leverage</h4><p>หากไม่สามารถเอาชนะฝ่ายข้าศึกเหนือ Ventimiglia ได้ ให้รุกยึดพื้นที่สำคัญเหนือเกาะ Talos เพื่อเป็นอำนาจในการเจรจาต่อรอง</p></div>
+    </div>
+    <div class="box" style="margin-top:12px"><div class="bh">IO Implication</div><div class="bp">N7 ต้องเตรียม Narrative ล่วงหน้าสำหรับแต่ละระลอก: ฟื้นฟูอธิปไตยหลัง Novorepnoye, คุ้มครองประชาชนและ SLOC, ใช้กำลังจำเป็นและได้สัดส่วน, เปิดโปง WL/Proxy และใช้หลักฐานก่อนข้อกล่าวหา</div></div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Western Safeguard Force Employment</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — CONOPS</div><div class="sh-title">IO CONOPS ผ่าน LIOEs/LOO</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <div class="g4">
+      <div class="phase"><h4>LOE 1<br>ปกปิด-ลวง</h4><p>OPSEC, MILDEC, COMSEC, EMSO ปกป้องเวลา ทิศทาง Main Effort, DP/CDP, C2/DEFNET และเส้นทางส่งกำลัง</p></div>
+      <div class="phase"><h4>LOE 2<br>เปิดโปง-ตอบโต้</h4><p>Counter-Disinformation, OSINT, Combat Camera ลดความชอบธรรม WL และเปิดโปง Proxy</p></div>
+      <div class="phase"><h4>LOE 3<br>ชอบธรรม-อิทธิพล</h4><p>PA, PSYOP/MISO, CMO, KLE ยืนยันว่า AZ รุกยึดคืนอย่างจำเป็น ได้สัดส่วน และคุ้มครองประชาชน/SLOC</p></div>
+      <div class="phase"><h4>LOE 4<br>ป้องกัน-ดำรง</h4><p>Cyber, INFOSEC, COMSEC ทำให้ C2/DEFNET/SCC/PA ปลอดภัยและต่อเนื่อง</p></div>
+    </div>
+    <div class="imgbox" style="margin-top:12px"><img src="../assets/img/N3_LOO_Finai.jpg" alt="LIOEs LOO original"></div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">LOE 1-4 / LIOEs LOO</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — PHASE SUPPORT</div><div class="sh-title">3 เฟส และ DP Support</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <table>
+      <tr><th>Phase</th><th>จุดเน้น IO</th><th>DP / Trigger สำคัญ</th></tr>
+      <tr><td><strong>Phase I ตอบโต้ / รุกยึดคืน Talos ใต้</strong></td><td>ตั้ง CIP, One Voice, OPSEC, Evidence Package เรื่อง Novorepnoye และการรุกยึดคืน Talos ใต้</td><td>DP1, DP3</td></tr>
+      <tr><td><strong>Phase II ป้องกันประเทศ / Ventimiglia</strong></td><td>สื่อสารการคุ้มครองพื้นที่ Ventimiglia, Main SLOC และการใช้กำลังจำเป็น/ได้สัดส่วน พร้อมตอบโต้ Narrative ปิดล้อม/พลเรือน</td><td>DP2, DP4, CDP</td></tr>
+      <tr><td><strong>Phase III สถาปนาความมั่นคง</strong></td><td>หากจำเป็น สนับสนุน Narrative การรุกยึดพื้นที่สำคัญ Talos เหนือเพื่ออำนาจต่อรอง และสื่อสารการสถาปนาความมั่นคงระยะต่อเนื่อง</td><td>DP5, DP6, End State</td></tr>
+    </table>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Western Safeguard Phase / DP Mapping</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — C2 COORDINATION</div><div class="sh-title">การบังคับบัญชาและประสานงาน</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <div class="g2">
+      <div class="box"><div class="bh">SCC / One Voice</div><div class="bp">ควบคุม Strategic Narrative, Talking Points, Fact Sheet และรอบข่าว ให้ทุกหน่วยสื่อสารไปทิศทางเดียวกัน</div></div>
+      <div class="box blue"><div class="bh">CMCC / CMOC</div><div class="bp">ประสานพลเรือน-ทหาร การอพยพ การช่วยเหลือ การลดข่าวลือ และภาพการคุ้มครองประชาชน</div></div>
+      <div class="box cyan"><div class="bh">N2 / N6 / PA / CMO</div><div class="bp">เชื่อมข่าวกรอง DEFNET/C2 ภาพข่าวสาร และหลักฐานสนับสนุนให้ทันรอบข่าวและปลอดภัยด้าน OPSEC</div></div>
+      <div class="box green"><div class="bh">Battle Rhythm</div><div class="bp">Daily OSINT update, Rapid Response, Legal/ROE Review, OPSEC Review และรายงาน PIR-IO/FFIR-IO ตาม DP/CDP ทุกวงรอบ CUB/CDB</div></div>
+    </div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">SCC / CMCC / Battle Rhythm</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — FUNCTIONAL ANNEXES</div><div class="sh-title">การมอบงานอนุผนวกหลัก</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <table>
+      <tr><th>อนุผนวก</th><th>งานหลัก</th><th>ข้อควบคุม</th></tr>
+      <tr><td>PSYOP / MISO</td><td>มีอิทธิพลต่อทัศนคติ ลดการสนับสนุน WL/Proxy และทำให้ประชาชนเข้าใจว่าการรุกยึดคืน/คุ้มครอง SLOC มีเป้าหมายเพื่อความปลอดภัย</td><td>ใช้ข้อมูลจริงที่อนุมัติ ไม่กระทบชาติพันธุ์ ศาสนา พลเรือน หรือประเทศที่สาม</td></tr>
+      <tr><td>PA / Combat Camera</td><td>ให้ข้อมูลถูกต้อง รวดเร็ว พร้อมภาพ/หลักฐานการคุ้มครองพลเรือนและการปฏิบัติตาม ROE</td><td>ผ่าน OPSEC, ความปลอดภัย และสิทธิส่วนบุคคลก่อนเผยแพร่</td></tr>
+      <tr><td>OPSEC / INFOSEC / COMSEC</td><td>ปกป้อง EEFI: เวลา ทิศทาง Main Effort, 3 ระลอก, DP/CDP, การรวมกำลัง, C2/DEFNET และเส้นทางส่งกำลัง</td><td>OPSEC Review Cell, Metadata Scrub, Need to Know</td></tr>
+      <tr><td>MILDEC</td><td>ทำให้ WL ประเมินเจตนา เวลา ทิศทาง ME และระดับความพร้อมผิด/ไม่มั่นใจ</td><td>ไม่ใช้ข้อมูลเท็จต่อประชาชนฝ่ายเรา ประเทศที่สาม สื่อ หรือองค์กรพลเรือน</td></tr>
+      <tr><td>EW / EMSO</td><td>ป้องกันและดำรง C2/DEFNET, SCC/PA, CMCC/CMOC, การเดินเรือ และช่องทางแจ้งเตือนประชาชน</td><td>ผลเชิงรุกต้องอนุมัติ ไม่กระทบระบบพลเรือน/มนุษยธรรม/ประเทศที่สาม</td></tr>
+    </table>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">PSYOP / PA / OPSEC / MILDEC / EW</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — RISK CONTROL</div><div class="sh-title">Risk Control และสรุป</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="content">
+    <div class="g2">
+      <div class="box red"><div class="bh">ความเสี่ยงหลัก</div><div class="bp">ข้อมูลลับหรือภาพหลุด, Narrative WL ขยายตัว, ระบบ IO/โครงสร้างพื้นฐานถูกรบกวน, ผลกระทบต่อพลเรือนหรือประเทศที่สาม, กิจกรรมเสี่ยงสูงบานปลาย</div></div>
+      <div class="box green"><div class="bh">มาตรการควบคุม</div><div class="bp">OPSEC Review, Metadata Scrub, One Voice, Rapid Response, OSINT Watchlist, Legal/ROE Review และ Authority Matrix</div></div>
+    </div>
+    <div class="box"><div class="bh">สรุปต่อผู้บังคับบัญชา</div><div class="bp">ความสำเร็จของ N7 คือทำให้การใช้กำลังทั้ง 3 ระลอกของ AZ ถูกมองว่าจำเป็น ได้สัดส่วน และมีหลักฐานรองรับ ขณะที่ WL/Proxy สูญเสียพื้นที่ข่าวสารเรื่อง Talos, Ventimiglia, SLOC และพลเรือน</div></div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Risk / Authority Matrix</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section><section class="slide">
+
+    <div class="sh">
+      <div class="sh-left"><img class="seal" src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN"><div><div class="sh-unit">N7 — Q&amp;A</div><div class="sh-title">ขอบคุณครับ</div></div></div>
+      <div class="sh-right"><div class="sh-label">N7 IO | AZ86</div><div class="sh-tag">Operation Western Safeguard</div></div>
+    </div>
+
+  <div class="cover-wrap">
+    <div style="opacity:.28;margin-bottom:18px"><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="" style="height:86px"></div>
+    <div style="font-size:32px;font-weight:800;margin-bottom:12px">พร้อมตอบคำถาม</div>
+    <div style="font-size:18px;color:var(--gold);margin-bottom:8px">N7 Information Operations</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">Operation Western Safeguard | Annex F IO Order Brief<br>กด H เพื่อกลับหน้ารวมงานนำเสนอ</div>
+  </div>
+<div class="sf"><span><img src="../assets/img/Emblem_of_the_Royal_Thai_Navy.svg" alt="RTN" style="height:14px;width:auto;vertical-align:middle;margin-right:3px;">กลุ่ม N7 IO</span><span class="sf-center">Q&amp;A</span><span>สธ.ทร.๘๖ | ๒๕๖๙</span></div>
+</section>
+</div>
+<div id="nav"><button onclick="prev()" title="Previous">◀</button><span id="ctr">1/11</span><button onclick="next()" title="Next">▶</button><a id="home-btn" href="index.html" title="Dashboard">⌂</a></div>
+<script>
+let cur=0;
+const slides=[...document.querySelectorAll('.slide')];
+const total=slides.length;
+function go(n){
+  slides[cur].classList.remove('active');
+  cur=Math.max(0,Math.min(n,total-1));
+  slides[cur].classList.add('active');
+  document.getElementById('ctr').textContent=(cur+1)+'/'+total;
+}
+function next(){go(cur+1)}
+function prev(){go(cur-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next()}
+  if(e.key==='ArrowLeft'){e.preventDefault();prev()}
+  if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}
+  if(e.key==='h'||e.key==='H'){window.location.href='index.html'}
+});
+go(0);
+</script>
+</body>
+</html>

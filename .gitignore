@@ -11,6 +11,19 @@
 
 # shared assets
 !/Emblem_of_the_Royal_Thai_Navy.svg
+!/assets/
+/assets/*
+!/assets/img/
+/assets/img/*
+!/assets/img/AO_Map.jpg
+!/assets/img/Emblem_of_the_Royal_Thai_Navy.svg
+!/assets/img/N3_LOO_Finai.jpg
+!/assets/img/V4_CONOPS_expanded_contact_sheet.jpg
+!/assets/docs/
+/assets/docs/*
+!/assets/docs/N7ผนวก_ฉ_Present_OrderBrief_AZ86_V5_CONOPS-Expanded-Clean.pptx
+!/assets/docs/ผนวก-ฉ-การปฏิบัติการข้อมูลข่าวสาร-AZ86-Operation-Crimson-Shield-draft.docx
+!/assets/docs/อนุผนวก-2-IO-Matrix-AZ86.docx
 
 # presentations (HTML decks)
 !/03_การนำเสนอ/
