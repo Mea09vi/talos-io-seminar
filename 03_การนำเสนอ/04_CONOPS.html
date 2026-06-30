@@ -419,74 +419,58 @@ td.hl{color:#e8f0ff;font-weight:600;}
     <div class="sh-right"><div class="sh-label">CONOPS 04</div><div class="sh-tag">กลุ่มที่ ๒</div></div>
   </div>
   <div class="content">
-    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:10px;">IO Synchronization Matrix</div>
+    <div style="font-size:20px;font-weight:800;color:#e8f0ff;margin-bottom:10px;">IO Synchronization Matrix — 3 เฟส</div>
     <div class="phase-bar">
-      <div class="phase-pill pp-shape">Phase 1<br>Shape (D-7)</div>
-      <div class="phase-pill pp-deter">Phase 2<br>Deter (D-3)</div>
-      <div class="phase-pill pp-seize">Phase 3<br>Seize (D-Day)</div>
-      <div class="phase-pill pp-exploit">Phase 4<br>Exploit (D+3)</div>
-      <div class="phase-pill pp-sustain">Phase 5<br>Sustain (D+7+)</div>
+      <div class="phase-pill pp-shape">Phase I<br>ตอบโต้ / Talos ใต้</div>
+      <div class="phase-pill pp-deter">Phase II<br>ป้องกันประเทศ / Ventimiglia</div>
+      <div class="phase-pill pp-sustain">Phase III<br>สถาปนาความมั่นคง</div>
     </div>
     <table>
       <tr>
         <th style="width:22%;">IO Capability</th>
         <th style="width:4%;text-align:center;font-size:10px;">แอลฯ</th>
-        <th style="width:15%;text-align:center;">Phase 1<br>Shape</th>
-        <th style="width:15%;text-align:center;">Phase 2<br>Deter</th>
-        <th style="width:15%;text-align:center;">Phase 3<br>Seize</th>
-        <th style="width:15%;text-align:center;">Phase 4<br>Exploit</th>
-        <th style="width:14%;text-align:center;">Phase 5<br>Sustain</th>
+        <th style="width:24%;text-align:center;">Phase I<br>ตอบโต้ / Talos ใต้</th>
+        <th style="width:25%;text-align:center;">Phase II<br>ป้องกันประเทศ / Ventimiglia</th>
+        <th style="width:25%;text-align:center;">Phase III<br>สถาปนาความมั่นคง</th>
       </tr>
       <tr>
         <td class="hl">PSYOP</td>
         <td style="text-align:center;color:#d4a820;font-size:10px;">N7</td>
-        <td class="sm-cell sm-high">เตรียมสาร</td>
-        <td class="sm-cell sm-full">เต็มกำลัง</td>
-        <td class="sm-cell sm-full">เต็มกำลัง</td>
-        <td class="sm-cell sm-full">เต็มกำลัง</td>
-        <td class="sm-cell sm-high">ลดระดับ</td>
+        <td class="sm-cell sm-full">เปิดโปง WL/Proxy</td>
+        <td class="sm-cell sm-full">คุ้มครอง SLOC/พลเรือน</td>
+        <td class="sm-cell sm-high">สร้างความชอบธรรมต่อเนื่อง</td>
       </tr>
       <tr>
         <td class="hl">EMCON</td>
         <td style="text-align:center;color:#d4a820;font-size:10px;">N7/N6</td>
-        <td class="sm-cell sm-low">Level I</td>
+        <td class="sm-cell sm-high">Level II</td>
         <td class="sm-cell sm-full">Level III</td>
-        <td class="sm-cell sm-full">Level III→ยก</td>
-        <td class="sm-cell sm-med">Level I</td>
-        <td class="sm-cell sm-low">ปกติ</td>
+        <td class="sm-cell sm-low">ปกติ/คุ้มครอง C2</td>
       </tr>
       <tr>
         <td class="hl">MILDEC</td>
         <td style="text-align:center;color:#d4a820;font-size:10px;">N7/N2</td>
         <td class="sm-cell sm-high">วาง Pattern</td>
-        <td class="sm-cell sm-full">Peak Decoy</td>
-        <td class="sm-cell sm-none">สิ้นสุด</td>
-        <td class="sm-cell sm-none">—</td>
-        <td class="sm-cell sm-none">—</td>
+        <td class="sm-cell sm-full">เลือกใช้ตาม DP/CDP</td>
+        <td class="sm-cell sm-med">ลดระดับ/ป้องกัน EEFI</td>
       </tr>
       <tr>
         <td class="hl">DEFNET Cyber</td>
         <td style="text-align:center;color:#d4a820;font-size:10px;">N7/N6</td>
         <td class="sm-cell sm-med">เสริม Cyber</td>
         <td class="sm-cell sm-full">สูงสุด</td>
-        <td class="sm-cell sm-full">สูงสุด</td>
-        <td class="sm-cell sm-high">สูง</td>
         <td class="sm-cell sm-med">ปกติ</td>
       </tr>
       <tr>
         <td class="hl">EW (ESM/ECM)</td>
         <td style="text-align:center;color:#d4a820;font-size:10px;">N7</td>
-        <td class="sm-cell sm-med">ESM Monitor</td>
-        <td class="sm-cell sm-high">ESM+ECM สแตนบาย</td>
-        <td class="sm-cell sm-full">ECM เปิดใช้</td>
-        <td class="sm-cell sm-med">ESM Only</td>
+        <td class="sm-cell sm-high">ESM Monitor</td>
+        <td class="sm-cell sm-full">ESM/ECM ตามอนุมัติ</td>
         <td class="sm-cell sm-low">ESM ลด</td>
       </tr>
       <tr>
         <td class="hl">StratComm</td>
         <td style="text-align:center;color:#d4a820;font-size:10px;">N7/PAO</td>
-        <td class="sm-cell sm-high">เตรียม Msg</td>
-        <td class="sm-cell sm-full">ต่อเนื่อง</td>
         <td class="sm-cell sm-full">ต่อเนื่อง</td>
         <td class="sm-cell sm-full">ต่อเนื่อง</td>
         <td class="sm-cell sm-high">ต่อเนื่อง</td>
@@ -494,10 +478,8 @@ td.hl{color:#e8f0ff;font-weight:600;}
       <tr>
         <td class="hl">CMO/KLE</td>
         <td style="text-align:center;color:#d4a820;font-size:10px;">N7/N9</td>
-        <td class="sm-cell sm-low">เตรียม KLE</td>
-        <td class="sm-cell sm-med">KLE เริ่ม</td>
-        <td class="sm-cell sm-high">Humanitarian</td>
-        <td class="sm-cell sm-full">เต็มกำลัง</td>
+        <td class="sm-cell sm-med">เตรียม KLE</td>
+        <td class="sm-cell sm-full">Humanitarian / ลดข่าวลือ</td>
         <td class="sm-cell sm-full">ต่อเนื่อง</td>
       </tr>
     </table>
